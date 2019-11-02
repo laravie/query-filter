@@ -2,36 +2,40 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
-use Laravie\QueryFilter\OrderedQuery;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
+use Laravie\QueryFilter\OrderedQuery;
 
 class OrderedQueryTest extends TestCase
 {
     /** @test */
-    public function it_can_build_basic_query_filter()
+    public function it_can_build_ordered_query()
     {
-        $query1 = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Illuminate\Database\Query\Builder');
 
-        $query1->shouldReceive('orderBy')->once()->with('updated_at', 'DESC')->andReturnSelf();
+        $query->shouldReceive('orderBy')->once()->with('updated_at', 'DESC')->andReturnSelf();
 
-        $stub1 = new OrderedQuery('updated', 'desc');
+        $stub = new OrderedQuery('updated', 'desc');
 
-        $this->assertEquals($query1, $stub1->apply($query1));
-
-        $query2 = m::mock('Illuminate\Database\Query\Builder');
-
-        $query2->shouldReceive('orderBy')->once()->with('updated_at', 'DESC')->andReturnSelf();
-
-        $stub2 = new OrderedQuery('created', 'desc', [
-            'only' => ['created_at'],
-        ]);
-
-        $this->assertEquals($query2, $stub2->apply($query2));
+        $this->assertEquals($query, $stub->apply($query));
     }
 
     /** @test */
-    public function it_can_build_basic_query_filter_given_column_excluded()
+    public function it_can_build_ordered_query_given_excluded_column()
+    {
+        $query = m::mock('Illuminate\Database\Query\Builder');
+
+        $query->shouldReceive('orderBy')->once()->with('updated_at', 'DESC')->andReturnSelf();
+
+        $stub = new OrderedQuery('created', 'desc', [
+            'only' => ['created_at'],
+        ]);
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
+
+    /** @test */
+    public function it_doesnt_build_ordered_query_given_excluded_column()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
 
