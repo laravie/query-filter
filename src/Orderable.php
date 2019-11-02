@@ -30,13 +30,13 @@ class Orderable
     /**
      * Construct a new Ordered Query.
      *
-     * @param  string  $column
+     * @param  string|null  $column
      * @param  string  $direction
      * @param  array  $config
      */
-    public function __construct(string $column, string $direction = 'asc', array $config = [])
+    public function __construct(?string $column, string $direction = 'asc', array $config = [])
     {
-        $this->column = $this->sanitizeColumnName($column);
+        $this->column = $this->sanitizeColumnName($column ?? '');
         $this->direction = $this->sanitizeDirection($direction);
         $this->config = $config;
     }

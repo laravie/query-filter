@@ -38,13 +38,13 @@ class Taxonomy
     /**
      * Construct a new Matches Query.
      *
-     * @param  string  $keyword
+     * @param  string|null  $keyword
      * @param  array  $rules
      * @param  array  $columns
      */
     public function __construct(?string $keyword, array $rules = [], array $columns = [])
     {
-        $this->keyword = $keyword;
+        $this->keyword = $keyword ?? '';
         $this->rules = $rules;
         $this->columns = $columns;
 

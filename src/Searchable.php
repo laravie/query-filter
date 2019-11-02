@@ -24,12 +24,12 @@ class Searchable
     /**
      * Construct a new Search Query.
      *
-     * @param  string  $keyword
+     * @param  string|null  $keyword
      * @param  array  $columns
      */
     public function __construct(?string $keyword, array $columns = [])
     {
-        $this->keyword = $keyword;
+        $this->keyword = $keyword ?? '';
         $this->columns = $columns;
     }
 
