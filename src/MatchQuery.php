@@ -51,9 +51,7 @@ class MatchQuery
         $this->rules = $rules;
         $this->columns = $columns;
 
-        [$basic, $tagged] = $this->parseRulesFromKeyword($keyword ?? '', $rules);
-
-        $this->conditions = \compact('basic', 'tagged');
+        $this->conditions = Value\Conditions::parse($keyword ?? '', \array_keys($rules));
     }
 
     /**
@@ -81,7 +79,7 @@ class MatchQuery
     protected function matchBasicConditions($query): void
     {
         (new SearchQuery(
-            $this->conditions['basic'], $this->columns
+            $this->conditions->basic(), $this->columns
         ))->apply($query);
     }
 
@@ -94,7 +92,9 @@ class MatchQuery
      */
     protected function matchTaggedConditions($query): void
     {
-        if (empty($this->conditions['tagged'])) {
+        $tagged = $this->conditions->tagged();
+
+        if (empty($tagged)) {
             return;
         }
 
@@ -102,7 +102,7 @@ class MatchQuery
             if (Str::contains($keyword, ':*') || Str::contains($keyword, ':[]')) {
                 [$tag, $type] = \explode(':', $keyword, 2);
 
-                $results = Arr::where($this->conditions['tagged'], static function ($value) use ($tag) {
+                $results = Arr::where($tagged, static function ($value) use ($tag) {
                     return Str::startsWith($value, "{$tag}:");
                 });
 
@@ -123,46 +123,12 @@ class MatchQuery
                     return $query;
                 });
             } else {
-                $query->when(\in_array($keyword, $this->conditions['tagged']), static function ($query) use ($callback) {
+                $query->when(\in_array($keyword, $tagged), static function ($query) use ($callback) {
                     \call_user_func($callback, $query);
 
                     return $query;
                 });
             }
         }
-    }
-
-    /**
-     * Parse rules from keyword.
-     *
-     * @param  string  $keyword
-     * @param  array  $rules
-     * @return array
-     */
-    protected function parseRulesFromKeyword(string $keyword, array $rules): array
-    {
-        $basic = [];
-        $tagged = [];
-
-        $tags = \array_map(static function ($value) {
-            [$tag, ] = \explode(':', $value, 2);
-
-            return "{$tag}:";
-        }, \array_keys($rules));
-
-        if (\preg_match_all('/([\w]+:\"[\w\s]*\"|[\w]+:[\w\S]+|[\w\S]+)\s?/', $keyword, $keywords)) {
-            foreach ($keywords[1] as $index => $keyword) {
-                if (! Str::startsWith($keyword, $tags)) {
-                    \array_push($basic, $keyword);
-                } else {
-                    \array_push($tagged, $keyword);
-                }
-            }
-        }
-
-        return [
-            \implode(' ', $basic),
-            $tagged,
-        ];
     }
 }
