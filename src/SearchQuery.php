@@ -22,12 +22,25 @@ class SearchQuery
      */
     protected $columns = [];
 
+    /**
+     * Construct a new Search Query.
+     *
+     * @param string  $keyword
+     * @param array  $columns
+     */
     public function __contruct(?string $keyword, array $columns = [])
     {
         $this->keyword = $keyword;
         $this->columns = $columns;
     }
 
+    /**
+     * Apply search to query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     */
     public function apply($query)
     {
         if (empty($this->keyword) || empty($this->columns)) {
@@ -77,7 +90,6 @@ class SearchQuery
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      * @param  string  $column
-     * @param  array  $keyword
      * @param  string  $likeOperator
      * @param  string  $whereOperator
      *
