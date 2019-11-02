@@ -17,6 +17,11 @@
     "require-dev": {
         "orchestra/testbench": "^4.0"
     },
+    "autoload": {
+        "psr-4": {
+            "Laravie\\QueryFilter\\" : "src/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
