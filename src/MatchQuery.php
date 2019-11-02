@@ -31,12 +31,9 @@ class MatchQuery
     /**
      * Matches logic.
      *
-     * @var array
+     * @var \Laravie\QueryFilter\Value\Conditions
      */
-    protected $conditions = [
-        'basic' => '',
-        'tagged' => [],
-    ];
+    protected $conditions;
 
     /**
      * Construct a new Matches Query.
