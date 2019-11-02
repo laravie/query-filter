@@ -2,6 +2,8 @@
 
 namespace Laravie\QueryFilter;
 
+use Orchestra\Support\Str;
+
 class OrderedQuery
 {
     /**
