@@ -4,9 +4,9 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\OrderedQuery;
+use Laravie\QueryFilter\Orderable;
 
-class OrderedQueryTest extends TestCase
+class OrderableTest extends TestCase
 {
     /** @test */
     public function it_can_build_ordered_query()
@@ -15,7 +15,7 @@ class OrderedQueryTest extends TestCase
 
         $query->shouldReceive('orderBy')->once()->with('updated_at', 'DESC')->andReturnSelf();
 
-        $stub = new OrderedQuery('updated', 'desc');
+        $stub = new Orderable('updated', 'desc');
 
         $this->assertEquals($query, $stub->apply($query));
     }
@@ -27,7 +27,7 @@ class OrderedQueryTest extends TestCase
 
         $query->shouldReceive('orderBy')->once()->with('created_at', 'DESC')->andReturnSelf();
 
-        $stub = new OrderedQuery('created', 'desc', [
+        $stub = new Orderable('created', 'desc', [
             'only' => ['created_at'],
         ]);
 
@@ -41,7 +41,7 @@ class OrderedQueryTest extends TestCase
 
         $query->shouldReceive('orderBy')->never()->with('password', 'DESC')->andReturnSelf();
 
-        $stub = new OrderedQuery('password', 'desc', [
+        $stub = new Orderable('password', 'desc', [
             'except' => ['password'],
         ]);
 

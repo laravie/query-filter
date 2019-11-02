@@ -5,7 +5,7 @@ namespace Laravie\QueryFilter;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class MatchQuery
+class Taxonomy
 {
     /**
      * Matches keyword.
@@ -75,7 +75,7 @@ class MatchQuery
      */
     protected function matchBasicConditions($query): void
     {
-        (new SearchQuery(
+        (new Searchable(
             $this->conditions->basic(), $this->columns
         ))->apply($query);
     }

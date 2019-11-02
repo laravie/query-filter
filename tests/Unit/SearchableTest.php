@@ -4,9 +4,9 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\SearchQuery;
+use Laravie\QueryFilter\Searchable;
 
-class SearchQueryTest extends TestCase
+class SearchableTest extends TestCase
 {
     /** @test */
     public function it_can_build_search_query()
@@ -23,7 +23,7 @@ class SearchQueryTest extends TestCase
             ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello')
             ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello%');
 
-        $stub = new SearchQuery(
+        $stub = new Searchable(
             'hello', ['name']
         );
 

@@ -4,7 +4,7 @@ namespace Laravie\QueryFilter;
 
 use Orchestra\Support\Str;
 
-class OrderedQuery
+class Orderable
 {
     /**
      * Ordered column name.

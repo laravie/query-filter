@@ -4,9 +4,9 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\MatchQuery;
+use Laravie\QueryFilter\Taxonomy;
 
-class MatchQueryTest extends TestCase
+class TaxonomyTest extends TestCase
 {
     /** @testx */
     public function it_can_build_match_query()
@@ -19,7 +19,7 @@ class MatchQueryTest extends TestCase
                 })
             ->shouldReceive('where')->once()->with('name', '=', 'hello');
 
-        $stub = new MatchQuery(
+        $stub = new Taxonomy(
             'name:hello', [
                 'name:*' => static function ($query, $value) {
                     return $query->where('name', '=', $value);
@@ -45,7 +45,7 @@ class MatchQueryTest extends TestCase
             ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello')
             ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello%');
 
-        $stub = new MatchQuery(
+        $stub = new Taxonomy(
             'hello', [], ['name']
         );
 
