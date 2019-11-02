@@ -3,37 +3,9 @@
 namespace Laravie\QueryFilter\Value;
 
 use Illuminate\Support\Str;
-use Illuminate\Database\Query\Expression;
 
-class Field
+class Field extends Column
 {
-    /**
-     * Field name.
-     *
-     * @var \Illuminate\Database\Query\Expression|string
-     */
-    protected $name;
-
-    /**
-     * Construct a new Field value object.
-     *
-     * @param  \Illuminate\Database\Query\Expression|string  $name
-     */
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Is an instance of Illuminate\Database\Query\Expression.
-     *
-     * @return bool
-     */
-    public function isExpression(): bool
-    {
-        return $this->name instanceof Expression;
-    }
-
     /**
      * Is relation selector.
      *
@@ -96,16 +68,6 @@ class Field
         $value = \preg_replace("/([\\\\]+)?\\'/", "\\'", $value);
 
         return \str_replace($delimiter, '"."', $value);
-    }
-
-    /**
-     * Get expression value.
-     *
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->isExpression() ? $this->name->getValue() : $this->name;
     }
 
     /**

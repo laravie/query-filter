@@ -54,7 +54,6 @@ class OrderableTest extends TestCase
      */
     public function it_doesnt_build_ordered_query_given_invalid_column_name($given)
     {
-
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('orderBy')->never()->with($given, 'ASC')->andReturnSelf();

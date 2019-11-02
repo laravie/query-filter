@@ -36,7 +36,7 @@ class Orderable
      */
     public function __construct(?string $column, string $direction = 'asc', array $config = [])
     {
-        $this->column = $this->sanitizeColumnName($column ?? '');
+        $this->column = new Value\Column($this->sanitizeColumnName($column ?? ''));
         $this->direction = $this->sanitizeDirection($direction);
         $this->config = $config;
     }
@@ -50,8 +50,8 @@ class Orderable
      */
     public function apply($query)
     {
-        return $this->validated()
-            ? $query->orderBy($this->column, $this->direction)
+        return $this->validate()
+            ? $query->orderBy($this->column->getValue(), $this->direction)
             : $query;
     }
 
@@ -60,22 +60,16 @@ class Orderable
      *
      * @return bool
      */
-    protected function validated(): bool
+    protected function validate(): bool
     {
-        if (empty($this->column) || ! Str::validateColumnName($this->column)) {
+        if (! $this->column->validate()) {
             return false;
         }
 
-        $only = $this->config['only'] ?? [];
-        $except = $this->config['except'] ?? [];
-
-        if ((! empty($only) && ! \in_array($this->column, (array) $only))
-            || (! empty($except) && \in_array($this->column, (array) $except))
-        ) {
-            return false;
-        }
-
-        return true;
+        return $this->column->accepted(
+            (array) ($this->config['only'] ?? []),
+            (array) ($this->config['except'] ?? [])
+        );
     }
 
     /**
