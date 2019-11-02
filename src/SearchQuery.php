@@ -3,7 +3,6 @@
 namespace Laravie\QueryFilter;
 
 use Orchestra\Support\Str;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class SearchQuery
@@ -25,8 +24,8 @@ class SearchQuery
     /**
      * Construct a new Search Query.
      *
-     * @param string  $keyword
-     * @param array  $columns
+     * @param  string  $keyword
+     * @param  array  $columns
      */
     public function __construct(?string $keyword, array $columns = [])
     {
@@ -54,7 +53,7 @@ class SearchQuery
         $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
         foreach ($this->columns as $column) {
-            $this->queryOnColumn($query, $column, $likeOperator);
+            $this->queryOnColumn($query, new Value\Field($column), $likeOperator);
         }
 
         return $query;
@@ -64,32 +63,31 @@ class SearchQuery
      * Build wildcard query filter for field using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Illuminate\Database\Query\Expression|string  $column
+     * @param  \Laravie\QueryFilter\Value\Field  $column
      * @param  string  $likeOperator
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    protected function queryOnColumn($query, $column, string $likeOperator = 'like')
+    protected function queryOnColumn($query, Value\Field $column, string $likeOperator = 'like')
     {
-        if ($column instanceof Expression) {
-            return $this->queryOnColumnUsing($query, $column->getValue(), $likeOperator, 'orWhere');
-        } elseif (! (Str::contains($column, '.') && $query instanceof EloquentBuilder)) {
-            return $this->queryOnColumnUsing($query, $column, $likeOperator, 'orWhere');
+        if ($column->isExpression()) {
+            return $this->queryOnColumnUsing($query, new Value\Field($column->getValue()), $likeOperator, 'orWhere');
+        } elseif ($column->isRelationSelector() && $query instanceof EloquentBuilder) {
+            [$relation, $column] = $column->wrapRelationNameAndField();
+
+            return $query->orWhereHas($relation, function ($query) use ($column, $keyword) {
+                $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
+            });
         }
 
-        $this->queryOnColumnUsing($query, $column, $likeOperator, 'orWhere');
-        [$relation, $column] = \explode('.', $column, 2);
-
-        return $query->orWhereHas($relation, function ($query) use ($column, $keyword) {
-            $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
-        });
+        return $this->queryOnColumnUsing($query, $column, $likeOperator, 'orWhere');
     }
 
     /**
      * Build wildcard query filter for column using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  string  $column
+     * @param  \Laravie\QueryFilter\Value\Field  $column
      * @param  string  $likeOperator
      * @param  string  $whereOperator
      *
@@ -97,15 +95,48 @@ class SearchQuery
      */
     protected function queryOnColumnUsing(
         $query,
-        string $column,
+        Value\Field $column,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
+        if ($column->isJsonPathSelector()) {
+            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
+        }
+
         $keywords = Str::searchable($this->keyword);
 
         return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
             foreach ($keywords as $keyword) {
-                $query->orWhere($column, $likeOperator, $keyword);
+                $query->orWhere((string) $column, $likeOperator, $keyword);
+            }
+        });
+    }
+
+    /**
+     * Build wildcard query filter for JSON column using where or orWhere.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     * @param  \Laravie\QueryFilter\Value\Field  $column
+     * @param  string  $likeOperator
+     * @param  string  $whereOperator
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     */
+    protected function queryOnJsonColumnUsing(
+        $query,
+        Value\Field $column,
+        string $likeOperator,
+        string $whereOperator = 'where'
+    ) {
+        $keywords = Str::searchable(Str::lower($this->keyword));
+
+        [$field, $path] = $column->wrapJsonFieldAndPath();
+
+        return $query->{$whereOperator}(static function ($query) use ($field, $path, $keywords, $likeOperator) {
+            foreach ($keywords as $keyword) {
+                $query->orWhereRaw(
+                    "lower({$field}->'\$.{$path}') {$likeOperator} ?", [$keyword]
+                );
             }
         });
     }

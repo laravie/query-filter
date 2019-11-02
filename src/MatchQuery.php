@@ -38,9 +38,9 @@ class MatchQuery
     /**
      * Construct a new Matches Query.
      *
-     * @param string  $keyword
-     * @param array  $rules
-     * @param array  $columns
+     * @param  string  $keyword
+     * @param  array  $rules
+     * @param  array  $columns
      */
     public function __construct(?string $keyword, array $rules = [], array $columns = [])
     {

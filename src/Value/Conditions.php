@@ -23,8 +23,8 @@ class Conditions
     /**
      * Construct a new Condition value object.
      *
-     * @param string $basic
-     * @param array  $tagged
+     * @param  string $basic
+     * @param  array  $tagged
      */
     public function __construct(string $basic, array $tagged)
     {

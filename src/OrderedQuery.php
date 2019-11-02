@@ -30,9 +30,9 @@ class OrderedQuery
     /**
      * Construct a new Ordered Query.
      *
-     * @param string  $column
-     * @param string  $direction
-     * @param array  $config
+     * @param  string  $column
+     * @param  string  $direction
+     * @param  array  $config
      */
     public function __construct(string $column, string $direction = 'asc', array $config = [])
     {
