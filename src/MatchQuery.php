@@ -94,7 +94,7 @@ class MatchQuery
      */
     protected function matchTaggedConditions($query): void
     {
-        if (empty($this->conditions['advanced'])) {
+        if (empty($this->conditions['tagged'])) {
             return;
         }
 
