@@ -7,6 +7,20 @@ use Illuminate\Support\Str;
 class Field extends Column
 {
     /**
+     * Validate column.
+     *
+     * @return bool
+     */
+    public function validate(): bool
+    {
+        if ($this->isRelationSelector() || $this->isJsonPathSelector()) {
+            return true;
+        }
+
+        return parent::validate();
+    }
+
+    /**
      * Is relation selector.
      *
      * @return bool

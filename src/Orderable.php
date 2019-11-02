@@ -2,7 +2,7 @@
 
 namespace Laravie\QueryFilter;
 
-use Orchestra\Support\Str;
+use Illuminate\Support\Str;
 
 class Orderable
 {
