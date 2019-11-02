@@ -25,7 +25,7 @@ class OrderedQueryTest extends TestCase
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
 
-        $query->shouldReceive('orderBy')->once()->with('updated_at', 'DESC')->andReturnSelf();
+        $query->shouldReceive('orderBy')->once()->with('created_at', 'DESC')->andReturnSelf();
 
         $stub = new OrderedQuery('created', 'desc', [
             'only' => ['created_at'],

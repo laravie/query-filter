@@ -69,8 +69,13 @@ class OrderedQuery
         $only = $this->config['only'] ?? [];
         $except = $this->config['except'] ?? [];
 
-        return (! empty($only) && ! \in_array($this->column, (array) $only)) ||
-            (! empty($except) && \in_array($this->column, (array) $except));
+        if ((! empty($only) && ! \in_array($this->column, (array) $only))
+            || (! empty($except) && \in_array($this->column, (array) $except))
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
