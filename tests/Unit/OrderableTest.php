@@ -47,4 +47,32 @@ class OrderableTest extends TestCase
 
         $this->assertEquals($query, $stub->apply($query));
     }
+
+    /**
+     * @test
+     * @dataProvider invalidColumnNameDataProvider
+     */
+    public function it_doesnt_build_ordered_query_given_invalid_column_name($given)
+    {
+
+        $query = m::mock('Illuminate\Database\Query\Builder');
+
+        $query->shouldReceive('orderBy')->never()->with($given, 'ASC')->andReturnSelf();
+
+        $this->assertEquals($query, (new Orderable($given))->apply($query));
+    }
+
+    /**
+     * Invalid column name data provider.
+     *
+     * @return array
+     */
+    public function invalidColumnNameDataProvider()
+    {
+        return [
+            ['email->"%27))%23injectedSQL'],
+            [\str_pad('email', 65, 'x')],
+            [''],
+        ];
+    }
 }
