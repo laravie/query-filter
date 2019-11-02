@@ -37,6 +37,7 @@ class Conditions
      *
      * @param  string  $keyword
      * @param  array  $rules
+     *
      * @return array
      */
     public static function parse(string $keyword, array $rules)

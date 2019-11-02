@@ -35,7 +35,7 @@ class MatchQuery
      */
     protected $conditions = [
         'basic' => '',
-        'tagged' => []
+        'tagged' => [],
     ];
 
     /**

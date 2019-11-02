@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Unit\Value;
 
-use Laravie\QueryFilter\Value\Conditions;
 use PHPUnit\Framework\TestCase;
+use Laravie\QueryFilter\Value\Conditions;
 
 class ConditionsTest extends TestCase
 {

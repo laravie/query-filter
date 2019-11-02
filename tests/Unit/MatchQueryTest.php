@@ -23,7 +23,7 @@ class MatchQueryTest extends TestCase
             'name:hello', [
                 'name:*' => static function ($query, $value) {
                     return $query->where('name', '=', $value);
-                }
+                },
             ], ['name']
         );
 
