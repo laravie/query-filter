@@ -28,7 +28,7 @@ class SearchQuery
      * @param string  $keyword
      * @param array  $columns
      */
-    public function __contruct(?string $keyword, array $columns = [])
+    public function __construct(?string $keyword, array $columns = [])
     {
         $this->keyword = $keyword;
         $this->columns = $columns;
