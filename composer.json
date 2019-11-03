@@ -11,12 +11,12 @@
     ],
     "require": {
         "php": ">=7.2",
-        "illuminate/database": "^5.8 || ^6.0",
-        "illuminate/support": "^5.8 || ^6.0"
+        "illuminate/database": "^5.8 || ^6.0 || ^7.0",
+        "illuminate/support": "^5.8 || ^6.0 || ^7.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.3",
-        "orchestra/testbench": "^3.8.5 || ^4.0",
+        "orchestra/testbench": "^3.8.5 || ^4.0 || ^5.0",
         "phpunit/phpunit": "^8.3"
     },
     "autoload": {
