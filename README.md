@@ -47,6 +47,8 @@ Above installation can also be simplify by using the following command:
 new Laravie\QueryFilter\Orderable(?string $column, string $direction = 'asc', array $config = []);
 ```
 
+The class provides a simple interface to handle `ORDER BY` queries to Laravel Eloquent/Query Builder.
+
 ```php
 use App\User;
 use Laravie\QueryFilter\Orderable;
@@ -60,17 +62,19 @@ $orderable = new Orderable(
 return $orderable->apply($query)->get(); 
 ```
 
-> The code will validate the column name before trying to apply `orderBy()` to the query, this would prevent SQL injection especially when column is given by the user.
-
 ```sql
 select * FROM `users` ORDER BY `name` DESC;
 ```
+
+> The code will validate the column name before trying to apply `orderBy()` to the query, this would prevent SQL injection especially when column is given by the user.
 
 ### Search Queries
 
 ```php
 new Laravie\QueryFilter\Searchable(?string $keyword, array $columns = []);
 ```
+
+The class provides a simple interface to `LIKE` queries to Laravel Eloquent/Query Builder.
 
 ```php
 use App\User;
@@ -104,6 +108,8 @@ where (
 
 #### Search with wildcard
 
+Set specific `%` or `*` wildcard to reduce the possible `LIKE`s variations.
+
 ```php
 use App\User;
 use Laravie\QueryFilter\Searchable;
@@ -129,6 +135,8 @@ where (
 ```
 
 #### Search with JSON path
+
+This would allow you to query JSON path using `LIKE` with case insensitive (JSON path in MySQL is case-sensitive by default).
 
 ```php
 use App\User;
@@ -156,6 +164,8 @@ where (
 ```
 
 #### Search with Relations
+
+This would make it easy to search results not only in the current model but also it's relations.
 
 ```php
 use App\User;
