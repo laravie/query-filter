@@ -9,6 +9,15 @@ Database/Eloquent Query Builder filters for Laravel
 [![License](https://poser.pugx.org/laravie/query-filter/license)](https://packagist.org/packages/laravie/query-filter)
 [![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=master)](https://coveralls.io/github/laravie/query-filter?branch=master)
 
+* [Installation](#installation)
+    - [Quick Installation](#quick-installation)
+* [Usages](#usages)
+    - [Order Queries](#order-queries)
+    - [Search Queries](#search-queries)
+        + [Search with wildcard](#search-with-wildcard)
+        + [Search with JSON path](#search-with-json-path)
+        + [Search with Relations](#search-with-relations)
+
 ## Installation
 
 To install through composer, simply put the following in your `composer.json` file:
