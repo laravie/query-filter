@@ -2,7 +2,6 @@
 
 namespace Laravie\QueryFilter;
 
-use Orchestra\Support\Str;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Searchable
