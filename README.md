@@ -60,6 +60,8 @@ $orderable = new Orderable(
 return $orderable->apply($query)->get(); 
 ```
 
+> The code will validate the column name before trying to apply `orderBy()` to the query, this would prevent SQL injection especially when column is given by the user.
+
 ```sql
 select * FROM `users` ORDER BY `name` DESC;
 ```
