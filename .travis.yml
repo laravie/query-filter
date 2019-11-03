@@ -11,9 +11,12 @@ env:
     - setup=basic
     - coverage=no
   matrix:
+    - laravel=^5.8
     - laravel=^6.0
+    - setup=stable laravel=^5.8
     - setup=stable laravel=^6.0
-    - setup=stable laravel=^6.0
+    - setup=stable laravel=^5.8
+    - setup=lowest laravel=^6.0
 
 before_install:
   - composer config discard-changes true
