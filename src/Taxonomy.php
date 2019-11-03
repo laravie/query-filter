@@ -37,10 +37,10 @@ class Taxonomy
      */
     public function __construct(?string $keyword, array $rules = [], array $columns = [])
     {
-        $this->rules = $rules;
+        $this->rules = \array_filter($rules);
         $this->columns = $columns;
 
-        $this->keywords = Value\Keywords::parse($keyword ?? '', \array_keys($rules));
+        $this->keywords = Value\Keywords::parse($keyword ?? '', \array_keys($this->rules));
     }
 
     /**
