@@ -160,7 +160,7 @@ where (
         or lower(`address`->'$.country') like '%malaysia'
         or lower(`address`->'$.country') like '%malaysia%'
     )
-)
+);
 ```
 
 #### Search with Relations
@@ -193,14 +193,14 @@ where (
         inner join `user_role` 
             on `roles`.`id` = `user_role`.`role_id` 
         where `users`.`id` = `user_role`.`user_id` 
-            and (
-                `name` like 'Administrator' 
-                or `name` like 'Administrator%' 
-                or `name` like '%Administrator' 
-                or `name` like '%Administrator%'
-            )
+        and (
+            `name` like 'Administrator' 
+            or `name` like 'Administrator%' 
+            or `name` like '%Administrator' 
+            or `name` like '%Administrator%'
         )
-)
+    )
+);
 ```
 
 > Relations search can only be applied to `Illuminate\Database\Eloquent\Builder` as it need to ensure that the relationship exists via `whereHas()` queries.
@@ -210,6 +210,8 @@ where (
 ```php
 new Laravie\QueryFilter\Taxonomy(?string $keyword, array $rules, array $columns = []);
 ```
+
+Taxonomy always developers to create a set of rules to group the search keywords using `WHERE ... AND`. For any un-grouped keyword it will be executed via `Laravie\QueryFilter\Searchable` based on given `$columns`.
 
 ```php
 use App\User;
