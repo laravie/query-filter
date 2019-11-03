@@ -183,6 +183,8 @@ where (
 )
 ```
 
+> Relations search can only be applied to `Illuminate\Database\Eloquent\Builder` as it need to ensure that the relationship exists via `whereHas()` queries.
+
 ### Taxonomy Queries
 
 ```php
