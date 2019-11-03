@@ -109,9 +109,11 @@ return $searchable->apply($query)->get();
 ```sql
 select * from `users` 
 where (
-    `name` like 'crynobone%gmail'
-) or (
-    `email` like 'crynobone%gmail'
+    (
+        `name` like 'crynobone%gmail'
+    ) or (
+        `email` like 'crynobone%gmail'
+    )
 );
 ```
 
@@ -133,7 +135,9 @@ return $searchable->apply($query)->get();
 ```sql
 select * from `users` 
 where (
-    lower(`address`->'$.country') like 'malaysia'
+    (
+        lower(`address`->'$.country') like 'malaysia'
+    )
 )
 ```
 
