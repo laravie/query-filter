@@ -30,7 +30,7 @@ class Searchable
     public function __construct(?string $keyword, array $columns = [])
     {
         $this->keyword = $keyword ?? '';
-        $this->columns = $columns;
+        $this->columns = \array_filter($columns);
     }
 
     /**
@@ -101,6 +101,8 @@ class Searchable
     ) {
         if ($column->isJsonPathSelector()) {
             return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
+        } elseif (! $column->validate()) {
+            return $query;
         }
 
         $keywords = Str::searchable($this->keyword);

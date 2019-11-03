@@ -32,6 +32,73 @@ class SearchableTest extends TestCase
     }
 
     /** @test */
+    public function it_ignores_build_search_query_when_columns_is_not_provided()
+    {
+        $query = m::mock('Illuminate\Database\Query\Builder');
+
+        $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('orWhere')->never()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                })
+            ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello%')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello%');
+
+        $stub = new Searchable(
+            'hello', []
+        );
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
+
+    /** @test */
+    public function it_ignores_build_search_query_when_columns_is_invalid()
+    {
+        $query = m::mock('Illuminate\Database\Query\Builder');
+
+        $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('orWhere')->never()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                })
+            ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello%')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello%');
+
+        $stub = new Searchable(
+            'hello', ['']
+        );
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
+
+    /** @test */
+    public function it_ignores_build_search_query_when_keyword_is_empty()
+    {
+        $query = m::mock('Illuminate\Database\Query\Builder');
+
+        $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('orWhere')->never()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                })
+            ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello%')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello')
+            ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello%');
+
+        $stub = new Searchable(
+            '', ['name']
+        );
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
+
+
+    /** @test */
     public function it_can_build_search_query_with_expression_value()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
