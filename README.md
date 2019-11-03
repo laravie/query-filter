@@ -44,6 +44,10 @@ Above installation can also be simplify by using the following command:
 ### Order Queries
 
 ```php
+new Laravie\QueryFilter\Orderable(?string $column, string $direction = 'asc', array $config = []);
+```
+
+```php
 use App\User;
 use Laravie\QueryFilter\Orderable;
 
@@ -61,6 +65,10 @@ select * FROM `users` ORDER BY `name` DESC;
 ```
 
 ### Search Queries
+
+```php
+new Laravie\QueryFilter\Searchable(?string $keyword, array $columns = []);
+```
 
 ```php
 use App\User;
@@ -186,6 +194,10 @@ where (
 > Relations search can only be applied to `Illuminate\Database\Eloquent\Builder` as it need to ensure that the relationship exists via `whereHas()` queries.
 
 ### Taxonomy Queries
+
+```php
+new Laravie\QueryFilter\Taxonomy(?string $keyword, array $rules, array $columns = []);
+```
 
 ```php
 use App\User;
