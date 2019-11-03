@@ -10,7 +10,7 @@ class Searchable
     /**
      * Search keyword.
      *
-     * @var string
+     * @var \Laravie\QueryFilter\Value\Keyword
      */
     protected $keyword;
 
@@ -29,7 +29,7 @@ class Searchable
      */
     public function __construct(?string $keyword, array $columns = [])
     {
-        $this->keyword = $keyword ?? '';
+        $this->keyword = new Value\Keyword($keyword ?? '');
         $this->columns = \array_filter($columns);
     }
 
@@ -42,7 +42,7 @@ class Searchable
      */
     public function apply($query)
     {
-        if (empty($this->keyword) || empty($this->columns)) {
+        if (! $this->keyword->validate() || empty($this->columns)) {
             return $query;
         }
 
@@ -107,7 +107,7 @@ class Searchable
             return $query;
         }
 
-        $keywords = Str::searchable($this->keyword);
+        $keywords = $this->keyword->all();
 
         return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
             foreach ($keywords as $keyword) {
@@ -132,7 +132,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        $keywords = Str::searchable(Str::lower($this->keyword));
+        $keywords = $this->keyword->allLowerCased();
 
         [$field, $path] = $column->wrapJsonFieldAndPath();
 

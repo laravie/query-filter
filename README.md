@@ -137,6 +137,9 @@ select * from `users`
 where (
     (
         lower(`address`->'$.country') like 'malaysia'
+        or lower(`address`->'$.country') like 'malaysia%'
+        or lower(`address`->'$.country') like '%malaysia'
+        or lower(`address`->'$.country') like '%malaysia%'
     )
 )
 ```
