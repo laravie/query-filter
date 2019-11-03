@@ -81,7 +81,7 @@ class Field extends Column
     {
         $value = \preg_replace("/([\\\\]+)?\\'/", "\\'", $value);
 
-        return \str_replace($delimiter, '"."', $value);
+        return \str_replace($delimiter, '.', $value);
     }
 
     /**
