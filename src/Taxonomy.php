@@ -84,6 +84,7 @@ class Taxonomy
         $tagged = $this->keywords->tagged();
 
         if (empty($tagged)) {
+
             return;
         }
 
@@ -100,11 +101,11 @@ class Taxonomy
                         [, $value] = \explode(':', $results[0] ?? null, 2);
                         $value = \trim($value, '"');
                     } else {
-                        $value = \array_map(static function ($text) {
+                        $value = \array_values(\array_map(static function ($text) {
                             [, $value] = \explode(':', $text, 2);
 
                             return \trim($value, '"');
-                        }, $results);
+                        }, $results));
                     }
 
                     \call_user_func($callback, $query, $value);

@@ -8,21 +8,27 @@ use Laravie\QueryFilter\Taxonomy;
 
 class TaxonomyTest extends TestCase
 {
-    /** @testx */
+    /** @test */
     public function it_can_build_match_query()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('unless')->once()->with(false, m::type('Closure'))
                 ->andReturnUsing(static function ($b, $c) use ($query) {
-                    $c($query);
+                    if (! $b) {
+                        return $c($query);
+                    }
                 })
-            ->shouldReceive('where')->once()->with('name', '=', 'hello');
+            ->shouldReceive('where')->once()->with('name', '=', 'hello')->andReturnSelf()
+            ->shouldReceive('whereIn')->once()->with('roles', ['admin', 'staff'])->andReturnSelf();
 
         $stub = new Taxonomy(
-            'name:hello', [
+            'name:hello role:admin role:staff', [
                 'name:*' => static function ($query, $value) {
                     return $query->where('name', '=', $value);
+                },
+                'role:[]' => static function ($query, $value) {
+                    return $query->whereIn('roles', $value);
                 },
             ], ['name']
         );
