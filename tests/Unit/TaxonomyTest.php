@@ -19,16 +19,26 @@ class TaxonomyTest extends TestCase
                         return $c($query);
                     }
                 })
+            ->shouldReceive('when')->once()->with(true, m::type('Closure'))
+                ->andReturnUsing(static function ($b, $c) use ($query) {
+                    if (!! $b) {
+                        return $c($query);
+                    }
+                })
             ->shouldReceive('where')->once()->with('name', '=', 'hello')->andReturnSelf()
-            ->shouldReceive('whereIn')->once()->with('roles', ['admin', 'staff'])->andReturnSelf();
+            ->shouldReceive('whereIn')->once()->with('roles', ['admin', 'staff'])->andReturnSelf()
+            ->shouldReceive('whereNotNull')->once()->with('deleted_at')->andReturnSelf();
 
         $stub = new Taxonomy(
-            'name:hello role:admin role:staff', [
+            'name:hello role:admin role:staff is:active', [
                 'name:*' => static function ($query, $value) {
                     return $query->where('name', '=', $value);
                 },
                 'role:[]' => static function ($query, $value) {
                     return $query->whereIn('roles', $value);
+                },
+                'is:active' => static function ($query) {
+                    return $query->whereNotNull('deleted_at');
                 },
             ], ['name']
         );
