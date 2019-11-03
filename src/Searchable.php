@@ -75,7 +75,7 @@ class Searchable
         } elseif ($column->isRelationSelector() && $query instanceof EloquentBuilder) {
             [$relation, $column] = $column->wrapRelationNameAndField();
 
-            return $query->orWhereHas($relation, function ($query) use ($column, $keyword) {
+            return $query->orWhereHas($relation, function ($query) use ($column, $likeOperator) {
                 $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
             });
         }
