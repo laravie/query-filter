@@ -8,32 +8,25 @@ use Illuminate\Support\Str;
 class Taxonomy
 {
     /**
-     * Matches keyword.
-     *
-     * @var string
-     */
-    protected $keyword;
-
-    /**
-     * Matches columns.
+     * Taxonomy columns.
      *
      * @var array
      */
     protected $columns = [];
 
     /**
-     * Matches rules.
+     * Taxonomy rules.
      *
      * @var array
      */
     protected $rules = [];
 
     /**
-     * Matches logic.
+     * Taxonomy keywords.
      *
-     * @var \Laravie\QueryFilter\Value\Conditions
+     * @var \Laravie\QueryFilter\Value\Keywords
      */
-    protected $conditions;
+    protected $keywords;
 
     /**
      * Construct a new Matches Query.
@@ -44,11 +37,10 @@ class Taxonomy
      */
     public function __construct(?string $keyword, array $rules = [], array $columns = [])
     {
-        $this->keyword = $keyword ?? '';
         $this->rules = $rules;
         $this->columns = $columns;
 
-        $this->conditions = Value\Conditions::parse($keyword ?? '', \array_keys($rules));
+        $this->keywords = Value\Keywords::parse($keyword ?? '', \array_keys($rules));
     }
 
     /**
@@ -76,7 +68,7 @@ class Taxonomy
     protected function matchBasicConditions($query): void
     {
         (new Searchable(
-            $this->conditions->basic(), $this->columns
+            $this->keywords->basic(), $this->columns
         ))->apply($query);
     }
 
@@ -89,7 +81,7 @@ class Taxonomy
      */
     protected function matchTaggedConditions($query): void
     {
-        $tagged = $this->conditions->tagged();
+        $tagged = $this->keywords->tagged();
 
         if (empty($tagged)) {
             return;

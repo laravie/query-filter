@@ -4,7 +4,7 @@ namespace Laravie\QueryFilter\Value;
 
 use Illuminate\Support\Str;
 
-class Conditions
+class Keywords
 {
     /**
      * Basic condition.

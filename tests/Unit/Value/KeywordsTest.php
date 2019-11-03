@@ -3,9 +3,9 @@
 namespace Laravie\QueryFilter\Tests\Unit\Value;
 
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Value\Conditions;
+use Laravie\QueryFilter\Value\Keywords;
 
-class ConditionsTest extends TestCase
+class KeywordsTest extends TestCase
 {
     /** @test */
     public function it_can_build_conditions()
@@ -17,7 +17,7 @@ class ConditionsTest extends TestCase
             'tags:[]',
         ];
 
-        $conditions = Conditions::parse(
+        $conditions = Keywords::parse(
             'Orchestra Platform name:"Mior Muhammad Zaki" email:crynobone@katsana.com tags:github work:KATSANA', $rules
         );
 
