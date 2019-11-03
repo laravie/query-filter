@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.0.2
+
+Released: 2019-11-03
+
+### Fixes
+
+* Fixes generated search keywords when it only contains either `%` or `*`.
+
 ## 1.0.1
 
 Released: 2019-11-03

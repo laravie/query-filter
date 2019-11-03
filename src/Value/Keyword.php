@@ -68,7 +68,7 @@ class Keyword
      */
     public static function searchable(string $text, string $wildcard = '*', string $replacement = '%'): array
     {
-        if (! Str::containsAll($text, [$wildcard, $replacement])) {
+        if (! Str::contains($text, [$wildcard, $replacement])) {
             return [
                 "{$text}", "{$text}%", "%{$text}", "%{$text}%",
             ];
