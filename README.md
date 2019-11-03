@@ -17,6 +17,7 @@ Database/Eloquent Query Builder filters for Laravel
         + [Search with wildcard](#search-with-wildcard)
         + [Search with JSON path](#search-with-json-path)
         + [Search with Relations](#search-with-relations)
+    - [Taxonomy Queries](#taxonomy-queries)
 
 ## Installation
 
@@ -168,17 +169,47 @@ where (
         or `name` like '%Administrator'
         or `name` like '%Administrator%'
     ) or exists (
-        select * from "roles" 
-        inner join "user_role" 
-            on "roles"."id" = "user_role"."role_id" 
-        where "users"."id" = "user_role"."user_id" 
+        select * from `roles` 
+        inner join `user_role` 
+            on `roles`.`id` = `user_role`.`role_id` 
+        where `users`.`id` = `user_role`.`user_id` 
             and (
-                "name" like 'Administrator' 
-                or "name" like 'Administrator%' 
-                or "name" like '%Administrator' 
-                or "name" like '%Administrator%'
+                `name` like 'Administrator' 
+                or `name` like 'Administrator%' 
+                or `name` like '%Administrator' 
+                or `name` like '%Administrator%'
             )
         )
 )
 ```
 
+### Taxonomy Queries
+
+```php
+use App\User;
+use Laravie\QueryFilter\Taxonomy;
+
+$query = App\User::query();
+
+$taxonomy = new Taxonomy(
+    'is:admin email:crynobone@gmail.com', [
+        'email:*' => static function ($query, $value) {
+            return $query->where('email', '=', $value);
+        },
+        'role:[]' => static function ($query, array $value) {
+            return $query->whereIn('role', $value);
+        },
+        'is:admin' => static function ($query) {
+            return $query->where('admin', '=', 1);
+        },
+    ],
+);
+
+$taxonomy->apply($query)->get();
+```
+
+```sql
+select * from `user` 
+where `email`='crynobone@gmail.com'
+and `admin`=1;
+```
