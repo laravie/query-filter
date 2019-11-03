@@ -52,7 +52,11 @@ class TaxonomyTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('orWhere')->once()->with(m::type('Closure'))
+        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                })
+            ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })

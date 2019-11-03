@@ -53,7 +53,9 @@ class Searchable
         $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
         foreach ($this->columns as $column) {
-            $this->queryOnColumn($query, new Value\Field($column), $likeOperator);
+            $query->where(function ($query) use ($column, $likeOperator) {
+                $this->queryOnColumn($query, new Value\Field($column), $likeOperator);
+            });
         }
 
         return $query;
