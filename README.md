@@ -18,7 +18,7 @@ Database/Eloquent Query Builder filters for Laravel
         + [Search with JSON path](#search-with-json-path)
         + [Search with Relations](#search-with-relations)
     - [Taxonomy Queries](#taxonomy-queries)
-* [Integrations]
+* [Integrations](integrations)
     - [Using with Laravel Nova](#using-with-laravel-nova)
 
 ## Installation
