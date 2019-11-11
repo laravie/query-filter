@@ -18,6 +18,7 @@ Database/Eloquent Query Builder filters for Laravel
         + [Search with JSON path](#search-with-json-path)
         + [Search with Relations](#search-with-relations)
     - [Taxonomy Queries](#taxonomy-queries)
+* [Integrations]
 
 ## Installation
 
@@ -240,4 +241,56 @@ $taxonomy->apply($query)->get();
 select * from `user` 
 where `email`='crynobone@gmail.com'
 and `admin`=1;
+```
+
+## Integrations
+
+### Using with Laravel Nova
+
+You can override the default Laravel global and local search feature by adding the following methods on `app/Nova/Resource.php`:
+
+```php
+<?php
+namespace App\Nova;
+
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource as NovaResource;
+use Laravie\QueryFilter\Searchable;
+
+abstract class Resource extends NovaResource
+{
+    // ...
+    
+    /**
+     * Apply the search query to the query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $search
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected static function applySearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            static::applyResourceSearch($query, $search);
+        });
+    }
+
+    /**
+     * Apply the search query to the query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $search
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected static function applyResourceSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            (new Searchable(
+                $search, static::searchableColumns()
+            ))->apply($query);
+        });
+    } 
+}
 ```
