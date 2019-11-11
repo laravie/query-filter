@@ -19,6 +19,7 @@ Database/Eloquent Query Builder filters for Laravel
         + [Search with Relations](#search-with-relations)
     - [Taxonomy Queries](#taxonomy-queries)
 * [Integrations]
+    - [Using with Laravel Nova](#using-with-laravel-nova)
 
 ## Installation
 
