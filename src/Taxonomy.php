@@ -30,10 +30,6 @@ class Taxonomy
 
     /**
      * Construct a new Matches Query.
-     *
-     * @param  string|null  $keyword
-     * @param  array  $rules
-     * @param  array  $columns
      */
     public function __construct(?string $keyword, array $rules = [], array $columns = [])
     {
@@ -62,8 +58,6 @@ class Taxonomy
      * Match basic conditions.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     *
-     * @return void
      */
     protected function matchBasicConditions($query): void
     {
@@ -76,15 +70,12 @@ class Taxonomy
      * Match tagged conditions.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     *
-     * @return void
      */
     protected function matchTaggedConditions($query): void
     {
         $tagged = $this->keywords->tagged();
 
         if (empty($tagged)) {
-
             return;
         }
 

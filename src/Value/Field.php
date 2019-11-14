@@ -8,8 +8,6 @@ class Field extends Column
 {
     /**
      * Validate column.
-     *
-     * @return bool
      */
     public function validate(): bool
     {
@@ -22,8 +20,6 @@ class Field extends Column
 
     /**
      * Is relation selector.
-     *
-     * @return bool
      */
     public function isRelationSelector(): bool
     {
@@ -32,8 +28,6 @@ class Field extends Column
 
     /**
      * Is JSON path selector.
-     *
-     * @return bool
      */
     public function isJsonPathSelector(): bool
     {
@@ -42,8 +36,6 @@ class Field extends Column
 
     /**
      * Wrap relation and field.
-     *
-     * @return array
      */
     public function wrapRelationNameAndField(): array
     {
@@ -57,8 +49,6 @@ class Field extends Column
 
     /**
      * Split the given JSON selector into the field and the optional path and wrap them separately.
-     *
-     * @return array
      */
     public function wrapJsonFieldAndPath(): array
     {

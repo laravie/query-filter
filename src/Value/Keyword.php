@@ -15,8 +15,6 @@ class Keyword
 
     /**
      * Construct a new Keyword value object.
-     *
-     * @param  string  $value
      */
     public function __construct(string $value)
     {
@@ -25,8 +23,6 @@ class Keyword
 
     /**
      * Validate keyword value.
-     *
-     * @return bool
      */
     public function validate(): bool
     {
@@ -35,10 +31,6 @@ class Keyword
 
     /**
      * Get searchable strings as lowercased.
-     *
-     * @param  string $wildcard
-     * @param  string $replacement
-     * @return array
      */
     public function allLowerCased(string $wildcard = '*', string $replacement = '%'): array
     {
@@ -47,10 +39,6 @@ class Keyword
 
     /**
      * Get searchable strings.
-     *
-     * @param  string $wildcard
-     * @param  string $replacement
-     * @return array
      */
     public function all(string $wildcard = '*', string $replacement = '%'): array
     {
@@ -59,12 +47,6 @@ class Keyword
 
     /**
      * Convert basic string to searchable result.
-     *
-     * @param  string  $text
-     * @param  string  $wildcard
-     * @param  string  $replacement
-     *
-     * @return array
      */
     public static function searchable(string $text, string $wildcard = '*', string $replacement = '%'): array
     {

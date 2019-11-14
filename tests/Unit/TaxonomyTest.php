@@ -21,7 +21,7 @@ class TaxonomyTest extends TestCase
                 })
             ->shouldReceive('when')->once()->with(true, m::type('Closure'))
                 ->andReturnUsing(static function ($b, $c) use ($query) {
-                    if (!! $b) {
+                    if ((bool) $b) {
                         return $c($query);
                     }
                 })
