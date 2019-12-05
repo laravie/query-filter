@@ -40,8 +40,6 @@ class Column
 
     /**
      * Is an instance of Illuminate\Database\Query\Expression.
-     *
-     * @return bool
      */
     public function isExpression(): bool
     {
@@ -50,8 +48,6 @@ class Column
 
     /**
      * Validate column.
-     *
-     * @return bool
      */
     public function validate(): bool
     {
@@ -66,11 +62,6 @@ class Column
 
     /**
      * Get if column is acceptable for filter.
-     *
-     * @param  array  $only
-     * @param  array  $except
-     *
-     * @return bool
      */
     public function accepted(array $only = [], array $except = []): bool
     {
@@ -85,8 +76,6 @@ class Column
 
     /**
      * Get expression value.
-     *
-     * @return string
      */
     public function getValue(): string
     {
@@ -95,10 +84,6 @@ class Column
 
     /**
      * Validate column name.
-     *
-     * @param  string|null  $column
-     *
-     * @return bool
      */
     public static function validateColumnName(?string $column): bool
     {

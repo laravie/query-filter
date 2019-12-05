@@ -101,7 +101,6 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-
     /** @test */
     public function it_can_build_search_query_with_expression_value()
     {

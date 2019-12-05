@@ -29,10 +29,6 @@ class Orderable
 
     /**
      * Construct a new Ordered Query.
-     *
-     * @param  string|null  $column
-     * @param  string  $direction
-     * @param  array  $config
      */
     public function __construct(?string $column, string $direction = 'asc', array $config = [])
     {
@@ -57,8 +53,6 @@ class Orderable
 
     /**
      * Validate requirement before applying to query.
-     *
-     * @return bool
      */
     protected function validate(): bool
     {
@@ -74,10 +68,6 @@ class Orderable
 
     /**
      * Sanitized column name.
-     *
-     * @param  string  $column
-     *
-     * @return string
      */
     protected function sanitizeColumnName(string $column): string
     {
@@ -88,10 +78,6 @@ class Orderable
 
     /**
      * Sanitized ordered direction.
-     *
-     * @param  string  $direction
-     *
-     * @return string
      */
     protected function sanitizeDirection(string $direction): string
     {

@@ -22,9 +22,6 @@ class Keywords
 
     /**
      * Construct a new Condition value object.
-     *
-     * @param  string $basic
-     * @param  array  $tagged
      */
     public function __construct(string $basic, array $tagged)
     {
@@ -34,9 +31,6 @@ class Keywords
 
     /**
      * Parse rules from keyword.
-     *
-     * @param  string  $keyword
-     * @param  array  $rules
      *
      * @return array
      */
@@ -69,8 +63,6 @@ class Keywords
 
     /**
      * Get basic conditions.
-     *
-     * @return string
      */
     public function basic(): string
     {
@@ -79,8 +71,6 @@ class Keywords
 
     /**
      * Get tagged conditions.
-     *
-     * @return array
      */
     public function tagged(): array
     {

@@ -22,9 +22,6 @@ class Searchable
 
     /**
      * Construct a new Search Query.
-     *
-     * @param  string|null  $keyword
-     * @param  array  $columns
      */
     public function __construct(?string $keyword, array $columns = [])
     {
@@ -65,7 +62,6 @@ class Searchable
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      * @param  \Laravie\QueryFilter\Value\Field  $column
-     * @param  string  $likeOperator
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
@@ -89,8 +85,6 @@ class Searchable
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      * @param  \Laravie\QueryFilter\Value\Field  $column
-     * @param  string  $likeOperator
-     * @param  string  $whereOperator
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
@@ -120,8 +114,6 @@ class Searchable
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      * @param  \Laravie\QueryFilter\Value\Field  $column
-     * @param  string  $likeOperator
-     * @param  string  $whereOperator
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
