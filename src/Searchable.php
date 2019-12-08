@@ -61,7 +61,6 @@ class Searchable
      * Build wildcard query filter for field using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Laravie\QueryFilter\Value\Field  $column
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
@@ -84,7 +83,6 @@ class Searchable
      * Build wildcard query filter for column using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Laravie\QueryFilter\Value\Field  $column
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
@@ -113,7 +111,6 @@ class Searchable
      * Build wildcard query filter for JSON column using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Laravie\QueryFilter\Value\Field  $column
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */

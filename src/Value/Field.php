@@ -23,7 +23,7 @@ class Field extends Column
      */
     public function isRelationSelector(): bool
     {
-        return Str::contains($this->name, '.');
+        return \strpos($this->name, '.') !== false;
     }
 
     /**
@@ -31,7 +31,7 @@ class Field extends Column
      */
     public function isJsonPathSelector(): bool
     {
-        return Str::contains($this->name, '->');
+        return \strpos($this->name, '->') !== false;
     }
 
     /**

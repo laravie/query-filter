@@ -32,7 +32,7 @@ class Keywords
     /**
      * Parse rules from keyword.
      *
-     * @return array
+     * @return static
      */
     public static function parse(string $keyword, array $rules)
     {
