@@ -11,8 +11,14 @@ class Field extends Column
      */
     public function validate(): bool
     {
-        if ($this->isRelationSelector() || $this->isJsonPathSelector()) {
-            return true;
+        if ($this->isRelationSelector()) {
+            [, $field] = $this->wrapRelationNameAndField();
+
+            return $field->validate();
+        } elseif ($this->isJsonPathSelector()) {
+            [, $path] = $this->wrapJsonFieldAndPath();
+
+            return (new Column(\str_replace('.', '', $path)))->validate();
         }
 
         return parent::validate();

@@ -92,10 +92,10 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        if ($column->isJsonPathSelector()) {
-            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
-        } elseif (! $column->validate()) {
+        if (! $column->validate()) {
             return $query;
+        } elseif ($column->isJsonPathSelector()) {
+            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
         }
 
         $keywords = $this->keyword->all();

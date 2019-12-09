@@ -184,4 +184,26 @@ class SearchableTest extends TestCase
 
         $this->assertEquals($query, $stub->apply($query));
     }
+
+    /** @test */
+    public function it_cant_build_search_query_with_invalid_column_name()
+    {
+        $query = m::mock('Illuminate\Database\Database\Builder');
+
+        $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                })
+                ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                });
+
+        $stub = new Searchable(
+            'hello', ['email->"%27))%23injectedSQL']
+        );
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
 }
