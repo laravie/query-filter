@@ -2,8 +2,6 @@
 
 namespace Laravie\QueryFilter\Value;
 
-use Illuminate\Support\Str;
-
 class Field extends Column
 {
     /**
