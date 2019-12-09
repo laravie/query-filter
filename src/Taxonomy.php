@@ -80,7 +80,7 @@ class Taxonomy
         }
 
         foreach ($this->rules as $keyword => $callback) {
-            if (Str::contains($keyword, ':*') || Str::contains($keyword, ':[]')) {
+            if (\strpos($keyword, ':*') !== false || \strpos($keyword, ':[]') !== false) {
                 [$tag, $type] = \explode(':', $keyword, 2);
 
                 $results = Arr::where($tagged, static function ($value) use ($tag) {

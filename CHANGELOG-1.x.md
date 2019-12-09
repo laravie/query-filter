@@ -2,6 +2,22 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.2.0
+
+Released: 2019-12-09
+
+### Changes
+
+* Validate relationship field and JSON path to not include invalid column name structure.
+
+## 1.1.0
+
+Released: 2019-12-09
+
+### Changes
+
+* Use `strpos()` instead of `Str::contains()` when possible.
+
 ## 1.0.2
 
 Released: 2019-11-03

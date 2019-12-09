@@ -11,8 +11,14 @@ class Field extends Column
      */
     public function validate(): bool
     {
-        if ($this->isRelationSelector() || $this->isJsonPathSelector()) {
-            return true;
+        if ($this->isRelationSelector()) {
+            [, $field] = $this->wrapRelationNameAndField();
+
+            return $field->validate();
+        } elseif ($this->isJsonPathSelector()) {
+            [, $path] = $this->wrapJsonFieldAndPath();
+
+            return (new Column(\str_replace('.', '', $path)))->validate();
         }
 
         return parent::validate();
@@ -23,7 +29,7 @@ class Field extends Column
      */
     public function isRelationSelector(): bool
     {
-        return Str::contains($this->name, '.');
+        return \strpos($this->name, '.') !== false;
     }
 
     /**
@@ -31,7 +37,7 @@ class Field extends Column
      */
     public function isJsonPathSelector(): bool
     {
-        return Str::contains($this->name, '->');
+        return \strpos($this->name, '->') !== false;
     }
 
     /**

@@ -61,7 +61,6 @@ class Searchable
      * Build wildcard query filter for field using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Laravie\QueryFilter\Value\Field  $column
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
@@ -84,7 +83,6 @@ class Searchable
      * Build wildcard query filter for column using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Laravie\QueryFilter\Value\Field  $column
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
@@ -94,10 +92,10 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        if ($column->isJsonPathSelector()) {
-            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
-        } elseif (! $column->validate()) {
+        if (! $column->validate()) {
             return $query;
+        } elseif ($column->isJsonPathSelector()) {
+            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
         }
 
         $keywords = $this->keyword->all();
@@ -113,7 +111,6 @@ class Searchable
      * Build wildcard query filter for JSON column using where or orWhere.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  \Laravie\QueryFilter\Value\Field  $column
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
