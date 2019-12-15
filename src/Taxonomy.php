@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Taxonomy
@@ -92,14 +93,19 @@ class Taxonomy
                         [, $value] = \explode(':', $results[0] ?? null, 2);
                         $value = \trim($value, '"');
                     } else {
-                        $value = \array_values(\array_map(static function ($text) {
-                            [, $value] = \explode(':', $text, 2);
+                        $value = Collection::make($results)
+                            ->map(static function ($text) {
+                                [, $value] = \explode(':', $text, 2);
 
-                            return \trim($value, '"');
-                        }, $results));
+                                return \trim($value, '"');
+                            })->filter(static function ($text) {
+                                return ! empty($text);
+                            })->values()->all();
                     }
 
-                    \call_user_func($callback, $query, $value);
+                    if (! empty($value)) {
+                        \call_user_func($callback, $query, $value);
+                    }
 
                     return $query;
                 });
