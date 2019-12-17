@@ -47,6 +47,35 @@ class TaxonomyTest extends TestCase
     }
 
     /** @test */
+    public function it_cant_build_match_query_given_empty_taxanomy()
+    {
+        $query = m::mock('Illuminate\Database\Query\Builder');
+
+        $query->shouldReceive('unless')->once()->with(true, m::type('Closure'))
+                ->andReturnUsing(static function ($b, $c) use ($query) {
+                    if (! $b) {
+                        return $c($query);
+                    }
+                });
+
+        $stub = new Taxonomy(
+            'name: role: role: is:', [
+                'name:*' => static function ($query, $value) {
+                    return $query->where('name', '=', $value);
+                },
+                'role:[]' => static function ($query, $value) {
+                    return $query->whereIn('roles', $value);
+                },
+                'is:active' => static function ($query) {
+                    return $query->whereNotNull('deleted_at');
+                },
+            ], ['name']
+        );
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
+
+    /** @test */
     public function it_can_build_match_query_with_basic_search()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');

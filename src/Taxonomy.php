@@ -2,9 +2,6 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-
 class Taxonomy
 {
     /**
@@ -73,38 +70,21 @@ class Taxonomy
      */
     protected function matchTaggedConditions($query): void
     {
-        $tagged = $this->keywords->tagged();
-
-        if (empty($tagged)) {
+        if (\count($this->keywords) > 0) {
             return;
         }
 
         foreach ($this->rules as $keyword => $callback) {
             if (\strpos($keyword, ':*') !== false || \strpos($keyword, ':[]') !== false) {
-                [$tag, $type] = \explode(':', $keyword, 2);
+                $value = $this->keywords->where($keyword);
 
-                $results = Arr::where($tagged, static function ($value) use ($tag) {
-                    return Str::startsWith($value, "{$tag}:");
-                });
-
-                $query->unless(empty($results), static function ($query) use ($callback, $results, $type) {
-                    if ($type === '*') {
-                        [, $value] = \explode(':', $results[0] ?? null, 2);
-                        $value = \trim($value, '"');
-                    } else {
-                        $value = \array_values(\array_map(static function ($text) {
-                            [, $value] = \explode(':', $text, 2);
-
-                            return \trim($value, '"');
-                        }, $results));
-                    }
-
+                $query->unless(empty($value), static function ($query) use ($callback, $value) {
                     \call_user_func($callback, $query, $value);
 
                     return $query;
                 });
             } else {
-                $query->when(\in_array($keyword, $tagged), static function ($query) use ($callback) {
+                $query->when($this->keyword->is($keyword), static function ($query) use ($callback) {
                     \call_user_func($callback, $query);
 
                     return $query;
