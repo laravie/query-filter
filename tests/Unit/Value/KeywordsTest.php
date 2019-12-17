@@ -15,14 +15,14 @@ class KeywordsTest extends TestCase
             'email:*',
             'work:*',
             'tags:[]',
+            'is:busy',
         ];
 
         $keywords = Keywords::parse(
-            'Orchestra Platform name:"Mior Muhammad Zaki" email:crynobone@katsana.com tags:github work:KATSANA tags:twitter', $rules
+            'Orchestra Platform name:"Mior Muhammad Zaki" email:crynobone@katsana.com tags:github work:KATSANA tags:twitter is:busy', $rules
         );
 
-        $this->assertTrue($keywords->hasBasic());
-        $this->assertTrue($keywords->hasTagged());
+        $this->assertSame(6, \count($keywords));
 
         $this->assertSame('Orchestra Platform', $keywords->basic());
         $this->assertSame([
@@ -31,7 +31,15 @@ class KeywordsTest extends TestCase
             'tags:github',
             'work:KATSANA',
             'tags:twitter',
+            'is:busy',
         ], $keywords->tagged());
+
+        $this->assertSame('Mior Muhammad Zaki', $keywords->where('name:*'));
+        $this->assertSame('crynobone@katsana.com', $keywords->where('email:*'));
+        $this->assertSame('KATSANA', $keywords->where('work:*'));
+        $this->assertSame(['github', 'twitter'], $keywords->where('tags:[]'));
+        $this->assertTrue($keywords->is('is:busy'));
+        $this->assertEmpty($keywords->where('foo:*'));
     }
 
     /** @test */
@@ -48,11 +56,16 @@ class KeywordsTest extends TestCase
             'Orchestra Platform', $rules
         );
 
-        $this->assertTrue($keywords->hasBasic());
-        $this->assertFalse($keywords->hasTagged());
+        $this->assertSame(0, \count($keywords));
 
         $this->assertSame('Orchestra Platform', $keywords->basic());
         $this->assertSame([], $keywords->tagged());
+
+        $this->assertEmpty($keywords->where('name:*'));
+        $this->assertEmpty($keywords->where('email:*'));
+        $this->assertEmpty($keywords->where('work:*'));
+        $this->assertEmpty($keywords->where('tags:[]'));
+        $this->assertEmpty($keywords->where('foo:*'));
     }
 
     /** @test */
@@ -69,8 +82,7 @@ class KeywordsTest extends TestCase
             'name:"Mior Muhammad Zaki" email:crynobone@katsana.com tags:github work:KATSANA tags:twitter', $rules
         );
 
-        $this->assertFalse($keywords->hasBasic());
-        $this->assertTrue($keywords->hasTagged());
+        $this->assertSame(5, \count($keywords));
 
         $this->assertSame('', $keywords->basic());
         $this->assertSame([
@@ -80,6 +92,12 @@ class KeywordsTest extends TestCase
             'work:KATSANA',
             'tags:twitter',
         ], $keywords->tagged());
+
+        $this->assertSame('Mior Muhammad Zaki', $keywords->where('name:*'));
+        $this->assertSame('crynobone@katsana.com', $keywords->where('email:*'));
+        $this->assertSame('KATSANA', $keywords->where('work:*'));
+        $this->assertSame(['github', 'twitter'], $keywords->where('tags:[]'));
+        $this->assertEmpty($keywords->where('foo:*'));
     }
 
     /** @test */
@@ -96,13 +114,18 @@ class KeywordsTest extends TestCase
             'name:"Mior Muhammad Zaki" email:crynobone@katsana.com', $rules
         );
 
-        $this->assertFalse($keywords->hasBasic());
-        $this->assertTrue($keywords->hasTagged());
+        $this->assertSame(2, \count($keywords));
 
         $this->assertSame('', $keywords->basic());
         $this->assertSame([
             'name:"Mior Muhammad Zaki"',
             'email:crynobone@katsana.com',
         ], $keywords->tagged());
+
+        $this->assertSame('Mior Muhammad Zaki', $keywords->where('name:*'));
+        $this->assertSame('crynobone@katsana.com', $keywords->where('email:*'));
+        $this->assertEmpty($keywords->where('work:*'));
+        $this->assertEmpty($keywords->where('tags:[]'));
+        $this->assertEmpty($keywords->where('foo:*'));
     }
 }

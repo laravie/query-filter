@@ -51,7 +51,7 @@ class TaxonomyTest extends TestCase
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
 
-        $query->shouldReceive('unless')->once()->with(false, m::type('Closure'))
+        $query->shouldReceive('unless')->once()->with(true, m::type('Closure'))
                 ->andReturnUsing(static function ($b, $c) use ($query) {
                     if (! $b) {
                         return $c($query);

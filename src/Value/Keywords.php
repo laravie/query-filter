@@ -2,9 +2,12 @@
 
 namespace Laravie\QueryFilter\Value;
 
+use Countable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class Keywords
+class Keywords implements Countable
 {
     /**
      * Basic condition.
@@ -78,18 +81,55 @@ class Keywords
     }
 
     /**
-     * Keywords contains basic.
+     * Count tagged keywords.
      */
-    public function hasBasic(): bool
+    public function count(): int
     {
-        return ! empty($this->basic);
+        return \count($this->tagged);
     }
 
     /**
-     * Keywords contains tagged.
+     * Filter same as tagged.
+     *
+     * @param  string  $keyword
+     * @return bool
      */
-    public function hasTagged(): bool
+    public function is(string $keyword): bool
     {
-        return ! empty($this->tagged);
+        return \in_array($keyword, $this->tagged());
+    }
+
+    /**
+     * Filter tagged by keyword.
+     *
+     * @param  string  $keyword
+     * @return string|array|null
+     */
+    public function where(string $keyword)
+    {
+        [$tag, $type] = \explode(':', $keyword, 2);
+
+        $results = Collection::make($this->tagged())
+            ->filter(static function ($value) use ($tag) {
+                return Str::startsWith($value, "{$tag}:");
+            })->values();
+
+        if ($results->isEmpty()) {
+            return [];
+        }
+
+        if ($type === '*') {
+            [, $value] = \explode(':', $results[0] ?? null, 2);
+
+            return \trim($value, '"');
+        }
+
+        return $results->map(static function ($text) {
+                [, $value] = \explode(':', $text, 2);
+
+                return \trim($value, '"');
+            })->filter(static function ($text) {
+                return ! empty($text);
+            })->values()->all();
     }
 }
