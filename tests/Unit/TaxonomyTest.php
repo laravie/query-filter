@@ -56,6 +56,14 @@ class TaxonomyTest extends TestCase
                     if (! $b) {
                         return $c($query);
                     }
+                })
+            ->shouldReceive('when')->once()->with(false, m::type('Closure'))
+                ->andReturnUsing(static function ($b, $c) use ($query) {
+                    if ((bool) $b) {
+                        return $c($query);
+                    }
+
+                    return $query;
                 });
 
         $stub = new Taxonomy(

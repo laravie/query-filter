@@ -70,7 +70,7 @@ class Taxonomy
      */
     protected function matchTaggedConditions($query): void
     {
-        if (\count($this->keywords) > 0) {
+        if (\count($this->keywords) < 1) {
             return;
         }
 
@@ -84,7 +84,7 @@ class Taxonomy
                     return $query;
                 });
             } else {
-                $query->when($this->keyword->is($keyword), static function ($query) use ($callback) {
+                $query->when($this->keywords->is($keyword), static function ($query) use ($callback) {
                     \call_user_func($callback, $query);
 
                     return $query;

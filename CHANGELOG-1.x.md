@@ -2,13 +2,21 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.4.0
+
+Released: 2019-12-17
+
+### Changes
+
+* Refactor `Laravie\QueryFilter\Taxanomy` and `Laravie\QueryFilter\Value\Keywords`.
+
 ## 1.3.0
 
 Released: 2019-12-15
 
 ### Changes
 
-* Taxanomy should skipped is tagged values is equivalent to empty string.
+* Taxanomy should skipped if tagged values is equivalent to empty string.
 
 ## 1.2.0
 
