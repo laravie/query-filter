@@ -62,6 +62,7 @@ class TaxonomyTest extends TestCase
                     if ((bool) $b) {
                         return $c($query);
                     }
+
                     return $query;
                 });
 
