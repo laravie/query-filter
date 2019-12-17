@@ -76,4 +76,20 @@ class Keywords
     {
         return $this->tagged;
     }
+
+    /**
+     * Keywords contains basic.
+     */
+    public function hasBasic(): bool
+    {
+        return ! empty($this->basic);
+    }
+
+    /**
+     * Keywords contains tagged.
+     */
+    public function hasTagged(): bool
+    {
+        return ! empty($this->tagged);
+    }
 }
