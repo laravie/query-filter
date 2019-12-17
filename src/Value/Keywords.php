@@ -3,9 +3,8 @@
 namespace Laravie\QueryFilter\Value;
 
 use Countable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class Keywords implements Countable
 {
@@ -90,9 +89,6 @@ class Keywords implements Countable
 
     /**
      * Filter same as tagged.
-     *
-     * @param  string  $keyword
-     * @return bool
      */
     public function is(string $keyword): bool
     {
@@ -102,7 +98,6 @@ class Keywords implements Countable
     /**
      * Filter tagged by keyword.
      *
-     * @param  string  $keyword
      * @return string|array|null
      */
     public function where(string $keyword)
@@ -125,11 +120,11 @@ class Keywords implements Countable
         }
 
         return $results->map(static function ($text) {
-                [, $value] = \explode(':', $text, 2);
+            [, $value] = \explode(':', $text, 2);
 
-                return \trim($value, '"');
-            })->filter(static function ($text) {
-                return ! empty($text);
-            })->values()->all();
+            return \trim($value, '"');
+        })->filter(static function ($text) {
+            return ! empty($text);
+        })->values()->all();
     }
 }
