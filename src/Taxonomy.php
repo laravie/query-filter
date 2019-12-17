@@ -70,7 +70,7 @@ class Taxonomy
      */
     protected function matchTaggedConditions($query): void
     {
-        if (\count($this->keywords) > 0) {
+        if (\count($this->keywords) < 1) {
             return;
         }
 
