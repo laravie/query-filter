@@ -28,7 +28,7 @@ To install through composer, simply put the following in your `composer.json` fi
 ```json
 {
     "require": {
-        "laravie/query-filter": "^1.0"
+        "laravie/query-filter": "^1.3"
     }
 }
 ```
@@ -39,7 +39,7 @@ And then run `composer install` from the terminal.
 
 Above installation can also be simplify by using the following command:
 
-    composer require "laravie/query-filter=^1.0"
+    composer require "laravie/query-filter=^1.3"
 
 ## Usages
 
@@ -256,7 +256,7 @@ namespace App\Nova;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource as NovaResource;
-use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Taxonomy;
 
 abstract class Resource extends NovaResource
 {
@@ -287,11 +287,21 @@ abstract class Resource extends NovaResource
      */
     protected static function applyResourceSearch($query, $search)
     {
-        return $query->where(function ($query) use ($search) {
-            (new Searchable(
-                $search, static::searchableColumns()
-            ))->apply($query);
-        });
-    } 
+        (new Taxonomy(
+            $search, static::taxonomiesRules(), static::searchableColumns()
+        ))->apply($query);
+
+        return $query;
+    }
+
+    /**
+     * Taxonomies Rules.
+     *
+     * @return array 
+     */
+    public static function taxonomiesRules()
+    {
+        return [];
+    }
 }
 ```
