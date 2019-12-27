@@ -19,6 +19,7 @@ Database/Eloquent Query Builder filters for Laravel
         + [Search with Relations](#search-with-relations)
     - [Taxonomy Queries](#taxonomy-queries)
 * [Integrations](integrations)
+    - [Query Builder Macro](#query-builder-macro)
     - [Using with Laravel Nova](#using-with-laravel-nova)
 
 ## Installation
@@ -246,12 +247,53 @@ and `admin`=1;
 
 ## Integrations
 
+### Query Builder Macro
+
+You can integrate `Searchable` with database or eloquent query builder macro by adding the following code to your `AppServiceProvider` (under `register` method):
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\ServiceProvider;
+use Laravie\QueryFilter\Searchable;
+
+class AppServiceProvider extends ServiceProvider 
+{
+    /**
+     * Register any application services.
+     *
+     * This service provider is a great spot to register your various container
+     * bindings with the application. As you can see, we are registering our
+     * "Registrar" implementation here. You can add your own bindings too!
+     *
+     * @return void
+     */
+    public function register()
+    {
+        QueryBuilder::macro('whereLike', static function ($attributes, string $searchTerm) {
+            return (new Searchable($searchTerm, Arr::wrap($attributes)))->apply($this);
+        });
+
+        EloquentBuilder::macro('whereLike', static function ($attributes, string $searchTerm) {
+            return (new Searchable($searchTerm, Arr::wrap($attributes)))->apply($this);
+        });
+    }
+}
+```
+
+
 ### Using with Laravel Nova
 
 You can override the default Laravel global and local search feature by adding the following methods on `app/Nova/Resource.php`:
 
 ```php
 <?php
+
 namespace App\Nova;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
