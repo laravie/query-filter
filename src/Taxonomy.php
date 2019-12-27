@@ -21,19 +21,19 @@ class Taxonomy
     /**
      * Taxonomy keywords.
      *
-     * @var \Laravie\QueryFilter\Value\Keywords
+     * @var \Laravie\QueryFilter\Value\Terms
      */
-    protected $keywords;
+    protected $terms;
 
     /**
      * Construct a new Matches Query.
      */
-    public function __construct(?string $keyword, array $rules = [], array $columns = [])
+    public function __construct(?string $terms, array $rules = [], array $columns = [])
     {
         $this->rules = \array_filter($rules);
         $this->columns = $columns;
 
-        $this->keywords = Value\Keywords::parse($keyword ?? '', \array_keys($this->rules));
+        $this->terms = Value\Terms::parse($terms ?? '', \array_keys($this->rules));
     }
 
     /**
@@ -59,7 +59,7 @@ class Taxonomy
     protected function matchBasicConditions($query): void
     {
         (new Searchable(
-            $this->keywords->basic(), $this->columns
+            $this->terms->basic(), $this->columns
         ))->apply($query);
     }
 
@@ -70,13 +70,13 @@ class Taxonomy
      */
     protected function matchTaggedConditions($query): void
     {
-        if (\count($this->keywords) < 1) {
+        if (\count($this->terms) < 1) {
             return;
         }
 
-        foreach ($this->rules as $keyword => $callback) {
-            if (\strpos($keyword, ':*') !== false || \strpos($keyword, ':[]') !== false) {
-                $value = $this->keywords->where($keyword);
+        foreach ($this->rules as $term => $callback) {
+            if (\strpos($term, ':*') !== false || \strpos($term, ':[]') !== false) {
+                $value = $this->terms->where($term);
 
                 $query->unless(empty($value), static function ($query) use ($callback, $value) {
                     \call_user_func($callback, $query, $value);
@@ -84,7 +84,7 @@ class Taxonomy
                     return $query;
                 });
             } else {
-                $query->when($this->keywords->is($keyword), static function ($query) use ($callback) {
+                $query->when($this->terms->is($term), static function ($query) use ($callback) {
                     \call_user_func($callback, $query);
 
                     return $query;
