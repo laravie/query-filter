@@ -285,7 +285,6 @@ class AppServiceProvider extends \Illuminate\Support\ServiceProvider
 }
 ```
 
-
 ### Using with Laravel Nova
 
 You can override the default Laravel global and local search feature by adding the following methods on `app/Nova/Resource.php`:
