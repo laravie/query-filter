@@ -2,6 +2,19 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.5.0
+
+Released: 2019-12-30
+
+### Added
+
+* Added `Laravie\QueryFilter\Value\Terms` as replacement for deprecated `Laravie\QueryFilter\Value\Keywords`.
+* Added documentation example how to add `whereLike` macros based on [@freekmurze](https://github.com/freekmurze)'s [Searching models using a where like query in Laravel](https://freek.dev/1182-searching-models-using-a-where-like-query-in-laravel)
+
+### Deprecated
+
+* Deprecate `Laravie\QueryFilter\Value\Keywords`.
+
 ## 1.4.0
 
 Released: 2019-12-17

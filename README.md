@@ -259,10 +259,9 @@ namespace App\Providers;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Arr;
-use Illuminate\Support\ServiceProvider;
 use Laravie\QueryFilter\Searchable;
 
-class AppServiceProvider extends ServiceProvider 
+class AppServiceProvider extends \Illuminate\Support\ServiceProvider 
 {
     /**
      * Register any application services.
@@ -285,7 +284,6 @@ class AppServiceProvider extends ServiceProvider
     }
 }
 ```
-
 
 ### Using with Laravel Nova
 
