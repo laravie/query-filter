@@ -130,7 +130,7 @@ class TermsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_escape_wildcard_attack_keywords()
+    public function it_can_still_parse_basic_terms_when_given_wildcard_attack_keywords()
     {
         $this->assertSame('%%%%', Terms::parse('%%%%', [])->basic());
         $this->assertSame(
