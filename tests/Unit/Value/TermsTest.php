@@ -128,4 +128,14 @@ class TermsTest extends TestCase
         $this->assertEmpty($terms->where('tags:[]'));
         $this->assertEmpty($terms->where('foo:*'));
     }
+
+    /** @test */
+    public function it_can_escape_wildcard_attack_keywords()
+    {
+        $this->assertSame('%%%%', Terms::parse('%%%%', [])->basic());
+        $this->assertSame(
+            '_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_',
+            Terms::parse('_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_', [])->basic()
+        );
+    }
 }
