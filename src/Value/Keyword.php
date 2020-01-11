@@ -50,7 +50,11 @@ class Keyword
      */
     public static function searchable(string $text, string $wildcard = '*', string $replacement = '%'): array
     {
-        if (! Str::contains($text, [$wildcard, $replacement])) {
+        $text = static::sanitize($text);
+
+        if (empty($text)) {
+            return [];
+        } elseif (! Str::contains($text, [$wildcard, $replacement])) {
             return [
                 "{$text}", "{$text}%", "%{$text}", "%{$text}%",
             ];
@@ -59,5 +63,21 @@ class Keyword
         return [
             \str_replace($wildcard, $replacement, $text),
         ];
+    }
+
+    /**
+     * Sanitize keywords.
+     */
+    public static function sanitize(string $keyword): string
+    {
+        $words = \preg_replace('/[^\w\*\s]/i', '', $keyword);
+
+        if (empty(\trim($words))) {
+            return '';
+        } elseif (\strlen($words) > 3 && \strlen($words) < (\strlen($keyword) * 0.5)) {
+            return $words;
+        }
+
+        return $keyword;
     }
 }
