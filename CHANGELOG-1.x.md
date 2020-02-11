@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.6.0
+
+Released: 2019-02-11
+
+### Changes
+
+* Sanitize againsts SQL wildcard attacks.
+
 ## 1.5.0
 
 Released: 2019-12-30
