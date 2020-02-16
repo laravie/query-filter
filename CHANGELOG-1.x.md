@@ -2,9 +2,17 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.6.1
+
+Released: 2020-02-16
+
+### Added
+
+* Added support for Laravel Framework `7.0+`.
+
 ## 1.6.0
 
-Released: 2019-02-11
+Released: 2020-02-11
 
 ### Changes
 
