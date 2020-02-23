@@ -24,23 +24,9 @@ Database/Eloquent Query Builder filters for Laravel
 
 ## Installation
 
-To install through composer, simply put the following in your `composer.json` file:
+To install through composer, run the following command from terminal:
 
-```json
-{
-    "require": {
-        "laravie/query-filter": "^1.3"
-    }
-}
-```
-
-And then run `composer install` from the terminal.
-
-### Quick Installation
-
-Above installation can also be simplify by using the following command:
-
-    composer require "laravie/query-filter=^1.3"
+    composer require "laravie/query-filter"
 
 ## Usages
 
