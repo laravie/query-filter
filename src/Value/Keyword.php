@@ -70,7 +70,7 @@ class Keyword
      */
     public static function sanitize(string $keyword): string
     {
-        $words = \preg_replace('/[^\w\*\s]/i', '', $keyword);
+        $words = \preg_replace('/[^\w\*\s]/iu', '', $keyword);
 
         if (empty(\trim($words))) {
             return '';
