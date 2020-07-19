@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.6.2
+
+Released: 2020-06-19
+
+### Fixes
+
+* Avoid sanitizing unicode characters. [#4](https://github.com/laravie/query-filter/pull/4)
+
 ## 1.6.1
 
 Released: 2020-02-16
