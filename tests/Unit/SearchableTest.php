@@ -128,38 +128,6 @@ class SearchableTest extends TestCase
     }
 
     /** @test */
-    public function it_can_build_search_query_with_relation_field()
-    {
-        $query = m::mock('Illuminate\Database\Eloquent\Builder');
-        $relationQuery = m::mock('Illuminate\Database\Database\Builder');
-
-        $query->shouldReceive('getModel->getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
-            ->shouldReceive('orWhereHas')->once()->with('users', m::type('Closure'))
-            ->andReturnUsing(static function ($r, $c) use ($relationQuery) {
-                $c($relationQuery);
-            });
-
-        $relationQuery->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($relationQuery) {
-                    $c($relationQuery);
-                })
-            ->shouldReceive('orWhere')->once()->with('name', 'like', 'hello')
-            ->shouldReceive('orWhere')->once()->with('name', 'like', 'hello%')
-            ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello')
-            ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello%');
-
-        $stub = new Searchable(
-            'hello', ['users.name']
-        );
-
-        $this->assertEquals($query, $stub->apply($query));
-    }
-
-    /** @test */
     public function it_can_build_search_query_with_json_selector()
     {
         $query = m::mock('Illuminate\Database\Database\Builder');
@@ -202,6 +170,38 @@ class SearchableTest extends TestCase
 
         $stub = new Searchable(
             'hello', ['email->"%27))%23injectedSQL']
+        );
+
+        $this->assertEquals($query, $stub->apply($query));
+    }
+
+    /** @test */
+    public function it_can_build_search_query_with_relation_field()
+    {
+        $query = m::mock('Illuminate\Database\Eloquent\Builder');
+        $relationQuery = m::mock('Illuminate\Database\Database\Builder');
+
+        $query->shouldReceive('getModel->getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($query) {
+                    $c($query);
+                })
+            ->shouldReceive('orWhereHas')->once()->with('posts', m::type('Closure'))
+            ->andReturnUsing(static function ($r, $c) use ($relationQuery) {
+                $c($relationQuery);
+            });
+
+        $relationQuery->shouldReceive('where')->once()->with(m::type('Closure'))
+                ->andReturnUsing(static function ($c) use ($relationQuery) {
+                    $c($relationQuery);
+                })
+            ->shouldReceive('orWhere')->once()->with('title', 'like', 'hello')
+            ->shouldReceive('orWhere')->once()->with('title', 'like', 'hello%')
+            ->shouldReceive('orWhere')->once()->with('title', 'like', '%hello')
+            ->shouldReceive('orWhere')->once()->with('title', 'like', '%hello%');
+
+        $stub = new Searchable(
+            'hello', ['posts.title']
         );
 
         $this->assertEquals($query, $stub->apply($query));
