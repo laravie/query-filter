@@ -21,7 +21,7 @@ class EloquentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("name" like ? or "name" like ? or "name" like ? or "name" like ?))',
+            'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
             $query->toSql()
         );
     }
@@ -133,7 +133,7 @@ class EloquentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (exists (select * from "posts" where "users"."id" = "posts"."user_id" and ("title" like ? or "title" like ? or "title" like ? or "title" like ?)))',
+            'select * from "users" where (exists (select * from "posts" where "users"."id" = "posts"."user_id" and ("posts"."title" like ? or "posts"."title" like ? or "posts"."title" like ? or "posts"."title" like ?)))',
             $query->toSql()
         );
     }
