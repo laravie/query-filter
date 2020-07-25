@@ -23,6 +23,11 @@ class FluentSearchableTest extends TestCase
             'select * from "users" where (("name" like ? or "name" like ? or "name" like ? or "name" like ?))',
             $query->toSql()
         );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -38,6 +43,11 @@ class FluentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users"',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
         );
     }
 
@@ -55,6 +65,11 @@ class FluentSearchableTest extends TestCase
             'select * from "users"',
             $query->toSql()
         );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -70,6 +85,11 @@ class FluentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users"',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
         );
     }
 
@@ -87,6 +107,11 @@ class FluentSearchableTest extends TestCase
             'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
             $query->toSql()
         );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -103,6 +128,11 @@ class FluentSearchableTest extends TestCase
             'select * from "users" where ((lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ?))',
             $query->toSql()
         );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -118,6 +148,11 @@ class FluentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users"',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
         );
     }
 }

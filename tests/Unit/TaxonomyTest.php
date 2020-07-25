@@ -26,16 +26,16 @@ class TaxonomyTest extends TestCase
                     }
                 })
             ->shouldReceive('where')->once()->with('name', '=', 'hello')->andReturnSelf()
-            ->shouldReceive('whereIn')->once()->with('roles', ['admin', 'staff'])->andReturnSelf()
+            ->shouldReceive('whereIn')->once()->with('email', ['crynobone@gmail.com', 'crynobone@orchestraplatform.com'])->andReturnSelf()
             ->shouldReceive('whereNotNull')->once()->with('deleted_at')->andReturnSelf();
 
         $stub = new Taxonomy(
-            'name:hello role:admin role:staff is:active', [
+            'name:hello email:crynobone@gmail.com email:crynobone@orchestraplatform.com is:active', [
                 'name:*' => static function ($query, $value) {
                     return $query->where('name', '=', $value);
                 },
-                'role:[]' => static function ($query, $value) {
-                    return $query->whereIn('roles', $value);
+                'email:[]' => static function ($query, $value) {
+                    return $query->whereIn('email', $value);
                 },
                 'is:active' => static function ($query) {
                     return $query->whereNotNull('deleted_at');
@@ -67,12 +67,12 @@ class TaxonomyTest extends TestCase
                 });
 
         $stub = new Taxonomy(
-            'name: role: role: is:', [
+            'name: email: email: is:', [
                 'name:*' => static function ($query, $value) {
                     return $query->where('name', '=', $value);
                 },
-                'role:[]' => static function ($query, $value) {
-                    return $query->whereIn('roles', $value);
+                'email:[]' => static function ($query, $value) {
+                    return $query->whereIn('email', $value);
                 },
                 'is:active' => static function ($query) {
                     return $query->whereNotNull('deleted_at');
