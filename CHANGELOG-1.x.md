@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.7.0
+
+Released: 2020-07-25
+
+### Changes
+
+* Avoid ambigous column name when search with related fields using Eloquent. 
+
 ## 1.6.2
 
 Released: 2020-06-19
