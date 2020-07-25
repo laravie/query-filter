@@ -24,6 +24,11 @@ class EloquentSearchableTest extends TestCase
             'select * from "users" where (("name" like ? or "name" like ? or "name" like ? or "name" like ?))',
             $query->toSql()
         );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -39,6 +44,11 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users"',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
         );
     }
 
@@ -56,6 +66,11 @@ class EloquentSearchableTest extends TestCase
             'select * from "users"',
             $query->toSql()
         );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -71,6 +86,11 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users"',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
         );
     }
 
@@ -88,6 +108,11 @@ class EloquentSearchableTest extends TestCase
             'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
             $query->toSql()
         );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -103,6 +128,11 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users" where ((lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ?))',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
         );
     }
 
@@ -120,6 +150,11 @@ class EloquentSearchableTest extends TestCase
             'select * from "users"',
             $query->toSql()
         );
+
+        $this->assertSame(
+            [],
+            $query->getBindings()
+        );
     }
 
     /** @test */
@@ -135,6 +170,11 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(
             'select * from "users" where (exists (select * from "posts" where "users"."id" = "posts"."user_id" and ("title" like ? or "title" like ? or "title" like ? or "title" like ?)))',
             $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
         );
     }
 }
