@@ -91,4 +91,25 @@ class EloquentTaxonomyTest extends TestCase
             $query->getBindings()
         );
     }
+
+    /** @test */
+    public function it_can_build_match_query_with_basic_search_with_related_field()
+    {
+        $stub = new Taxonomy(
+            'hello', [], ['name', 'posts.title']
+        );
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?) or exists (select * from "posts" where "users"."id" = "posts"."user_id" and ("posts"."title" like ? or "posts"."title" like ? or "posts"."title" like ? or "posts"."title" like ?)))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%', 'hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
+    }
 }
