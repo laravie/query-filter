@@ -100,6 +100,10 @@ class Searchable
 
         $keywords = $this->keyword->all();
 
+        if ($query instanceof EloquentBuilder) {
+            $column = $query->qualifyColumn((string) $column);
+        }
+
         return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
             foreach ($keywords as $keyword) {
                 $query->orWhere((string) $column, $likeOperator, $keyword);

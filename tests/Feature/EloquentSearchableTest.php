@@ -21,7 +21,7 @@ class EloquentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("name" like ? or "name" like ? or "name" like ? or "name" like ?))',
+            'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
             $query->toSql()
         );
 
@@ -161,19 +161,19 @@ class EloquentSearchableTest extends TestCase
     public function it_can_build_search_query_with_relation_field()
     {
         $stub = new Searchable(
-            'hello', ['posts.title']
+            'hello', ['name', 'posts.title']
         );
 
         $query = User::query();
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (exists (select * from "posts" where "users"."id" = "posts"."user_id" and ("title" like ? or "title" like ? or "title" like ? or "title" like ?)))',
+            'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?) or exists (select * from "posts" where "users"."id" = "posts"."user_id" and ("posts"."title" like ? or "posts"."title" like ? or "posts"."title" like ? or "posts"."title" like ?)))',
             $query->toSql()
         );
 
         $this->assertSame(
-            ['hello', 'hello%', '%hello', '%hello%'],
+            ['hello', 'hello%', '%hello', '%hello%', 'hello', 'hello%', '%hello', '%hello%'],
             $query->getBindings()
         );
     }
