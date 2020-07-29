@@ -31,6 +31,14 @@ class Searchable
     }
 
     /**
+     * Get search keyword.
+     */
+    public function searchKeyword(): Value\Keyword
+    {
+        return $this->keyword;
+    }
+
+    /**
      * Apply search to query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
