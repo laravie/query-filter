@@ -177,4 +177,25 @@ class EloquentSearchableTest extends TestCase
             $query->getBindings()
         );
     }
+
+    /** @test */
+    public function it_can_build_search_query_with_polymorphic_relation_field()
+    {
+        $stub = new Searchable(
+            'hello', ['name', 'morph:notes.title']
+        );
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
+    }
 }
