@@ -29,7 +29,13 @@ class FieldTest extends TestCase
     /** @test */
     public function it_can_wrap_relation_field()
     {
-        $this->assertEquals(['users', new Field('fullname')], (new Field('users.fullname'))->wrapRelationNameAndField());
+        $this->assertEquals(['users', new Field('fullname'), 'normal'], (new Field('users.fullname'))->wrapRelationNameAndField());
+    }
+
+    /** @test */
+    public function it_can_wrap_morph_relation_field()
+    {
+        $this->assertEquals(['users', new Field('fullname'), 'morph'], (new Field('morph:users.fullname'))->wrapRelationNameAndField());
     }
 
     /** @test */

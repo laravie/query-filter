@@ -45,9 +45,17 @@ class Field extends Column
     {
         [$relation, $column] = \explode('.', $this->name, 2);
 
+        $type = 'normal';
+
+        if (\strpos($relation, 'morph:') === 0 && $relation !== 'morph:') {
+            $type = 'morph';
+            $relation = \substr($relation, 6);
+        }
+
         return [
             $relation,
             new static($column),
+            $type,
         ];
     }
 

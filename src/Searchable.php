@@ -69,7 +69,13 @@ class Searchable
         if ($column->isExpression()) {
             return $this->queryOnColumnUsing($query, new Value\Field($column->getValue()), $likeOperator, 'orWhere');
         } elseif ($column->isRelationSelector() && $query instanceof EloquentBuilder) {
-            [$relation, $column] = $column->wrapRelationNameAndField();
+            [$relation, $column, $type] = $column->wrapRelationNameAndField();
+
+            if ($type === 'morph') {
+                return $query->orWhereHasMorph($relation, '*', function ($query) use ($column, $likeOperator) {
+                    $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
+                });
+            }
 
             return $query->orWhereHas($relation, function ($query) use ($column, $likeOperator) {
                 $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
