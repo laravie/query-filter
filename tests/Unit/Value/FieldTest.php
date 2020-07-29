@@ -33,12 +33,6 @@ class FieldTest extends TestCase
     }
 
     /** @test */
-    public function it_can_wrap_morph_relation_field()
-    {
-        $this->assertEquals(['users', new Field('fullname'), 'morph'], (new Field('morph:users.fullname'))->wrapRelationNameAndField());
-    }
-
-    /** @test */
     public function it_can_wrap_json_selector()
     {
         $this->assertEquals(['address', 'country.code'], (new Field('address->country->code'))->wrapJsonFieldAndPath());

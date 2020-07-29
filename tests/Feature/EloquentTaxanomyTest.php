@@ -114,30 +114,4 @@ class EloquentTaxonomyTest extends TestCase
             $query->getBindings()
         );
     }
-
-
-    /** @test */
-    public function it_can_build_match_query_with_polymorphic_relation_field()
-    {
-        Relation::morphMap([
-            'users' => User::class,
-        ]);
-
-        $stub = new Taxonomy(
-            'hello', [], ['title', 'morph:notable.name']
-        );
-
-        $query = Note::query();
-        $stub->apply($query);
-
-        $this->assertSame(
-            'select * from "notes" where (("notes"."title" like ? or "notes"."title" like ? or "notes"."title" like ? or "notes"."title" like ?) or (("notes"."notable_type" = ? and exists (select * from "users" where "notes"."notable_id" = "users"."id" and ("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?)))))',
-            $query->toSql()
-        );
-
-        $this->assertSame(
-            ['hello', 'hello%', '%hello', '%hello%', 'users', 'hello', 'hello%', '%hello', '%hello%'],
-            $query->getBindings()
-        );
-    }
 }

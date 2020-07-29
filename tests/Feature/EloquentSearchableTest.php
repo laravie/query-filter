@@ -210,40 +210,4 @@ class EloquentSearchableTest extends TestCase
 
         $this->assertSame(3, $query->count());
     }
-
-    /** @test */
-    public function it_can_build_search_query_with_polymorphic_relation_field()
-    {
-        Relation::morphMap([
-            'users' => User::class,
-        ]);
-
-        $user = \factory(User::class)->create();
-        \factory(User::class, 5)->create();
-
-        \factory(Note::class, 3)->create([
-            'notable_type' => 'users',
-            'notable_id' => $user->id,
-            'title' => 'hello world',
-        ]);
-
-        $stub = new Searchable(
-            'hello', ['title', 'morph:notable.name']
-        );
-
-        $query = Note::query();
-        $stub->apply($query);
-
-        $this->assertSame(
-            'select * from "notes" where (("notes"."title" like ? or "notes"."title" like ? or "notes"."title" like ? or "notes"."title" like ?) or (("notes"."notable_type" = ? and exists (select * from "users" where "notes"."notable_id" = "users"."id" and ("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?)))))',
-            $query->toSql()
-        );
-
-        $this->assertSame(
-            ['hello', 'hello%', '%hello', '%hello%', 'users', 'hello', 'hello%', '%hello', '%hello%'],
-            $query->getBindings()
-        );
-
-        $this->assertSame(3, $query->count());
-    }
 }
