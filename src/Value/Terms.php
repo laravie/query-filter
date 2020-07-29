@@ -41,11 +41,12 @@ class Terms implements Countable
         $basic = [];
         $tagged = [];
 
-        $tags = \array_map(static function ($value) {
-            [$tag, ] = \explode(':', $value, 2);
+        $tags = Collection::make($rules)
+            ->map(static function ($value) {
+                [$tag, ] = \explode(':', $value, 2);
 
-            return "{$tag}:";
-        }, $rules);
+                return "{$tag}:";
+            })->all();
 
         if (\preg_match_all('/([\w]+:\"[\w\s]*\"|[\w]+:[\w\S]+|[\w\S]+)\s?/', $term, $terms)) {
             foreach ($terms[1] as $index => $term) {

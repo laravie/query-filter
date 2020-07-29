@@ -12,7 +12,6 @@ class CreateNotesTable extends Migration
             $table->bigIncrements('id');
 
             $table->morphs('notable');
-
             $table->string('title');
             $table->text('content');
 
