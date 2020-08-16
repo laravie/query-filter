@@ -160,6 +160,27 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_build_search_query_with_nested_json_selector()
+    {
+        $stub = new Searchable(
+            '60000', ['personal->address->postcode']
+        );
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where ((lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['60000', '60000%', '%60000', '%60000%'],
+            $query->getBindings()
+        );
+    }
+
+    /** @test */
     public function it_cant_build_search_query_with_invalid_column_name()
     {
         $stub = new Searchable(
