@@ -32,7 +32,7 @@ after_script:
 
 matrix:
   include:
-    - php: 7.2
+    - php: 7.3
       env: setup=coveralls coverage=yes laravel=^8.0
   allow_failures:
     - env: setup=coveralls coverage=yes laravel=^8.0
