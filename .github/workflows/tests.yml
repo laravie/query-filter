@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4, 7.3]
-        laravel: [5.8.x, 6.x, 7.x, 8.x]
+        laravel: [8.x]
         os: [ubuntu-latest, windows-latest]
 
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }} on ${{ matrix.os }}
