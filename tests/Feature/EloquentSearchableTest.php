@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Tests\Factories\PostFactory;
+use Laravie\QueryFilter\Tests\Factories\UserFactory;
 use Laravie\QueryFilter\Tests\Models\Note;
 use Laravie\QueryFilter\Tests\Models\Post;
 use Laravie\QueryFilter\Tests\Models\User;
@@ -16,11 +18,11 @@ class EloquentSearchableTest extends TestCase
     /** @test */
     public function it_can_build_search_query()
     {
-        \factory(User::class, 5)->create([
+        UserFactory::new()->times(5)->create([
             'name' => 'hello world',
         ]);
 
-        \factory(User::class, 3)->create([
+        UserFactory::new()->times(3)->create([
             'name' => 'goodbye world',
         ]);
 
@@ -110,11 +112,11 @@ class EloquentSearchableTest extends TestCase
     /** @test */
     public function it_can_build_search_query_with_expression_value()
     {
-        \factory(User::class, 5)->create([
+        UserFactory::new()->times(5)->create([
             'name' => 'hello world',
         ]);
 
-        \factory(User::class, 3)->create([
+        UserFactory::new()->times(3)->create([
             'name' => 'goodbye world',
         ]);
 
@@ -204,11 +206,11 @@ class EloquentSearchableTest extends TestCase
     /** @test */
     public function it_can_build_search_query_with_relation_field()
     {
-        \factory(Post::class, 3)->create([
+        PostFactory::new()->times(3)->create([
             'title' => 'hello world',
         ]);
 
-        \factory(Post::class, 5)->create([
+        PostFactory::new()->times(5)->create([
             'title' => 'goodbye world',
         ]);
 
