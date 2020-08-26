@@ -2,13 +2,26 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
+use Illuminate\Database\Query\Expression;
+use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Value\Keyword;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Searchable;
-use Illuminate\Database\Query\Expression;
 
 class SearchableTest extends TestCase
 {
+    /** @test */
+    public function it_has_proper_signature()
+    {
+        $stub = new Searchable(
+            'Hello', ['name']
+        );
+
+        $this->assertInstanceOf(Keyword::class, $stub->searchKeyword());
+        $this->assertSame(['Hello', 'Hello%', '%Hello', '%Hello%'], $stub->searchKeyword()->all());
+        $this->assertSame(['hello', 'hello%', '%hello', '%hello%'], $stub->searchKeyword()->allLowerCased());
+    }
+
     /** @test */
     public function it_can_build_search_query()
     {

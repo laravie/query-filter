@@ -2,9 +2,12 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Tests\Models\Note;
+use Laravie\QueryFilter\Tests\Models\Post;
 use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 
@@ -13,6 +16,14 @@ class EloquentSearchableTest extends TestCase
     /** @test */
     public function it_can_build_search_query()
     {
+        \factory(User::class, 5)->create([
+            'name' => 'hello world',
+        ]);
+
+        \factory(User::class, 3)->create([
+            'name' => 'goodbye world',
+        ]);
+
         $stub = new Searchable(
             'hello', ['name']
         );
@@ -29,6 +40,8 @@ class EloquentSearchableTest extends TestCase
             ['hello', 'hello%', '%hello', '%hello%'],
             $query->getBindings()
         );
+
+        $this->assertSame(5, $query->count());
     }
 
     /** @test */
@@ -97,6 +110,14 @@ class EloquentSearchableTest extends TestCase
     /** @test */
     public function it_can_build_search_query_with_expression_value()
     {
+        \factory(User::class, 5)->create([
+            'name' => 'hello world',
+        ]);
+
+        \factory(User::class, 3)->create([
+            'name' => 'goodbye world',
+        ]);
+
         $stub = new Searchable(
             'hello', [new Expression('users.name')]
         );
@@ -113,13 +134,15 @@ class EloquentSearchableTest extends TestCase
             ['hello', 'hello%', '%hello', '%hello%'],
             $query->getBindings()
         );
+
+        $this->assertSame(5, $query->count());
     }
 
     /** @test */
     public function it_can_build_search_query_with_json_selector()
     {
         $stub = new Searchable(
-            'hello', ['address->postcode']
+            '60000', ['address->postcode']
         );
 
         $query = User::query();
@@ -131,7 +154,28 @@ class EloquentSearchableTest extends TestCase
         );
 
         $this->assertSame(
-            ['hello', 'hello%', '%hello', '%hello%'],
+            ['60000', '60000%', '%60000', '%60000%'],
+            $query->getBindings()
+        );
+    }
+
+    /** @test */
+    public function it_can_build_search_query_with_nested_json_selector()
+    {
+        $stub = new Searchable(
+            '60000', ['personal->address->postcode']
+        );
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where ((lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['60000', '60000%', '%60000', '%60000%'],
             $query->getBindings()
         );
     }
@@ -160,6 +204,14 @@ class EloquentSearchableTest extends TestCase
     /** @test */
     public function it_can_build_search_query_with_relation_field()
     {
+        \factory(Post::class, 3)->create([
+            'title' => 'hello world',
+        ]);
+
+        \factory(Post::class, 5)->create([
+            'title' => 'goodbye world',
+        ]);
+
         $stub = new Searchable(
             'hello', ['name', 'posts.title']
         );
@@ -176,5 +228,7 @@ class EloquentSearchableTest extends TestCase
             ['hello', 'hello%', '%hello', '%hello%', 'hello', 'hello%', '%hello', '%hello%'],
             $query->getBindings()
         );
+
+        $this->assertSame(3, $query->count());
     }
 }

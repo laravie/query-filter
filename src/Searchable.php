@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Searchable
 {
@@ -27,6 +28,14 @@ class Searchable
     {
         $this->keyword = new Value\Keyword($keyword ?? '');
         $this->columns = \array_filter($columns);
+    }
+
+    /**
+     * Get search keyword.
+     */
+    public function searchKeyword(): Value\Keyword
+    {
+        return $this->keyword;
     }
 
     /**

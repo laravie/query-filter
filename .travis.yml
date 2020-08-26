@@ -15,6 +15,7 @@ env:
     - laravel=^8.0
     - setup=stable laravel=^6.0
     - setup=stable laravel=^7.0
+    - setup=stable laravel=^8.0
     - setup=lowest laravel=^6.0
     - setup=lowest laravel=^7.0
     - setup=lowest laravel=^8.0

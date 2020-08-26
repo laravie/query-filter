@@ -48,6 +48,7 @@ class Field extends Column
         return [
             $relation,
             new static($column),
+            'normal',
         ];
     }
 
