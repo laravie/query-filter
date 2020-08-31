@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 1.8.0
+
+Released: 2020-08-31
+
+### Changes
+
+* Allow to get search keyword using `Laravie\QueryFilter\Searchable::searchKeyword()`.
+
 ## 1.7.0
 
 Released: 2020-07-25
