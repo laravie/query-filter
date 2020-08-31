@@ -1,7 +1,6 @@
 <?php
 
 use Faker\Generator as Faker;
-use Illuminate\Support\Str;
 use Laravie\QueryFilter\Tests\Models\Post;
 use Laravie\QueryFilter\Tests\Models\User;
 

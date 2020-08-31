@@ -1,7 +1,7 @@
 <?php
 
-use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use Faker\Generator as Faker;
 use Laravie\QueryFilter\Tests\Models\User;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */

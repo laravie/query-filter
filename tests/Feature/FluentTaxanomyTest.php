@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
-use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Taxonomy;
+use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Tests\TestCase;
 
 class FluentTaxonomyTest extends TestCase
