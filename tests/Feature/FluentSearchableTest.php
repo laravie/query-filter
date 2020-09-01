@@ -2,10 +2,10 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
-use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use Illuminate\Database\Query\Expression;
 
 class FluentSearchableTest extends TestCase
 {
