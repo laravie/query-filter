@@ -18,9 +18,9 @@ before_install:
   - composer config discard-changes true
 
 before_script:
-  - composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-lowest --prefer-stable; fi
+  - composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-update
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
   - if [[ $setup = 'coveralls' ]]; then wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar; chmod +x php-coveralls.phar; fi
 
 script:
