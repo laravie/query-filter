@@ -3,55 +3,21 @@ language: php
 
 php:
   - 7.2
-  - 7.3
-  - 7.4
-
-env:
-  global:
-    - setup=basic
-    - coverage=no
-  matrix:
-    - laravel=^5.8
-    - laravel=^6.0
-    - laravel=^7.0
-    - setup=stable laravel=^5.8
-    - setup=stable laravel=^6.0
-    - setup=stable laravel=^7.0
-    - setup=lowest laravel=^6.0
-    - setup=lowest laravel=^7.0
 
 before_install:
+  - travis_retry composer self-update
   - composer config discard-changes true
 
 before_script:
-  - composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-lowest --prefer-stable; fi
-  - if [[ $setup = 'coveralls' ]]; then wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar; chmod +x php-coveralls.phar; fi
+  - composer install --prefer-dist --no-interaction
+  - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
+  - chmod +x php-coveralls.phar
 
 script:
-  - if [[ $coverage = 'yes' ]]; then vendor/bin/phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml; fi
-  - if [[ $coverage = 'no' ]]; then vendor/bin/phpunit -c phpunit.xml; fi
+  - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
 
 after_script:
-  - if [[ $setup = 'coveralls' ]]; then php-coveralls.phar -v; fi
+  - php-coveralls.phar -v
 
 matrix:
-  include:
-    - php: 8.0
-      env: setup=basic laravel=^6.0
-    - php: 8.0
-      env: setup=basic laravel=^7.0
-    - php: 8.0
-      env: setup=stable laravel=^6.0
-    - php: 8.0
-      env: setup=stable laravel=^7.0
-    - php: 8.0
-      env: setup=lowest laravel=^6.0
-    - php: 8.0
-      env: setup=lowest laravel=^7.0
-    - php: 7.2
-      env: setup=coveralls coverage=yes laravel=^6.0
-  allow_failures:
-    - env: setup=coveralls coverage=yes laravel=^6.0
   fast_finish: true
