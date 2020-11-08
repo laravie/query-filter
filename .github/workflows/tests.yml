@@ -23,7 +23,7 @@ jobs:
           - "highest"
           - "lowest"
         laravel:
-          - "5.8"
+          - "5.8.x"
           - "6.x"
           - "7.x"
         experimental:
