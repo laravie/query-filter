@@ -4,40 +4,48 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 3'
 
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: false
       matrix:
-        php: [7.4, 7.3]
-        laravel: [8.x]
-        os: [ubuntu-latest, windows-latest]
+        os:
+          - "ubuntu-latest"
+        php:
+          - "7.3"
+          - "7.4"
+          - "8.0"
+        dependencies:
+          - "locked"
+          - "highest"
+          - "lowest"
+        laravel:
+          - "8.x"
+        experimental:
+          - false
 
-    name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }} on ${{ matrix.os }}
+    name: Laravel ${{ matrix.laravel }} on PHP${{ matrix.php }}-${{ matrix.os }} (${{ matrix.dependencies }})
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache/files
-          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, sqlite3, pdo_sqlite, pdo_mysql, bcmath, intl
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, sqlite3, pdo_sqlite, bcmath, fileinfo
           coverage: none
 
-      - name: Install dependencies
+      - name: Install Laravel Framework ${{ matrix.laravel }}
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-suggest
+      - name: Install dependencies
+        uses: "ramsey/composer-install@v1"
+        with:
+          composer-options: "--prefer-dist"
       - name: Execute tests
         run: vendor/bin/phpunit
