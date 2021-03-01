@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter\Value;
 
 use Illuminate\Support\Str;
+use Laravie\QueryFilter\Taxonomy;
 
 class Keyword
 {
@@ -14,11 +15,42 @@ class Keyword
     protected $value;
 
     /**
+     * Enable wildcard searching.
+     *
+     * @var bool
+     */
+    protected $enableWildcardSearching = true;
+
+    /**
      * Construct a new Keyword value object.
      */
     public function __construct(string $value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * Enable using wildcard search.
+     *
+     * @return $this
+     */
+    public function withSearchingWildcard()
+    {
+        $this->enableWildcardSearching = true;
+
+        return $this;
+    }
+
+    /**
+     * Disable using wildcard search.
+     *
+     * @return $this
+     */
+    public function withoutSearchingWildcard()
+    {
+        $this->enableWildcardSearching = false;
+
+        return $this;
     }
 
     /**
@@ -42,19 +74,19 @@ class Keyword
      */
     public function all(string $wildcard = '*', string $replacement = '%'): array
     {
-        return static::searchable($this->value, $wildcard, $replacement);
+        return static::searchable($this->value, $wildcard, $replacement, $this->enableWildcardSearching);
     }
 
     /**
      * Convert basic string to searchable result.
      */
-    public static function searchable(string $text, string $wildcard = '*', string $replacement = '%'): array
+    public static function searchable(string $text, string $wildcard = '*', string $replacement = '%', bool $enableWildcardSearching = true): array
     {
         $text = static::sanitize($text);
 
         if (empty($text)) {
             return [];
-        } elseif (! Str::contains($text, [$wildcard, $replacement])) {
+        } elseif (! Str::contains($text, [$wildcard, $replacement]) && $enableWildcardSearching === true) {
             return [
                 "{$text}", "{$text}%", "%{$text}", "%{$text}%",
             ];

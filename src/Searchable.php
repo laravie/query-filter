@@ -3,9 +3,12 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Support\Traits\Tappable;
 
 class Searchable
 {
+    use Tappable;
+
     /**
      * Search keyword.
      *
@@ -35,6 +38,30 @@ class Searchable
     public function searchKeyword(): Value\Keyword
     {
         return $this->keyword;
+    }
+
+    /**
+     * Enable using wildcard search.
+     *
+     * @return $this
+     */
+    public function withSearchingWildcard()
+    {
+        $this->keyword->withSearchingWildcard();
+
+        return $this;
+    }
+
+    /**
+     * Disable using wildcard search.
+     *
+     * @return $this
+     */
+    public function withoutSearchingWildcard()
+    {
+        $this->keyword->withoutSearchingWildcard();
+
+        return $this;
     }
 
     /**
