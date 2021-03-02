@@ -88,10 +88,10 @@ class Keyword
 
         if (empty($text)) {
             return [];
-        } elseif (\is_null($wildcard) || \is_null($replacement)) {
+        } elseif (\is_null($replacement)) {
             return [$text];
-        } elseif (! Str::contains($text, [$wildcard, $replacement]) && $wildcardSearching === true) {
-            return collect(static::$defaultSearchVariations)
+        } elseif (! Str::contains($text, \array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
+            return \collect(static::$defaultSearchVariations)
                 ->map(function ($string) use ($text) {
                     return Str::replaceFirst('{keyword}', $text, $string);
                 })->all();

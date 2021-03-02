@@ -31,6 +31,9 @@ class KeywordTest extends TestCase
     {
         $this->assertSame([
             'Hello',
+            'Hello%',
+            '%Hello',
+            '%Hello%',
         ], (new Keyword('Hello'))->all(null, '%'));
 
 

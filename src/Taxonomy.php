@@ -15,7 +15,14 @@ class Taxonomy
      *
      * @var array
      */
-    protected $columns = [];
+    protected $fields = [];
+
+    /**
+     * Search filters.
+     *
+     * @var array
+     */
+    protected $filters = [];
 
     /**
      * Taxonomy rules.
@@ -34,10 +41,11 @@ class Taxonomy
     /**
      * Construct a new Matches Query.
      */
-    public function __construct(?string $terms, array $rules = [], array $columns = [])
+    public function __construct(?string $terms, array $rules = [], array $fields = [], array $filters = [])
     {
         $this->rules = \array_filter($rules);
-        $this->columns = $columns;
+        $this->fields = $fields;
+        $this->filters = $filters;
 
         $this->terms = Value\Terms::parse($terms ?? '', \array_keys($this->rules));
     }
@@ -65,7 +73,7 @@ class Taxonomy
     protected function matchBasicConditions($query): void
     {
         (new Searchable(
-            $this->terms->basic(), $this->columns
+            $this->terms->basic(), $this->fields, $this->filters
         ))
         ->wildcardCharacter($this->wildcardCharacter)
         ->tap(function (Searchable $searchable) {
