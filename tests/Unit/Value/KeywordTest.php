@@ -23,7 +23,7 @@ class KeywordTest extends TestCase
     {
         $this->assertSame([
             'Hello',
-        ], (new Keyword('Hello'))->all('*', '%', false));
+        ], (new Keyword('Hello'))->noWildcardSearching()->all());
     }
 
     /** @test */
@@ -39,7 +39,7 @@ class KeywordTest extends TestCase
 
         $this->assertSame([
             'Hello',
-        ], (new Keyword('Hello'))->all('*', null));
+        ], (new Keyword('Hello'))->wildcardCharacter('*')->wildcardReplacement(null)->all());
     }
 
     /** @test */
@@ -69,7 +69,7 @@ class KeywordTest extends TestCase
     {
         $this->assertSame([
             'hello',
-        ], (new Keyword('Hello'))->allLowerCased('*', '%', false));
+        ], (new Keyword('Hello'))->wildcardCharacter('*')->noWildcardSearching()->allLowerCased());
     }
 
     /** @test */
@@ -91,7 +91,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('He%world'))->all());
         $this->assertSame([
             'He%world',
-        ], (new Keyword('He*world'))->all());
+        ], (new Keyword('He*world'))->wildcardCharacter('*')->all());
     }
 
     /** @test */
@@ -102,7 +102,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('مر%العالم'))->all());
         $this->assertSame([
             'مر%العالم',
-        ], (new Keyword('مر*العالم'))->all());
+        ], (new Keyword('مر*العالم'))->wildcardCharacter('*')->all());
     }
 
     /** @test */
@@ -110,11 +110,11 @@ class KeywordTest extends TestCase
     {
         $this->assertSame([], (new Keyword('%%%%'))->all());
         $this->assertSame([], (new Keyword('% % % %'))->all());
-        $this->assertSame(['h%l%o%o%l%'], (new Keyword('h*l*o*o*l*'))->all());
+        $this->assertSame(['h%l%o%o%l%'], (new Keyword('h*l*o*o*l*'))->wildcardCharacter('*')->all());
         $this->assertSame(['h%l%o%o%l%'], (new Keyword('h%l%o%o%l%'))->all());
         $this->assertSame([
             '__aF_D_F_N_%%R_xa%9_',
-        ], (new Keyword('_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_'))->all());
+        ], (new Keyword('_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_'))->wildcardCharacter('*')->all());
     }
 
     /** @test */
@@ -126,6 +126,6 @@ class KeywordTest extends TestCase
         $this->assertSame(['م%ر%ح%ب%ا%'], (new Keyword('م%ر%ح%ب%ا%'))->all());
         $this->assertSame([
             '__aF_D_F_N_%%R_xa%9_',
-        ], (new Keyword('_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_'))->all());
+        ], (new Keyword('_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_'))->wildcardCharacter('*')->all());
     }
 }

@@ -11,5 +11,5 @@ interface Search
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    public function apply($query, array $keywords, string $likeOperator, string $whereOperator);
+    public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator);
 }

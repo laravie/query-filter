@@ -66,11 +66,10 @@ class Searchable
         });
 
         $query->where(function ($query) use ($fields, $filters, $likeOperator) {
-            $keywords = $this->searchKeyword()->all(
-                $this->wildcardCharacter,
-                $this->wildcardReplacement,
-                $this->wildcardSearching ?? true
-            );
+            $keywords = $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($this->wildcardSearching ?? true);
 
             foreach ($filters as $filter) {
                 $filter->apply($query, $keywords, $likeOperator);
@@ -123,11 +122,10 @@ class Searchable
 
         return (new Filters\FieldSearch())->field($field)->apply(
             $query,
-            $this->searchKeyword()->all(
-                $this->wildcardCharacter,
-                $this->wildcardReplacement,
-                $field->wildcardSearching ?? $this->wildcardSearching ?? true
-            ),
+            $this->searchKeyword()
+                ->wildcardCharacter($this->wildcardCharacter)
+                ->wildcardReplacement($this->wildcardReplacement)
+                ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
             $likeOperator,
             $whereOperator
         );
@@ -150,11 +148,10 @@ class Searchable
             ->field($field)
             ->apply(
                 $query,
-                $this->searchKeyword()->allLowerCased(
-                    $this->wildcardCharacter,
-                    $this->wildcardReplacement,
-                    $field->wildcardSearching ?? $this->wildcardSearching ?? true
-                ),
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
                 $likeOperator,
                 $whereOperator
             );
@@ -172,11 +169,10 @@ class Searchable
             ->field($field)
             ->apply(
                 $query,
-                $this->searchKeyword()->all(
-                    $this->wildcardCharacter,
-                    $this->wildcardReplacement,
-                    $field->wildcardSearching ?? $this->wildcardSearching ?? true
-                ),
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
                 $likeOperator,
                 'orWhere'
             );

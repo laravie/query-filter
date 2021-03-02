@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter\Filters;
 
 use Laravie\QueryFilter\Search;
+use Laravie\QueryFilter\Contracts\Keyword;
 
 class RelationSearch extends Search
 {
@@ -13,7 +14,7 @@ class RelationSearch extends Search
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
+    public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator)
     {
         [$relation, $field] = $this->field->wrapRelationNameAndField();
 

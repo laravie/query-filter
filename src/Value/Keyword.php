@@ -3,10 +3,15 @@
 namespace Laravie\QueryFilter\Value;
 
 use Illuminate\Support\Str;
+use Laravie\QueryFilter\Concerns\SearchingWildcard;
 use Laravie\QueryFilter\Contracts\Keyword as KeywordContract;
+use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 
-class Keyword
+class Keyword implements KeywordContract
 {
+    use ConditionallySearchingWildcard,
+        SearchingWildcard;
+
     /**
      * Keyword value.
      *
@@ -46,34 +51,28 @@ class Keyword
     }
 
     /**
-     * Get searchable strings as lowercase.
+     * Get searchable strings.
      */
-    public function allLowerCased(
-        ?string $wildcard = '*',
-        ?string $replacement = '%',
-        bool $wildcardSearching = true
-    ): array {
+    public function all(): array
+    {
         return static::searchable(
-            Str::lower($this->value),
-            $wildcard,
-            $replacement,
-            $wildcardSearching
+            $this->value,
+            $this->wildcardCharacter,
+            $this->wildcardReplacement,
+            $this->wildcardSearching ?? true
         );
     }
 
     /**
-     * Get searchable strings.
+     * Get searchable strings as lowercase.
      */
-    public function all(
-        ?string $wildcard = '*',
-        ?string $replacement = '%',
-        bool $wildcardSearching = true
-    ): array {
+    public function allLowerCased(): array
+    {
         return static::searchable(
-            $this->value,
-            $wildcard,
-            $replacement,
-            $wildcardSearching
+            Str::lower($this->value),
+            $this->wildcardCharacter,
+            $this->wildcardReplacement,
+            $this->wildcardSearching ?? true
         );
     }
 
