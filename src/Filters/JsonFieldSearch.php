@@ -2,10 +2,10 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Laravie\QueryFilter\Search;
+use Laravie\QueryFilter\SearchFilter;
 use Laravie\QueryFilter\Contracts\Keyword;
 
-class JsonFieldSearch extends Search
+class JsonFieldSearch extends SearchFilter
 {
     /**
      * Apply JSON field search queries.

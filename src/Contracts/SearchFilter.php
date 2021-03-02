@@ -2,7 +2,7 @@
 
 namespace Laravie\QueryFilter\Contracts;
 
-interface Search
+interface SearchFilter
 {
     /**
      * Apply search queries.

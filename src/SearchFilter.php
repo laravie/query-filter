@@ -2,7 +2,7 @@
 
 namespace Laravie\QueryFilter;
 
-abstract class Search implements Contracts\Search
+abstract class SearchFilter implements Contracts\SearchFilter
 {
     /**
      * Field implementation.

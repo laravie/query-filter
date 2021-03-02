@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
+use Laravie\QueryFilter\Filters\PrimaryKeySearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Database\Query\Expression;
@@ -40,6 +41,37 @@ class EloquentSearchableTest extends TestCase
         );
 
         $this->assertSame(5, $query->count());
+    }
+
+    /** @test */
+    public function it_can_build_search_query_with_primary_key_search()
+    {
+        UserFactory::new()->times(5)->create([
+            'name' => 'hello world',
+        ]);
+
+        UserFactory::new()->times(3)->create([
+            'name' => 'goodbye world',
+        ]);
+
+        $stub = new Searchable(
+            '5', [new PrimaryKeySearch(PHP_INT_MAX, ['id']), 'name']
+        );
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where ("users"."id" = ? or ("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['5', '5', '5%', '%5', '%5%'],
+            $query->getBindings()
+        );
+
+        $this->assertSame(1, $query->count());
     }
 
     /** @test */

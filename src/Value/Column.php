@@ -39,6 +39,14 @@ class Column
     }
 
     /**
+     * Get expression value.
+     */
+    public function getValue(): string
+    {
+        return $this->isExpression() ? $this->name->getValue() : $this->name;
+    }
+
+    /**
      * Is an instance of Illuminate\Database\Query\Expression.
      */
     public function isExpression(): bool
@@ -72,14 +80,6 @@ class Column
         }
 
         return true;
-    }
-
-    /**
-     * Get expression value.
-     */
-    public function getValue(): string
-    {
-        return $this->isExpression() ? $this->name->getValue() : $this->name;
     }
 
     /**

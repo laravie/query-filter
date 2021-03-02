@@ -4,9 +4,9 @@ namespace Laravie\QueryFilter\Filters;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Laravie\QueryFilter\Contracts\Keyword;
-use Laravie\QueryFilter\Search;
+use Laravie\QueryFilter\SearchFilter;
 
-class FieldSearch extends Search
+class FieldSearch extends SearchFilter
 {
     /**
      * Apply generic field search queries.

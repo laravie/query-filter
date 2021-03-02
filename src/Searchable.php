@@ -68,7 +68,7 @@ class Searchable
         $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
         [$filters, $fields] = \collect($this->fields)->partition(function ($field) {
-            return $field instanceof Contracts\Search;
+            return $field instanceof Contracts\SearchFilter;
         });
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {

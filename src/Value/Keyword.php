@@ -35,19 +35,19 @@ class Keyword implements KeywordContract
     }
 
     /**
-     * Validate keyword value.
-     */
-    public function validate(): bool
-    {
-        return ! empty($this->value);
-    }
-
-    /**
      * Get keyword value.
      */
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    /**
+     * Validate keyword value.
+     */
+    public function validate(): bool
+    {
+        return ! empty($this->value);
     }
 
     /**

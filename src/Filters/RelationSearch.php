@@ -2,10 +2,10 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Laravie\QueryFilter\Search;
+use Laravie\QueryFilter\SearchFilter;
 use Laravie\QueryFilter\Contracts\Keyword;
 
-class RelationSearch extends Search
+class RelationSearch extends SearchFilter
 {
     /**
      * Apply relation search queries.
