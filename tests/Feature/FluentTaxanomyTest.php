@@ -96,7 +96,7 @@ class FluentTaxonomyTest extends TestCase
     {
         $stub = (new Taxonomy(
             'hello', [], ['name']
-        ))->withoutWildcardSearching();
+        ))->noWildcardSearching();
 
         $query = DB::table('users');
         $stub->apply($query);

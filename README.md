@@ -135,7 +135,7 @@ $query = App\User::query();
 
 $searchable = (new Searchable(
     'crynobone@gmail', ['name', 'email']
-))->withoutWildcardSearching();
+))->noWildcardSearching();
 
 return $searchable->apply($query)->get(); 
 ```

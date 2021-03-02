@@ -36,7 +36,7 @@ class FluentSearchableTest extends TestCase
     {
         $stub = (new Searchable(
             'hello', [new Expression('users.name')]
-        ))->withoutWildcardSearching();
+        ))->noWildcardSearching();
 
         $query = DB::table('users');
         $stub->apply($query);
@@ -57,7 +57,7 @@ class FluentSearchableTest extends TestCase
     public function it_can_build_search_query_with_exact_keyword_on_column()
     {
         $stub = new Searchable(
-            'hello', [(new Field('name'))->withoutWildcardSearching(), 'email']
+            'hello', [(new Field('name'))->noWildcardSearching(), 'email']
         );
 
         $query = DB::table('users');

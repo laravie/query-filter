@@ -70,9 +70,9 @@ class Taxonomy
         ->wildcardCharacter($this->wildcardCharacter)
         ->tap(function (Searchable $searchable) {
             if (($this->wildcardSearching ?? true) === true) {
-                $searchable->withWildcardSearching();
+                $searchable->allowWildcardSearching();
             } else {
-                $searchable->withoutWildcardSearching();
+                $searchable->noWildcardSearching();
             }
         })->apply($query);
     }

@@ -16,7 +16,7 @@ trait ConditionallySearchingWildcard
      *
      * @return $this
      */
-    public function withWildcardSearching()
+    public function allowWildcardSearching()
     {
         $this->wildcardSearching = true;
 
@@ -28,7 +28,7 @@ trait ConditionallySearchingWildcard
      *
      * @return $this
      */
-    public function withoutWildcardSearching()
+    public function noWildcardSearching()
     {
         $this->wildcardSearching = false;
 
