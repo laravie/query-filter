@@ -3,9 +3,12 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Tappable;
 
 class Orderable
 {
+    use Tappable;
+
     /**
      * Ordered column name.
      *

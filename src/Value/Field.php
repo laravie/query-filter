@@ -2,8 +2,12 @@
 
 namespace Laravie\QueryFilter\Value;
 
+use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
+
 class Field extends Column
 {
+    use ConditionallySearchingWildcard;
+
     /**
      * Validate column.
      */

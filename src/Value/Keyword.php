@@ -14,6 +14,13 @@ class Keyword
     protected $value;
 
     /**
+     * List default search variations.
+     *
+     * @var string[]
+     */
+    public static $defaultSearchVariations = ['{keyword}', '{keyword}%', '%{keyword}', '%{keyword}%'];
+
+    /**
      * Construct a new Keyword value object.
      */
     public function __construct(string $value)
@@ -30,34 +37,43 @@ class Keyword
     }
 
     /**
-     * Get searchable strings as lowercased.
+     * Get searchable strings as lowercase.
      */
-    public function allLowerCased(string $wildcard = '*', string $replacement = '%'): array
-    {
-        return static::searchable(Str::lower($this->value), $wildcard, $replacement);
+    public function allLowerCased(
+        ?string $wildcard = '*',
+        ?string $replacement = '%',
+        bool $wildcardSearching = true
+    ): array {
+        return static::searchable(Str::lower($this->value), $wildcard, $replacement, $wildcardSearching);
     }
 
     /**
      * Get searchable strings.
      */
-    public function all(string $wildcard = '*', string $replacement = '%'): array
-    {
-        return static::searchable($this->value, $wildcard, $replacement);
+    public function all(
+        ?string $wildcard = '*',
+        ?string $replacement = '%',
+        bool $wildcardSearching = true
+    ): array {
+        return static::searchable($this->value, $wildcard, $replacement, $wildcardSearching);
     }
 
     /**
      * Convert basic string to searchable result.
      */
-    public static function searchable(string $text, string $wildcard = '*', string $replacement = '%'): array
+    public static function searchable(string $text, ?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
     {
         $text = static::sanitize($text);
 
         if (empty($text)) {
             return [];
-        } elseif (! Str::contains($text, [$wildcard, $replacement])) {
-            return [
-                "{$text}", "{$text}%", "%{$text}", "%{$text}%",
-            ];
+        } elseif (\is_null($wildcard) || \is_null($replacement)) {
+            return [$text];
+        } elseif (! Str::contains($text, [$wildcard, $replacement]) && $wildcardSearching === true) {
+            return collect(static::$defaultSearchVariations)
+                ->map(function ($string) use ($text) {
+                    return Str::replaceFirst('{keyword}', $text, $string);
+                })->all();
         }
 
         return [

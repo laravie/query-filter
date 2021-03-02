@@ -4,6 +4,7 @@ namespace Laravie\QueryFilter\Tests\Feature;
 
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Value\Field;
 use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Database\Query\Expression;
 
@@ -26,6 +27,49 @@ class FluentSearchableTest extends TestCase
 
         $this->assertSame(
             ['hello', 'hello%', '%hello', '%hello%'],
+            $query->getBindings()
+        );
+    }
+
+    /** @test */
+    public function it_can_build_search_query_with_exact_keyword()
+    {
+        $stub = (new Searchable(
+            'hello', [new Expression('users.name')]
+        ))->noWildcardSearching();
+
+        $query = DB::table('users');
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where (("users"."name" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello'],
+            $query->getBindings()
+        );
+    }
+
+
+    /** @test */
+    public function it_can_build_search_query_with_exact_keyword_on_column()
+    {
+        $stub = new Searchable(
+            'hello', [(new Field('name'))->noWildcardSearching(), 'email']
+        );
+
+        $query = DB::table('users');
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where (("name" like ?) or ("email" like ? or "email" like ? or "email" like ? or "email" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello', 'hello', 'hello%', '%hello', '%hello%'],
             $query->getBindings()
         );
     }

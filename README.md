@@ -2,12 +2,12 @@
 Database/Eloquent Query Builder filters for Laravel
 ==============
 
-[![Build Status](https://travis-ci.org/laravie/query-filter.svg?branch=master)](https://travis-ci.org/laravie/query-filter)
+[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=2.x)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3A2.x)
 [![Latest Stable Version](https://poser.pugx.org/laravie/query-filter/v/stable)](https://packagist.org/packages/laravie/query-filter)
 [![Total Downloads](https://poser.pugx.org/laravie/query-filter/downloads)](https://packagist.org/packages/laravie/query-filter)
 [![Latest Unstable Version](https://poser.pugx.org/laravie/query-filter/v/unstable)](https://packagist.org/packages/laravie/query-filter)
 [![License](https://poser.pugx.org/laravie/query-filter/license)](https://packagist.org/packages/laravie/query-filter)
-[![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=master)](https://coveralls.io/github/laravie/query-filter?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=2.x)](https://coveralls.io/github/laravie/query-filter?branch=2.x)
 
 * [Installation](#installation)
     - [Quick Installation](#quick-installation)
@@ -119,6 +119,34 @@ where (
         `name` like 'crynobone%gmail'
     ) or (
         `email` like 'crynobone%gmail'
+    )
+);
+```
+
+#### Search with exact wildcard 
+
+Use `withoutWildcardSearching()` to disable adding additional search condition.
+
+```php
+use App\User;
+use Laravie\QueryFilter\Searchable;
+
+$query = App\User::query();
+
+$searchable = (new Searchable(
+    'crynobone@gmail', ['name', 'email']
+))->noWildcardSearching();
+
+return $searchable->apply($query)->get(); 
+```
+
+```sql
+select * from `users` 
+where (
+    (
+        `name` like 'crynobone@gmail'
+    ) or (
+        `email` like 'crynobone@gmail'
     )
 );
 ```

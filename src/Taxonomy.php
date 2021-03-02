@@ -2,8 +2,14 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Support\Traits\Tappable;
+
 class Taxonomy
 {
+    use Concerns\ConditionallySearchingWildcard,
+        Concerns\SearchingWildcard,
+        Tappable;
+
     /**
      * Taxonomy columns.
      *
@@ -60,7 +66,15 @@ class Taxonomy
     {
         (new Searchable(
             $this->terms->basic(), $this->columns
-        ))->apply($query);
+        ))
+        ->wildcardCharacter($this->wildcardCharacter)
+        ->tap(function (Searchable $searchable) {
+            if (($this->wildcardSearching ?? true) === true) {
+                $searchable->allowWildcardSearching();
+            } else {
+                $searchable->noWildcardSearching();
+            }
+        })->apply($query);
     }
 
     /**

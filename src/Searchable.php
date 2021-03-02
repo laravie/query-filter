@@ -2,10 +2,15 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Support\Traits\Tappable;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Searchable
 {
+    use Concerns\ConditionallySearchingWildcard,
+        Concerns\SearchingWildcard,
+        Tappable;
+
     /**
      * Search keyword.
      *
@@ -58,7 +63,7 @@ class Searchable
 
         $query->where(function ($query) use ($likeOperator) {
             foreach ($this->columns as $column) {
-                $this->queryOnColumn($query, new Value\Field($column), $likeOperator);
+                $this->queryOnColumn($query, Value\Field::make($column), $likeOperator);
             }
         });
 
@@ -106,7 +111,11 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
         }
 
-        $keywords = $this->keyword->all();
+        $wildcardSearching = $column->wildcardSearching ?? $this->wildcardSearching ?? true;
+
+        $keywords = $this->keyword->all(
+            $this->wildcardCharacter, $this->wildcardReplacement, $wildcardSearching
+        );
 
         if ($query instanceof EloquentBuilder) {
             $column = $query->qualifyColumn((string) $column);
@@ -132,7 +141,11 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        $keywords = $this->keyword->allLowerCased();
+        $wildcardSearching = $column->wildcardSearching ?? $this->wildcardSearching ?? true;
+
+        $keywords = $this->keyword->allLowerCased(
+            $this->wildcardCharacter, $this->wildcardReplacement, $wildcardSearching
+        );
 
         [$field, $path] = $column->wrapJsonFieldAndPath();
 

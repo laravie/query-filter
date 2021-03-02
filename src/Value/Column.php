@@ -39,6 +39,21 @@ class Column
     }
 
     /**
+     * Make a new Field value object.
+     *
+     * @param  static|\Illuminate\Database\Query\Expression|string  $name
+     * @return static
+     */
+    public static function make($name)
+    {
+        if ($name instanceof static) {
+            return $name;
+        }
+
+        return new static($name);
+    }
+
+    /**
      * Is an instance of Illuminate\Database\Query\Expression.
      */
     public function isExpression(): bool
