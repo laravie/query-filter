@@ -32,7 +32,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, sqlite3, pdo_sqlite, bcmath, fileinfo
-          coverage: none
+          coverage: xdebug
 
       - name: Install Laravel Framework ${{ matrix.laravel }}
         run: |
