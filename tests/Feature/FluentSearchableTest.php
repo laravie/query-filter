@@ -31,6 +31,27 @@ class FluentSearchableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_build_search_query_with_exact_keyword()
+    {
+        $stub = (new Searchable(
+            'hello', [new Expression('users.name')]
+        ))->withoutWildcardSearching();
+
+        $query = DB::table('users');
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where (("users"."name" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello'],
+            $query->getBindings()
+        );
+    }
+
+    /** @test */
     public function it_ignores_build_search_query_when_columns_is_not_provided()
     {
         $stub = new Searchable(

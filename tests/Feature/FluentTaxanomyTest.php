@@ -90,4 +90,25 @@ class FluentTaxonomyTest extends TestCase
             $query->getBindings()
         );
     }
+
+    /** @test */
+    public function it_can_build_match_query_with_basic_search_with_exact_keyword()
+    {
+        $stub = (new Taxonomy(
+            'hello', [], ['name']
+        ))->withoutWildcardSearching();
+
+        $query = DB::table('users');
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where (("name" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['hello'],
+            $query->getBindings()
+        );
+    }
 }
