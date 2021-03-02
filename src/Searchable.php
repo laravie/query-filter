@@ -26,20 +26,12 @@ class Searchable
     protected $fields = [];
 
     /**
-     * Search filters.
-     *
-     * @var array
-     */
-    protected $filters = [];
-
-    /**
      * Construct a new Search Query.
      */
-    public function __construct(?string $keyword, array $fields = [], array $filters = [])
+    public function __construct(?string $keyword, array $fields = [])
     {
         $this->keyword = new Value\Keyword($keyword ?? '');
         $this->fields = \array_filter($fields);
-        $this->filters = \array_filter($filters);
     }
 
     /**
@@ -69,9 +61,13 @@ class Searchable
 
         $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
+        [$filters, $fields] = \collect($this->fields)->partition(function ($field) {
+            return $field instanceof Contracts\Search;
+        });
+
         $query
-            ->when(\count($this->filters) > 0, function ($query) use ($likeOperator) {
-                foreach ($this->filters as $filter) {
+            ->when($filters->isNotEmpty(), function ($query) use ($filters, $likeOperator) {
+                foreach ($filters as $filter) {
                     $filter->apply(
                         $query,
                         $this->keyword->all(
@@ -83,8 +79,8 @@ class Searchable
                     );
                 }
             })
-            ->where(function ($query) use ($likeOperator) {
-                foreach ($this->fields as $field) {
+            ->where(function ($query) use ($fields, $likeOperator) {
+                foreach ($fields as $field) {
                     $this->queryOnColumn($query, Value\Field::make($field), $likeOperator);
                 }
             });
