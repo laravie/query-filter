@@ -123,6 +123,34 @@ where (
 );
 ```
 
+#### Search with exact wildcard 
+
+Use `withoutWildcardSearching()` to disable adding additional search condition.
+
+```php
+use App\User;
+use Laravie\QueryFilter\Searchable;
+
+$query = App\User::query();
+
+$searchable = (new Searchable(
+    'crynobone@gmail', ['name', 'email']
+))->withoutWildcardSearching();
+
+return $searchable->apply($query)->get(); 
+```
+
+```sql
+select * from `users` 
+where (
+    (
+        `name` like 'crynobone@gmail'
+    ) or (
+        `email` like 'crynobone@gmail'
+    )
+);
+```
+
 #### Search with JSON path
 
 This would allow you to query JSON path using `LIKE` with case insensitive (JSON path in MySQL is case-sensitive by default).

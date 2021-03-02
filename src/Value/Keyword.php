@@ -59,10 +59,14 @@ class Keyword
     {
         $text = static::sanitize($text);
 
+        if (\is_null($wildcard) && ! \is_null($replacement)) {
+            $wildcard = $replacement;
+        }
+
         if (empty($text)) {
             return [];
         } elseif (
-            (! \is_null($wildcard) && ! \is_null($replacement))
+            ! \is_null($replacement)
             && $wildcard !== $replacement
             && ! Str::contains($text, [$wildcard, $replacement])
             && $wildcardSearching === true
