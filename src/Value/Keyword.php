@@ -14,13 +14,6 @@ class Keyword
     protected $value;
 
     /**
-     * Enable wildcard searching.
-     *
-     * @var bool
-     */
-    protected $enableWildcardSearching = true;
-
-    /**
      * Construct a new Keyword value object.
      */
     public function __construct(string $value)
