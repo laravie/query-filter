@@ -30,7 +30,7 @@ class Searchable
      */
     public function __construct(?string $keyword, array $fields = [])
     {
-        $this->keyword = new Value\Keyword($keyword ?? '');
+        $this->keyword = $keyword ?? '';
         $this->fields = \array_filter($fields);
     }
 
@@ -51,9 +51,15 @@ class Searchable
      */
     public function apply($query)
     {
-        if (! $this->keyword->validate() || empty($this->fields)) {
+        $keywords = $this->searchKeyword();
+
+        if (! $keywords->validate() || empty($this->fields)) {
             return $query;
         }
+
+        $keywords->wildcardCharacter($this->wildcardCharacter)
+            ->wildcardReplacement($this->wildcardReplacement)
+            ->wildcardSearching($this->wildcardSearching ?? true);
 
         $connectionType = $query instanceof EloquentBuilder
             ? $query->getModel()->getConnection()->getDriverName()
@@ -65,12 +71,7 @@ class Searchable
             return $field instanceof Contracts\Search;
         });
 
-        $query->where(function ($query) use ($fields, $filters, $likeOperator) {
-            $keywords = $this->searchKeyword()
-                    ->wildcardCharacter($this->wildcardCharacter)
-                    ->wildcardReplacement($this->wildcardReplacement)
-                    ->wildcardSearching($this->wildcardSearching ?? true);
-
+        $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
             foreach ($filters as $filter) {
                 $filter->apply($query, $keywords, $likeOperator);
             }
