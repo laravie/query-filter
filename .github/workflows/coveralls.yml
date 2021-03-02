@@ -3,8 +3,6 @@ name: tests
 on:
   push:
   pull_request:
-  schedule:
-    - cron: '0 0 * * 3'
 
 jobs:
   tests:
@@ -15,13 +13,9 @@ jobs:
         os:
           - "ubuntu-latest"
         php:
-          - "7.3"
-          - "7.4"
           - "8.0"
         dependencies:
           - "locked"
-          - "highest"
-          - "lowest"
         laravel:
           - "8.x"
         experimental:
@@ -52,3 +46,10 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+
+      - name: Upload coverage results to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer global require php-coveralls/php-coveralls
+          php-coveralls --coverage_clover=build/logs/clover.xml -v
