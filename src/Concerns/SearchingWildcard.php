@@ -2,28 +2,21 @@
 
 namespace Laravie\QueryFilter\Concerns;
 
-trait WildcardSearching
+trait SearchingWildcard
 {
     /**
      * Wildcard search character.
      *
      * @var string|null
      */
-    protected $wildcardCharacter = '*';
+    public $wildcardCharacter = '*';
 
     /**
      * Wildcard search character replacement.
      *
      * @var string
      */
-    protected $wildcardReplacement = '%';
-
-    /**
-     * Enable wildcard searching.
-     *
-     * @var bool
-     */
-    protected $wildcardSearching = true;
+    public $wildcardReplacement = '%';
 
     /**
      * Set wildcard search character.
@@ -45,30 +38,6 @@ trait WildcardSearching
     public function wildcardReplacement(?string $character = null)
     {
         $this->wildcardReplacement = $character;
-
-        return $this;
-    }
-
-    /**
-     * Enable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withWildcardSearching()
-    {
-        $this->wildcardSearching = true;
-
-        return $this;
-    }
-
-    /**
-     * Disable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withoutWildcardSearching()
-    {
-        $this->wildcardSearching = false;
 
         return $this;
     }

@@ -14,6 +14,13 @@ class Keyword
     protected $value;
 
     /**
+     * List default search variations.
+     *
+     * @var string[]
+     */
+    public static $defaultSearchVariations = ['{keyword}', '{keyword}%', '%{keyword}', '%{keyword}%'];
+
+    /**
      * Construct a new Keyword value object.
      */
     public function __construct(string $value)
@@ -32,16 +39,22 @@ class Keyword
     /**
      * Get searchable strings as lowercase.
      */
-    public function allLowerCased(?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
-    {
+    public function allLowerCased(
+        ?string $wildcard = '*',
+        ?string $replacement = '%',
+        bool $wildcardSearching = true
+    ): array {
         return static::searchable(Str::lower($this->value), $wildcard, $replacement, $wildcardSearching);
     }
 
     /**
      * Get searchable strings.
      */
-    public function all(?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
-    {
+    public function all(
+        ?string $wildcard = '*',
+        ?string $replacement = '%',
+        bool $wildcardSearching = true
+    ): array {
         return static::searchable($this->value, $wildcard, $replacement, $wildcardSearching);
     }
 
@@ -57,9 +70,10 @@ class Keyword
         } elseif (\is_null($wildcard) || \is_null($replacement)) {
             return [$text];
         } elseif (! Str::contains($text, [$wildcard, $replacement]) && $wildcardSearching === true) {
-            return [
-                "{$text}", "{$text}%", "%{$text}", "%{$text}%",
-            ];
+            return collect(static::$defaultSearchVariations)
+                ->map(function ($string) use ($text) {
+                    return Str::replaceFirst('{keyword}', $text, $string);
+                })->all();
         }
 
         return [

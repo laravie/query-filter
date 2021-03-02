@@ -6,8 +6,9 @@ use Illuminate\Support\Traits\Tappable;
 
 class Taxonomy
 {
-    use Tappable,
-        Concerns\WildcardSearching;
+    use Concerns\ConditionallySearchingWildcard,
+        Concerns\SearchingWildcard,
+        Tappable;
 
     /**
      * Taxonomy columns.
@@ -68,7 +69,7 @@ class Taxonomy
         ))
         ->wildcardCharacter($this->wildcardCharacter)
         ->tap(function (Searchable $searchable) {
-            if ($this->wildcardSearching === true) {
+            if (($this->wildcardSearching ?? true) === true) {
                 $searchable->withWildcardSearching();
             } else {
                 $searchable->withoutWildcardSearching();
