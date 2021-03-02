@@ -27,6 +27,19 @@ class KeywordTest extends TestCase
     }
 
     /** @test */
+    public function it_can_generate_keywords_with_empty_wildcard_character()
+    {
+        $this->assertSame([
+            'Hello',
+        ], (new Keyword('Hello'))->all(null, '%'));
+
+
+        $this->assertSame([
+            'Hello',
+        ], (new Keyword('Hello'))->all('*', null));
+    }
+
+    /** @test */
     public function it_can_generate_keywords_for_other_langs()
     {
         $this->assertSame([

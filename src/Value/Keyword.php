@@ -52,18 +52,11 @@ class Keyword
     {
         $text = static::sanitize($text);
 
-        if (\is_null($wildcard) && ! \is_null($replacement)) {
-            $wildcard = $replacement;
-        }
-
         if (empty($text)) {
             return [];
-        } elseif (
-            ! \is_null($replacement)
-            && $wildcard !== $replacement
-            && ! Str::contains($text, [$wildcard, $replacement])
-            && $wildcardSearching === true
-        ) {
+        } elseif (\is_null($wildcard) || \is_null($replacement)) {
+            return [$text];
+        } elseif (! Str::contains($text, [$wildcard, $replacement]) && $wildcardSearching === true) {
             return [
                 "{$text}", "{$text}%", "%{$text}", "%{$text}%",
             ];

@@ -67,7 +67,6 @@ class Taxonomy
             $this->terms->basic(), $this->columns
         ))
         ->wildcardCharacter($this->wildcardCharacter)
-        ->wildcardReplacement($this->wildcardReplacement)
         ->tap(function (Searchable $searchable) {
             if ($this->wildcardSearching === true) {
                 $searchable->withWildcardSearching();

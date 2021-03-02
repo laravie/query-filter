@@ -2,12 +2,12 @@
 Database/Eloquent Query Builder filters for Laravel
 ==============
 
-[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=master)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3Amaster)
+[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=2.x)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3A2.x)
 [![Latest Stable Version](https://poser.pugx.org/laravie/query-filter/v/stable)](https://packagist.org/packages/laravie/query-filter)
 [![Total Downloads](https://poser.pugx.org/laravie/query-filter/downloads)](https://packagist.org/packages/laravie/query-filter)
 [![Latest Unstable Version](https://poser.pugx.org/laravie/query-filter/v/unstable)](https://packagist.org/packages/laravie/query-filter)
 [![License](https://poser.pugx.org/laravie/query-filter/license)](https://packagist.org/packages/laravie/query-filter)
-[![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=master)](https://coveralls.io/github/laravie/query-filter?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=2.x)](https://coveralls.io/github/laravie/query-filter?branch=2.x)
 
 * [Installation](#installation)
     - [Quick Installation](#quick-installation)
