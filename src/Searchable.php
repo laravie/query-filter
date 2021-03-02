@@ -39,7 +39,7 @@ class Searchable
      */
     public function searchKeyword(): Value\Keyword
     {
-        return $this->keyword;
+        return new Value\Keyword($this->keyword);
     }
 
     /**
@@ -65,25 +65,21 @@ class Searchable
             return $field instanceof Contracts\Search;
         });
 
-        $query
-            ->when($filters->isNotEmpty(), function ($query) use ($filters, $likeOperator) {
-                foreach ($filters as $filter) {
-                    $filter->apply(
-                        $query,
-                        $this->keyword->all(
-                            $this->wildcardCharacter,
-                            $this->wildcardReplacement,
-                            $this->wildcardSearching ?? true
-                        ),
-                        $likeOperator
-                    );
-                }
-            })
-            ->where(function ($query) use ($fields, $likeOperator) {
-                foreach ($fields as $field) {
-                    $this->queryOnColumn($query, Value\Field::make($field), $likeOperator);
-                }
-            });
+        $query->where(function ($query) use ($fields, $filters, $likeOperator) {
+            $keywords = $this->searchKeyword()->all(
+                $this->wildcardCharacter,
+                $this->wildcardReplacement,
+                $this->wildcardSearching ?? true
+            );
+
+            foreach ($filters as $filter) {
+                $filter->apply($query, $keywords, $likeOperator);
+            }
+
+            foreach ($fields as $field) {
+                $this->queryOnColumn($query, Value\Field::make($field), $likeOperator);
+            }
+        });
 
         return $query;
     }
@@ -127,7 +123,7 @@ class Searchable
 
         return (new Filters\FieldSearch())->field($field)->apply(
             $query,
-            $this->keyword->all(
+            $this->searchKeyword()->all(
                 $this->wildcardCharacter,
                 $this->wildcardReplacement,
                 $field->wildcardSearching ?? $this->wildcardSearching ?? true
@@ -154,7 +150,7 @@ class Searchable
             ->field($field)
             ->apply(
                 $query,
-                $this->keyword->allLowerCased(
+                $this->searchKeyword()->allLowerCased(
                     $this->wildcardCharacter,
                     $this->wildcardReplacement,
                     $field->wildcardSearching ?? $this->wildcardSearching ?? true
@@ -176,7 +172,7 @@ class Searchable
             ->field($field)
             ->apply(
                 $query,
-                $this->keyword->all(
+                $this->searchKeyword()->all(
                     $this->wildcardCharacter,
                     $this->wildcardReplacement,
                     $field->wildcardSearching ?? $this->wildcardSearching ?? true

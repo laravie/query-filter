@@ -38,6 +38,14 @@ class Keyword
     }
 
     /**
+     * Get keyword value.
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
      * Get searchable strings as lowercase.
      */
     public function allLowerCased(
