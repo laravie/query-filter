@@ -3,7 +3,6 @@
 namespace Laravie\QueryFilter\Value;
 
 use Illuminate\Support\Str;
-use Laravie\QueryFilter\Taxonomy;
 
 class Keyword
 {
@@ -30,30 +29,6 @@ class Keyword
     }
 
     /**
-     * Enable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withSearchingWildcard()
-    {
-        $this->enableWildcardSearching = true;
-
-        return $this;
-    }
-
-    /**
-     * Disable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withoutSearchingWildcard()
-    {
-        $this->enableWildcardSearching = false;
-
-        return $this;
-    }
-
-    /**
      * Validate keyword value.
      */
     public function validate(): bool
@@ -62,31 +37,36 @@ class Keyword
     }
 
     /**
-     * Get searchable strings as lowercased.
+     * Get searchable strings as lowercase.
      */
-    public function allLowerCased(string $wildcard = '*', string $replacement = '%'): array
+    public function allLowerCased(?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
     {
-        return static::searchable(Str::lower($this->value), $wildcard, $replacement);
+        return static::searchable(Str::lower($this->value), $wildcard, $replacement, $wildcardSearching);
     }
 
     /**
      * Get searchable strings.
      */
-    public function all(string $wildcard = '*', string $replacement = '%'): array
+    public function all(?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
     {
-        return static::searchable($this->value, $wildcard, $replacement, $this->enableWildcardSearching);
+        return static::searchable($this->value, $wildcard, $replacement, $wildcardSearching);
     }
 
     /**
      * Convert basic string to searchable result.
      */
-    public static function searchable(string $text, string $wildcard = '*', string $replacement = '%', bool $enableWildcardSearching = true): array
+    public static function searchable(string $text, ?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
     {
         $text = static::sanitize($text);
 
         if (empty($text)) {
             return [];
-        } elseif (! Str::contains($text, [$wildcard, $replacement]) && $enableWildcardSearching === true) {
+        } elseif (
+            (! \is_null($wildcard) && ! \is_null($replacement))
+            && $wildcard !== $replacement
+            && ! Str::contains($text, [$wildcard, $replacement])
+            && $wildcardSearching === true
+        ) {
             return [
                 "{$text}", "{$text}%", "%{$text}", "%{$text}%",
             ];

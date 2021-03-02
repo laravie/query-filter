@@ -2,8 +2,13 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Support\Traits\Tappable;
+
 class Taxonomy
 {
+    use Tappable,
+        Concerns\WildcardSearching;
+
     /**
      * Taxonomy columns.
      *
@@ -26,12 +31,6 @@ class Taxonomy
     protected $terms;
 
     /**
-     * Enable wildcard searching
-     * @var bool
-     */
-    protected $enableWildcardSearching = true;
-
-    /**
      * Construct a new Matches Query.
      */
     public function __construct(?string $terms, array $rules = [], array $columns = [])
@@ -40,30 +39,6 @@ class Taxonomy
         $this->columns = $columns;
 
         $this->terms = Value\Terms::parse($terms ?? '', \array_keys($this->rules));
-    }
-
-    /**
-     * Enable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withSearchingWildcard()
-    {
-        $this->enableWildcardSearching = true;
-
-        return $this;
-    }
-
-    /**
-     * Disable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withoutSearchingWildcard()
-    {
-        $this->enableWildcardSearching = false;
-
-        return $this;
     }
 
     /**
@@ -90,11 +65,14 @@ class Taxonomy
     {
         (new Searchable(
             $this->terms->basic(), $this->columns
-        ))->tap(function ($searchable) {
-            if ($this->enableWildcardSearching === true) {
-                $searchable->withSearchingWildcard();
+        ))
+        ->wildcardCharacter($this->wildcardCharacter)
+        ->wildcardReplacement($this->wildcardReplacement)
+        ->tap(function (Searchable $searchable) {
+            if ($this->wildcardSearching === true) {
+                $searchable->withWildcardSearching();
             } else {
-                $searchable->withoutSearchingWildcard();
+                $searchable->withoutWildcardSearching();
             }
         })->apply($query);
     }

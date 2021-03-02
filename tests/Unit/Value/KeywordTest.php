@@ -19,6 +19,14 @@ class KeywordTest extends TestCase
     }
 
     /** @test */
+    public function it_can_generate_exact_keyword()
+    {
+        $this->assertSame([
+            'Hello',
+        ], (new Keyword('Hello'))->all('*', '%', false));
+    }
+
+    /** @test */
     public function it_can_generate_keywords_for_other_langs()
     {
         $this->assertSame([
@@ -38,6 +46,14 @@ class KeywordTest extends TestCase
             '%hello',
             '%hello%',
         ], (new Keyword('Hello'))->allLowerCased());
+    }
+
+    /** @test */
+    public function it_can_generate_exact_lowercased_keyword()
+    {
+        $this->assertSame([
+            'hello',
+        ], (new Keyword('Hello'))->allLowerCased('*', '%', false));
     }
 
     /** @test */

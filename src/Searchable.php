@@ -2,12 +2,13 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Traits\Tappable;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Searchable
 {
-    use Tappable;
+    use Tappable,
+        Concerns\WildcardSearching;
 
     /**
      * Search keyword.
@@ -38,30 +39,6 @@ class Searchable
     public function searchKeyword(): Value\Keyword
     {
         return $this->keyword;
-    }
-
-    /**
-     * Enable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withSearchingWildcard()
-    {
-        $this->keyword->withSearchingWildcard();
-
-        return $this;
-    }
-
-    /**
-     * Disable using wildcard search.
-     *
-     * @return $this
-     */
-    public function withoutSearchingWildcard()
-    {
-        $this->keyword->withoutSearchingWildcard();
-
-        return $this;
     }
 
     /**
@@ -133,7 +110,7 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
         }
 
-        $keywords = $this->keyword->all();
+        $keywords = $this->keyword->all($this->wildcardCharacter, $this->wildcardReplacement, $this->wildcardSearching);
 
         if ($query instanceof EloquentBuilder) {
             $column = $query->qualifyColumn((string) $column);
@@ -159,7 +136,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        $keywords = $this->keyword->allLowerCased();
+        $keywords = $this->keyword->allLowerCased($this->wildcardCharacter, $this->wildcardReplacement, $this->wildcardSearching);
 
         [$field, $path] = $column->wrapJsonFieldAndPath();
 
