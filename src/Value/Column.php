@@ -29,28 +29,13 @@ class Column
     protected $name;
 
     /**
-     * Construct a new Field value object.
+     * Construct a new Column value object.
      *
      * @param  \Illuminate\Database\Query\Expression|string  $name
      */
     public function __construct($name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * Make a new Field value object.
-     *
-     * @param  static|\Illuminate\Database\Query\Expression|string  $name
-     * @return static
-     */
-    public static function make($name)
-    {
-        if ($name instanceof static) {
-            return $name;
-        }
-
-        return new static($name);
     }
 
     /**

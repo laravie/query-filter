@@ -2,11 +2,36 @@
 
 namespace Laravie\QueryFilter\Value;
 
+use Laravie\QueryFilter\Contracts\Field as FieldContract;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 
-class Field extends Column
+class Field extends Column implements FieldContract
 {
     use ConditionallySearchingWildcard;
+
+    /**
+     * Searchable instance.
+     *
+     * @var \Laravie\QueryFilter\Searchable
+     */
+    protected $searchable;
+
+    /**
+     * Make a new Field value object.
+     *
+     * @param  static|\Illuminate\Database\Query\Expression|string  $name
+     * @return static
+     */
+    public static function make($name)
+    {
+        if ($name instanceof static) {
+            return tap(new static($name), function ($field) use ($name) {
+                $field->wildcardSearching = $name->wildcardSearching;
+            });
+        }
+
+        return new static($name);
+    }
 
     /**
      * Validate column.
@@ -51,7 +76,9 @@ class Field extends Column
 
         return [
             $relation,
-            new static($column),
+            tap(new static($column), function ($field) {
+                $field->wildcardSearching = $this->wildcardSearching;
+            }),
             'normal',
         ];
     }

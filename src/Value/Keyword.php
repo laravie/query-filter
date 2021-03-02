@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter\Value;
 
 use Illuminate\Support\Str;
+use Laravie\QueryFilter\Contracts\Keyword as KeywordContract;
 
 class Keyword
 {
@@ -44,7 +45,12 @@ class Keyword
         ?string $replacement = '%',
         bool $wildcardSearching = true
     ): array {
-        return static::searchable(Str::lower($this->value), $wildcard, $replacement, $wildcardSearching);
+        return static::searchable(
+            Str::lower($this->value),
+            $wildcard,
+            $replacement,
+            $wildcardSearching
+        );
     }
 
     /**
@@ -55,7 +61,22 @@ class Keyword
         ?string $replacement = '%',
         bool $wildcardSearching = true
     ): array {
-        return static::searchable($this->value, $wildcard, $replacement, $wildcardSearching);
+        return static::searchable(
+            $this->value,
+            $wildcard,
+            $replacement,
+            $wildcardSearching
+        );
+    }
+
+    /**
+     * Return value as string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->value;
     }
 
     /**

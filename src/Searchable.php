@@ -23,15 +23,15 @@ class Searchable
      *
      * @var array
      */
-    protected $columns = [];
+    protected $fields = [];
 
     /**
      * Construct a new Search Query.
      */
-    public function __construct(?string $keyword, array $columns = [])
+    public function __construct(?string $keyword, array $fields = [])
     {
         $this->keyword = new Value\Keyword($keyword ?? '');
-        $this->columns = \array_filter($columns);
+        $this->fields = \array_filter($fields);
     }
 
     /**
@@ -51,7 +51,7 @@ class Searchable
      */
     public function apply($query)
     {
-        if (! $this->keyword->validate() || empty($this->columns)) {
+        if (! $this->keyword->validate() || empty($this->fields)) {
             return $query;
         }
 
@@ -62,8 +62,8 @@ class Searchable
         $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
         $query->where(function ($query) use ($likeOperator) {
-            foreach ($this->columns as $column) {
-                $this->queryOnColumn($query, Value\Field::make($column), $likeOperator);
+            foreach ($this->fields as $field) {
+                $this->queryOnColumn($query, Value\Field::make($field), $likeOperator);
             }
         });
 
@@ -77,19 +77,15 @@ class Searchable
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    protected function queryOnColumn($query, Value\Field $column, string $likeOperator = 'like')
+    protected function queryOnColumn($query, Value\Field $field, string $likeOperator = 'like')
     {
-        if ($column->isExpression()) {
-            return $this->queryOnColumnUsing($query, new Value\Field($column->getValue()), $likeOperator, 'orWhere');
-        } elseif ($column->isRelationSelector() && $query instanceof EloquentBuilder) {
-            [$relation, $column] = $column->wrapRelationNameAndField();
-
-            return $query->orWhereHas($relation, function ($query) use ($column, $likeOperator) {
-                $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
-            });
+        if ($field->isExpression()) {
+            return $this->queryOnColumnUsing($query, new Value\Field($field->getValue()), $likeOperator, 'orWhere');
+        } elseif ($field->isRelationSelector() && $query instanceof EloquentBuilder) {
+            return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
 
-        return $this->queryOnColumnUsing($query, $column, $likeOperator, 'orWhere');
+        return $this->queryOnColumnUsing($query, $field, $likeOperator, 'orWhere');
     }
 
     /**
@@ -101,31 +97,26 @@ class Searchable
      */
     protected function queryOnColumnUsing(
         $query,
-        Value\Field $column,
+        Value\Field $field,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        if (! $column->validate()) {
+        if (! $field->validate()) {
             return $query;
-        } elseif ($column->isJsonPathSelector()) {
-            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
+        } elseif ($field->isJsonPathSelector()) {
+            return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        $wildcardSearching = $column->wildcardSearching ?? $this->wildcardSearching ?? true;
-
-        $keywords = $this->keyword->all(
-            $this->wildcardCharacter, $this->wildcardReplacement, $wildcardSearching
+        return (new Filters\FieldSearch())->field($field)->apply(
+            $query,
+            $this->keyword->all(
+                $this->wildcardCharacter,
+                $this->wildcardReplacement,
+                $field->wildcardSearching ?? $this->wildcardSearching ?? true
+            ),
+            $likeOperator,
+            $whereOperator
         );
-
-        if ($query instanceof EloquentBuilder) {
-            $column = $query->qualifyColumn((string) $column);
-        }
-
-        return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
-            foreach ($keywords as $keyword) {
-                $query->orWhere((string) $column, $likeOperator, $keyword);
-            }
-        });
     }
 
     /**
@@ -137,24 +128,43 @@ class Searchable
      */
     protected function queryOnJsonColumnUsing(
         $query,
-        Value\Field $column,
+        Value\Field $field,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        $wildcardSearching = $column->wildcardSearching ?? $this->wildcardSearching ?? true;
+        return (new Filters\JsonFieldSearch())
+            ->field($field)
+            ->apply(
+                $query,
+                $this->keyword->allLowerCased(
+                    $this->wildcardCharacter,
+                    $this->wildcardReplacement,
+                    $field->wildcardSearching ?? $this->wildcardSearching ?? true
+                ),
+                $likeOperator,
+                $whereOperator
+            );
+    }
 
-        $keywords = $this->keyword->allLowerCased(
-            $this->wildcardCharacter, $this->wildcardReplacement, $wildcardSearching
-        );
-
-        [$field, $path] = $column->wrapJsonFieldAndPath();
-
-        return $query->{$whereOperator}(static function ($query) use ($field, $path, $keywords, $likeOperator) {
-            foreach ($keywords as $keyword) {
-                $query->orWhereRaw(
-                    "lower({$field}->'\$.{$path}') {$likeOperator} ?", [$keyword]
-                );
-            }
-        });
+        /**
+     * Build wildcard query filter for column using where on relation.
+     */
+    protected function queryOnColumnUsingRelation(
+        EloquentBuilder $query,
+        Value\Field $field,
+        string $likeOperator
+    ): EloquentBuilder {
+        return (new Filters\RelationSearch())
+            ->field($field)
+            ->apply(
+                $query,
+                $this->keyword->all(
+                    $this->wildcardCharacter,
+                    $this->wildcardReplacement,
+                    $field->wildcardSearching ?? $this->wildcardSearching ?? true
+                ),
+                $likeOperator,
+                'orWhere'
+            );
     }
 }
