@@ -51,7 +51,7 @@ class MorphRelationSearch extends SearchFilter
     {
         $this->validateEloquentQueryBuilder($query);
 
-        $types = ! empty($this->types) ? '*' : $this->types;
+        $types = ! empty($this->types) ? $this->types : '*';
 
         $query->{$whereOperator.'HasMorph'}($this->relation, $types, function ($query) use ($keywords, $likeOperator) {
             return (new FieldSearch($this->column))->apply(

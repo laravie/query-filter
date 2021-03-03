@@ -30,7 +30,6 @@ class JsonFieldSearchTest extends TestCase
         );
     }
 
-
     /** @test */
     public function it_can_build_search_query_with_nested_json_selector()
     {
@@ -51,5 +50,4 @@ class JsonFieldSearchTest extends TestCase
             $query->getBindings()
         );
     }
-
 }
