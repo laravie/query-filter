@@ -42,7 +42,7 @@ class FluentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("users"."name" like ?))',
+            'select * from "users" where ("users"."name" like ?)',
             $query->toSql()
         );
 
@@ -64,7 +64,7 @@ class FluentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("name" like ?) or ("email" like ? or "email" like ? or "email" like ? or "email" like ?))',
+            'select * from "users" where ("name" like ? or ("email" like ? or "email" like ? or "email" like ? or "email" like ?))',
             $query->toSql()
         );
 

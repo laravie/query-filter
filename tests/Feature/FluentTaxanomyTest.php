@@ -102,7 +102,7 @@ class FluentTaxonomyTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("name" like ?))',
+            'select * from "users" where ("name" like ?)',
             $query->toSql()
         );
 
