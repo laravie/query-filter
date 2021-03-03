@@ -42,7 +42,7 @@ The class provides a simple interface to handle `ORDER BY` queries to Laravel El
 use App\User;
 use Laravie\QueryFilter\Orderable;
 
-$query = App\User::query();
+$query = User::query();
 
 $orderable = new Orderable(
     'name', 'desc'
@@ -69,7 +69,7 @@ The class provides a simple interface to `LIKE` queries to Laravel Eloquent/Quer
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'crynobone', ['name', 'email']
@@ -103,7 +103,7 @@ Set specific `%` or `*` wildcard to reduce the possible `LIKE`s variations.
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'crynobone*gmail', ['name', 'email']
@@ -131,7 +131,7 @@ Use `withoutWildcardSearching()` to disable adding additional search condition.
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = (new Searchable(
     'crynobone@gmail', ['name', 'email']
@@ -159,7 +159,7 @@ This would allow you to query JSON path using `LIKE` with case insensitive (JSON
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'Malaysia', ['address->country']
@@ -188,7 +188,7 @@ This would make it easy to search results not only in the current model but also
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'Administrator', ['name', 'roles.name']
@@ -222,6 +222,25 @@ where (
 
 > Relations search can only be applied to `Illuminate\Database\Eloquent\Builder` as it need to ensure that the relationship exists via `whereHas()` queries.
 
+#### Search with Morph Relations
+
+You can use polymorphic relationship search using the following options:
+
+```php
+use App\Comment;
+use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Filters\MorphRelationSearch;
+
+$query = Comment::query();
+
+$searchable = new Searchable(
+    'Administrator', ['name', new MorphRelationSearch('commentable', 'name')]
+);
+
+return $searchable->apply($query)->get(); 
+```
+
+
 ### Taxonomy Queries
 
 ```php
@@ -234,7 +253,7 @@ Taxonomy always developers to create a set of rules to group the search keywords
 use App\User;
 use Laravie\QueryFilter\Taxonomy;
 
-$query = App\User::query();
+$query = User::query();
 
 $taxonomy = new Taxonomy(
     'is:admin email:crynobone@gmail.com', [
