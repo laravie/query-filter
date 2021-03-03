@@ -14,7 +14,7 @@ class Searchable
     /**
      * Search keyword.
      *
-     * @var \Laravie\QueryFilter\Value\Keyword
+     * @var \Laravie\QueryFilter\Keyword
      */
     protected $keyword;
 
@@ -37,9 +37,9 @@ class Searchable
     /**
      * Get search keyword.
      */
-    public function searchKeyword(): Value\Keyword
+    public function searchKeyword(): Keyword
     {
-        return new Value\Keyword($this->keyword);
+        return new Keyword($this->keyword);
     }
 
     /**
@@ -77,7 +77,7 @@ class Searchable
             }
 
             foreach ($fields as $field) {
-                $this->queryOnColumn($query, Value\Field::make($field), $likeOperator, 'orWhere');
+                $this->queryOnColumn($query, Field::make($field), $likeOperator, 'orWhere');
             }
         });
 
@@ -93,12 +93,12 @@ class Searchable
      */
     protected function queryOnColumn(
         $query,
-        Value\Field $field,
+        Field $field,
         string $likeOperator = 'like',
         string $whereOperator = 'orWhere'
     ) {
         if ($field->isExpression()) {
-            return $this->queryOnColumnUsing($query, new Value\Field($field->getValue()), $likeOperator, $whereOperator);
+            return $this->queryOnColumnUsing($query, new Field($field->getValue()), $likeOperator, $whereOperator);
         } elseif ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
             return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
@@ -115,7 +115,7 @@ class Searchable
      */
     protected function queryOnColumnUsing(
         $query,
-        Value\Field $field,
+        Field $field,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
@@ -145,7 +145,7 @@ class Searchable
      */
     protected function queryOnJsonColumnUsing(
         $query,
-        Value\Field $field,
+        Field $field,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
@@ -167,7 +167,7 @@ class Searchable
      */
     protected function queryOnColumnUsingRelation(
         EloquentQueryBuilder $query,
-        Value\Field $field,
+        Field $field,
         string $likeOperator
     ): EloquentQueryBuilder {
         [$relation, $column] = $field->wrapRelationNameAndField();

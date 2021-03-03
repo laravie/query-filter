@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Unit\Value;
+namespace Laravie\QueryFilter\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Value\Field;
+use Laravie\QueryFilter\Field;
 use Illuminate\Database\Query\Expression;
 
 class FieldTest extends TestCase

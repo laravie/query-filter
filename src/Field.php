@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\QueryFilter\Value;
+namespace Laravie\QueryFilter;
 
 use Laravie\QueryFilter\Contracts\Field as FieldContract;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;

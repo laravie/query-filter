@@ -4,7 +4,7 @@ namespace Laravie\QueryFilter\Tests\Feature;
 
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Value\Field;
+use Laravie\QueryFilter\Field;
 use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Database\Query\Expression;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\QueryFilter\Value;
+namespace Laravie\QueryFilter;
 
 use Illuminate\Support\Str;
 use Laravie\QueryFilter\Concerns\SearchingWildcard;

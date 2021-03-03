@@ -27,7 +27,7 @@ class Taxonomy
     /**
      * Taxonomy keywords.
      *
-     * @var \Laravie\QueryFilter\Value\Terms
+     * @var \Laravie\QueryFilter\Terms
      */
     protected $terms;
 
@@ -39,7 +39,7 @@ class Taxonomy
         $this->rules = \array_filter($rules);
         $this->fields = $fields;
 
-        $this->terms = Value\Terms::parse($terms ?? '', \array_keys($this->rules));
+        $this->terms = Terms::parse($terms ?? '', \array_keys($this->rules));
     }
 
     /**

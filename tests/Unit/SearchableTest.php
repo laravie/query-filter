@@ -5,7 +5,7 @@ namespace Laravie\QueryFilter\Tests\Unit;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Value\Keyword;
+use Laravie\QueryFilter\Keyword;
 use Illuminate\Database\Query\Expression;
 
 class SearchableTest extends TestCase
