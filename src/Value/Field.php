@@ -42,7 +42,7 @@ class Field extends Column implements FieldContract
         if ($this->isRelationSelector()) {
             [, $field] = $this->wrapRelationNameAndField();
 
-            return Field::make($field)->validate();
+            return static::make($field)->validate();
         } elseif ($this->isJsonPathSelector()) {
             [, $path] = $this->wrapJsonFieldAndPath();
 
