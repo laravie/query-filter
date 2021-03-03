@@ -20,6 +20,7 @@ class Field extends Column implements FieldContract
      * Make a new Field value object.
      *
      * @param  static|\Illuminate\Database\Query\Expression|string  $name
+     *
      * @return static
      */
     public static function make($name)

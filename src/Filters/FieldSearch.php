@@ -2,9 +2,9 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Laravie\QueryFilter\Contracts\Keyword;
 use Laravie\QueryFilter\SearchFilter;
+use Laravie\QueryFilter\Contracts\Keyword;
+use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 
 class FieldSearch extends SearchFilter
 {
@@ -17,7 +17,7 @@ class FieldSearch extends SearchFilter
      */
     public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator)
     {
-        $field = $query instanceof EloquentBuilder
+        $field = $query instanceof EloquentQueryBuilder
             ? $query->qualifyColumn((string) $this->field)
             : $this->field;
 

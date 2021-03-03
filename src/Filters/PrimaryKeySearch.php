@@ -2,11 +2,9 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Illuminate\Database\Eloquent\Model;
-use RuntimeException;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Laravie\QueryFilter\Contracts\Keyword;
 use Laravie\QueryFilter\SearchFilter;
+use Illuminate\Database\Eloquent\Model;
+use Laravie\QueryFilter\Contracts\Keyword;
 
 class PrimaryKeySearch extends SearchFilter
 {
@@ -26,9 +24,6 @@ class PrimaryKeySearch extends SearchFilter
 
     /**
      * Construct new Primary Key Search.
-     *
-     * @param  int  $maxPrimaryKeySize
-     * @param  array  $columns
      */
     public function __construct(int $maxPrimaryKeySize, array $columns)
     {
@@ -45,9 +40,7 @@ class PrimaryKeySearch extends SearchFilter
      */
     public function apply($query, Keyword $keywords, string $likeOperator, ?string $whereOperator = null)
     {
-        if (!$query instanceof EloquentBuilder) {
-            throw new RuntimeException('Unable to use PrimaryKeySearch with [' . get_class($query) . ']');
-        }
+        $this->validateEloquentQueryBuilder($query);
 
         if ($this->canSearchPrimaryKey($model = $query->getModel(), $search = $keywords->getValue())) {
             $query->orWhere($model->getQualifiedKeyName(), $search);
@@ -59,10 +52,7 @@ class PrimaryKeySearch extends SearchFilter
     /**
      * Determine if can search primary key.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string|int  $search
-     *
-     * @return bool
      */
     protected function canSearchPrimaryKey(Model $model, $search): bool
     {

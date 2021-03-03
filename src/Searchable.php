@@ -3,7 +3,7 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Support\Traits\Tappable;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 
 class Searchable
 {
@@ -61,7 +61,7 @@ class Searchable
             ->wildcardReplacement($this->wildcardReplacement)
             ->wildcardSearching($this->wildcardSearching ?? true);
 
-        $connectionType = $query instanceof EloquentBuilder
+        $connectionType = $query instanceof EloquentQueryBuilder
             ? $query->getModel()->getConnection()->getDriverName()
             : $query->getConnection()->getDriverName();
 
@@ -95,7 +95,7 @@ class Searchable
     {
         if ($field->isExpression()) {
             return $this->queryOnColumnUsing($query, new Value\Field($field->getValue()), $likeOperator, 'orWhere');
-        } elseif ($field->isRelationSelector() && $query instanceof EloquentBuilder) {
+        } elseif ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
             return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
 
@@ -158,14 +158,14 @@ class Searchable
             );
     }
 
-        /**
+    /**
      * Build wildcard query filter for column using where on relation.
      */
     protected function queryOnColumnUsingRelation(
-        EloquentBuilder $query,
+        EloquentQueryBuilder $query,
         Value\Field $field,
         string $likeOperator
-    ): EloquentBuilder {
+    ): EloquentQueryBuilder {
         return (new Filters\RelationSearch())
             ->field($field)
             ->apply(

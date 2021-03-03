@@ -14,8 +14,6 @@ trait ConditionallySearchingWildcard
     /**
      * Set wildcard searching status.
      *
-     * @param  bool|null  $wildcardSearching
-     *
      * @return $this
      */
     public function wildcardSearching(?bool $wildcardSearching)

@@ -16,6 +16,8 @@ class RelationSearch extends SearchFilter
      */
     public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator)
     {
+        $this->validateEloquentQueryBuilder($query);
+
         [$relation, $field] = $this->field->wrapRelationNameAndField();
 
         $query->{$whereOperator.'Has'}($relation, function ($query) use ($field, $keywords, $likeOperator) {
