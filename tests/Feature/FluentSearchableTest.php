@@ -2,9 +2,9 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
+use Laravie\QueryFilter\Field;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Field;
 use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Database\Query\Expression;
 

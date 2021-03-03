@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Laravie\QueryFilter\Terms;
+use PHPUnit\Framework\TestCase;
 
 class TermsTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Laravie\QueryFilter\Column;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Database\Query\Expression;
 
 class ColumnTest extends TestCase
