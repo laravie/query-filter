@@ -42,7 +42,7 @@ class Field extends Column implements FieldContract
         if ($this->isRelationSelector()) {
             [, $field] = $this->wrapRelationNameAndField();
 
-            return $field->validate();
+            return Field::make($field)->validate();
         } elseif ($this->isJsonPathSelector()) {
             [, $path] = $this->wrapJsonFieldAndPath();
 
@@ -77,9 +77,7 @@ class Field extends Column implements FieldContract
 
         return [
             $relation,
-            tap(new static($column), function ($field) {
-                $field->wildcardSearching = $this->wildcardSearching;
-            }),
+            $column,
             'normal',
         ];
     }

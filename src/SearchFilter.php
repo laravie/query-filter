@@ -9,25 +9,6 @@ use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 abstract class SearchFilter implements Contracts\SearchFilter
 {
     /**
-     * Field implementation.
-     *
-     * @var \Laravie\QueryFilter\Contracts\Field
-     */
-    protected $field;
-
-    /**
-     * Set field for current search.
-     *
-     * @return $this
-     */
-    public function field(Contracts\Field $field)
-    {
-        $this->field = $field;
-
-        return $this;
-    }
-
-    /**
      * Validate $query is an instance of Eloquent Query Builder.
      *
      * @param  mixed  $query

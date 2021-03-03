@@ -121,7 +121,7 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        return (new Filters\FieldSearch())->field($field)->apply(
+        return (new Filters\FieldSearch($field->getOriginalValue()))->apply(
             $query,
             $this->searchKeyword()
                 ->wildcardCharacter($this->wildcardCharacter)
@@ -145,17 +145,17 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        return (new Filters\JsonFieldSearch())
-            ->field($field)
-            ->apply(
-                $query,
-                $this->searchKeyword()
-                    ->wildcardCharacter($this->wildcardCharacter)
-                    ->wildcardReplacement($this->wildcardReplacement)
-                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
-                $likeOperator,
-                $whereOperator
-            );
+        [$column, $path] = $field->wrapJsonFieldAndPath();
+
+        return (new Filters\JsonFieldSearch($column, $path))->apply(
+            $query,
+            $this->searchKeyword()
+                ->wildcardCharacter($this->wildcardCharacter)
+                ->wildcardReplacement($this->wildcardReplacement)
+                ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
+            $likeOperator,
+            $whereOperator
+        );
     }
 
     /**
@@ -166,16 +166,16 @@ class Searchable
         Value\Field $field,
         string $likeOperator
     ): EloquentQueryBuilder {
-        return (new Filters\RelationSearch())
-            ->field($field)
-            ->apply(
-                $query,
-                $this->searchKeyword()
-                    ->wildcardCharacter($this->wildcardCharacter)
-                    ->wildcardReplacement($this->wildcardReplacement)
-                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
-                $likeOperator,
-                'orWhere'
-            );
+        [$relation, $column] = $field->wrapRelationNameAndField();
+
+        return (new Filters\RelationSearch($relation, $column))->apply(
+            $query,
+            $this->searchKeyword()
+                ->wildcardCharacter($this->wildcardCharacter)
+                ->wildcardReplacement($this->wildcardReplacement)
+                ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
+            $likeOperator,
+            'orWhere'
+        );
     }
 }

@@ -39,6 +39,16 @@ class Column
     }
 
     /**
+     * Get original value.
+     *
+     * @return \Illuminate\Database\Query\Expression|string
+     */
+    public function getOriginalValue()
+    {
+        return $this->name;
+    }
+
+    /**
      * Get expression value.
      */
     public function getValue(): string

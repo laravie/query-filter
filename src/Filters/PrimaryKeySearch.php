@@ -16,19 +16,11 @@ class PrimaryKeySearch extends SearchFilter
     protected $maxPrimaryKeySize = PHP_INT_MAX;
 
     /**
-     * List of columns.
-     *
-     * @var array
-     */
-    protected $columns = [];
-
-    /**
      * Construct new Primary Key Search.
      */
-    public function __construct(int $maxPrimaryKeySize, array $columns)
+    public function __construct(?int $maxPrimaryKeySize)
     {
-        $this->maxPrimaryKeySize = $maxPrimaryKeySize;
-        $this->columns = $columns;
+        $this->maxPrimaryKeySize = $maxPrimaryKeySize ?? $this->maxPrimaryKeySize;
     }
 
     /**
@@ -58,7 +50,6 @@ class PrimaryKeySearch extends SearchFilter
     {
         return \ctype_digit($search)
             && \in_array($model->getKeyType(), ['int', 'integer'])
-            && ($model->getConnection()->getDriverName() != 'pgsql' || $search <= $this->maxPrimaryKeySize)
-            && in_array($model->getKeyName(), $this->columns);
+            && ($model->getConnection()->getDriverName() != 'pgsql' || $search <= $this->maxPrimaryKeySize);
     }
 }

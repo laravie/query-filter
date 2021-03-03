@@ -8,6 +8,29 @@ use Laravie\QueryFilter\Contracts\Keyword;
 class JsonFieldSearch extends SearchFilter
 {
     /**
+     * Column name.
+     *
+     * @var string
+     */
+    protected $column;
+
+    /**
+     * JSON path.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * Construct a new JSON Field Search.
+     */
+    public function __construct(string $column, string $path)
+    {
+        $this->column = $column;
+        $this->path = $path;
+    }
+
+    /**
      * Apply JSON field search queries.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
@@ -16,12 +39,10 @@ class JsonFieldSearch extends SearchFilter
      */
     public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator)
     {
-        [$field, $path] = $this->field->wrapJsonFieldAndPath();
-
-        return $query->{$whereOperator}(static function ($query) use ($field, $path, $keywords, $likeOperator) {
+        return $query->{$whereOperator}(function ($query) use ($keywords, $likeOperator) {
             foreach ($keywords->allLowerCased() as $keyword) {
                 $query->orWhereRaw(
-                    "lower({$field}->'\$.{$path}') {$likeOperator} ?", [$keyword]
+                    "lower({$this->column}->'\$.{$this->path}') {$likeOperator} ?", [$keyword]
                 );
             }
         });

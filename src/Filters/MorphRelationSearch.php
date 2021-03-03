@@ -2,7 +2,6 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Laravie\QueryFilter\Value\Field;
 use Laravie\QueryFilter\SearchFilter;
 use Laravie\QueryFilter\Contracts\Keyword;
 
@@ -13,12 +12,12 @@ class MorphRelationSearch extends SearchFilter
      *
      * @var string
      */
-    protected $name;
+    protected $relation;
 
     /**
      * Related column used for search.
      *
-     * @var string
+     * @var \Illuminate\Database\Query\Expression|string
      */
     protected $column;
 
@@ -31,10 +30,12 @@ class MorphRelationSearch extends SearchFilter
 
     /**
      * Construct new Morph Related Search.
+     *
+     * @param  \Illuminate\Database\Query\Expression|string  $column
      */
-    public function __construct(string $name, string $column, array $types = [])
+    public function __construct(string $relation, $column, array $types = [])
     {
-        $this->name = $name;
+        $this->relation = $relation;
         $this->column = $column;
         $this->types = $types;
     }
@@ -52,10 +53,10 @@ class MorphRelationSearch extends SearchFilter
 
         $types = ! empty($this->types) ? '*' : $this->types;
 
-        $query->{$whereOperator.'HasMorph'}($this->name, $types, function ($query) use ($keywords, $likeOperator) {
-            return (new FieldSearch())
-                ->field(new Field($this->column))
-                ->apply($query, $keywords, $likeOperator, 'where');
+        $query->{$whereOperator.'HasMorph'}($this->relation, $types, function ($query) use ($keywords, $likeOperator) {
+            return (new FieldSearch($this->column))->apply(
+                $query, $keywords, $likeOperator, 'where'
+            );
         });
 
         return $query;
