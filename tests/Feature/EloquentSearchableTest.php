@@ -44,7 +44,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function it_can_build_search_query_with_primary_key_search()
+    public function it_can_build_search_query_with_combined_with_search_filters()
     {
         UserFactory::new()->times(5)->create([
             'name' => 'hello world',

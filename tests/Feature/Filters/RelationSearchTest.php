@@ -2,12 +2,12 @@
 
 namespace Laravie\QueryFilter\Tests\Feature\Filters;
 
-use Laravie\QueryFilter\Filters\RelationSearch;
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\Factories\PostFactory;
-use Laravie\QueryFilter\Tests\Models\User;
-use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Support\Facades\DB;
+use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Tests\TestCase;
+use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Filters\RelationSearch;
+use Laravie\QueryFilter\Tests\Factories\PostFactory;
 
 class RelationSearchTest extends TestCase
 {

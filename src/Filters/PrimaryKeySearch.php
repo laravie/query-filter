@@ -18,7 +18,7 @@ class PrimaryKeySearch extends SearchFilter
     /**
      * Construct new Primary Key Search.
      */
-    public function __construct(?int $maxPrimaryKeySize)
+    public function __construct(?int $maxPrimaryKeySize = null)
     {
         $this->maxPrimaryKeySize = $maxPrimaryKeySize ?? $this->maxPrimaryKeySize;
     }

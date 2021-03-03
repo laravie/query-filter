@@ -2,13 +2,14 @@
 
 namespace Laravie\QueryFilter\Tests\Feature\Filters;
 
+use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
 use Laravie\QueryFilter\Tests\Models\User;
-use Laravie\QueryFilter\Filters\FieldSearch;
+use Laravie\QueryFilter\Filters\PrimaryKeySearch;
 use Laravie\QueryFilter\Tests\Factories\UserFactory;
 
-class FieldSearchTest extends TestCase
+class PrimaryKeySearchTest extends TestCase
 {
     /** @test */
     public function it_can_build_search_query()
@@ -22,22 +23,36 @@ class FieldSearchTest extends TestCase
         ]);
 
         $stub = new Searchable(
-            'hello', [new FieldSearch('name')]
+            '5', [new PrimaryKeySearch()]
         );
 
         $query = User::query();
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
+            'select * from "users" where ("users"."id" = ?)',
             $query->toSql()
         );
 
         $this->assertSame(
-            ['hello', 'hello%', '%hello', '%hello%'],
+            ['5'],
             $query->getBindings()
         );
 
-        $this->assertSame(5, $query->count());
+        $this->assertSame(1, $query->count());
+    }
+
+    /** @test */
+    public function it_cannot_build_search_query_from_fluent_query_builder()
+    {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Unable to use PrimaryKeySearch when $query is not an instance of Illuminate\Database\Eloquent\Builder');
+
+        $stub = new Searchable(
+            '5', [new PrimaryKeySearch()]
+        );
+
+        $query = DB::table('users');
+        $stub->apply($query);
     }
 }

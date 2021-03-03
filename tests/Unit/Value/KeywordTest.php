@@ -10,12 +10,16 @@ class KeywordTest extends TestCase
     /** @test */
     public function it_can_generate_keywords()
     {
+        $stub = new Keyword('Hello');
+
+        $this->assertSame('Hello', (string) $stub);
+
         $this->assertSame([
             'Hello',
             'Hello%',
             '%Hello',
             '%Hello%',
-        ], (new Keyword('Hello'))->all());
+        ], $stub->all());
     }
 
     /** @test */

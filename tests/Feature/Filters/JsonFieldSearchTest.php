@@ -2,12 +2,10 @@
 
 namespace Laravie\QueryFilter\Tests\Feature\Filters;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravie\QueryFilter\Filters\JsonFieldSearch;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
+use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Filters\JsonFieldSearch;
 
 class JsonFieldSearchTest extends TestCase
 {
