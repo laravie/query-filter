@@ -13,7 +13,7 @@ use Laravie\QueryFilter\Tests\Factories\UserFactory;
 class EloquentSearchableTest extends TestCase
 {
     /** @test */
-    public function itCanBuildSearchQuery()
+    public function it_can_build_search_query()
     {
         UserFactory::new()->times(5)->create([
             'name' => 'hello world',
@@ -44,7 +44,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itCanBuildSearchQueryWithPrimaryKeySearch()
+    public function it_can_build_search_query_with_primary_key_search()
     {
         UserFactory::new()->times(5)->create([
             'name' => 'hello world',
@@ -55,7 +55,7 @@ class EloquentSearchableTest extends TestCase
         ]);
 
         $stub = new Searchable(
-            '5', [new PrimaryKeySearch(PHP_INT_MAX, ['id']), 'name']
+            '5', [new PrimaryKeySearch(PHP_INT_MAX), 'name']
         );
 
         $query = User::query();
@@ -75,7 +75,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itIgnoresBuildSearchQueryWhenColumnsIsNotProvided()
+    public function it_ignores_build_search_query_when_columns_is_not_provided()
     {
         $stub = new Searchable(
             'hello', []
@@ -96,7 +96,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itIgnoresBuildSearchQueryWhenColumnsIsInvalid()
+    public function it_ignores_build_search_query_when_columns_is_invalid()
     {
         $stub = new Searchable(
             'hello', ['']
@@ -117,7 +117,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itIgnoresBuildSearchQueryWhenKeywordIsEmpty()
+    public function it_ignores_build_search_query_when_keyword_is_empty()
     {
         $stub = new Searchable(
             '', ['name']
@@ -138,7 +138,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itCanBuildSearchQueryWithExpressionValue()
+    public function it_can_build_search_query_with_expression_value()
     {
         UserFactory::new()->times(5)->create([
             'name' => 'hello world',
@@ -169,7 +169,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itCanBuildSearchQueryWithJsonSelector()
+    public function it_can_build_search_query_with_json_selector()
     {
         $stub = new Searchable(
             '60000', ['address->postcode']
@@ -190,7 +190,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itCanBuildSearchQueryWithNestedJsonSelector()
+    public function it_can_build_search_query_with_nested_json_selector()
     {
         $stub = new Searchable(
             '60000', ['personal->address->postcode']
@@ -211,7 +211,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itCantBuildSearchQueryWithInvalidColumnName()
+    public function it_cant_build_search_query_with_invalid_column_name()
     {
         $stub = new Searchable(
             'hello', ['email->"%27))%23injectedSQL']
@@ -232,7 +232,7 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
-    public function itCanBuildSearchQueryWithRelationField()
+    public function it_can_build_search_query_with_relation_field()
     {
         PostFactory::new()->times(3)->create([
             'title' => 'hello world',

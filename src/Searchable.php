@@ -73,11 +73,11 @@ class Searchable
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
             foreach ($filters as $filter) {
-                $filter->apply($query, $keywords, $likeOperator);
+                $filter->apply($query, $keywords, $likeOperator, 'orWhere');
             }
 
             foreach ($fields as $field) {
-                $this->queryOnColumn($query, Value\Field::make($field), $likeOperator);
+                $this->queryOnColumn($query, Value\Field::make($field), $likeOperator, 'orWhere');
             }
         });
 
@@ -91,15 +91,19 @@ class Searchable
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    protected function queryOnColumn($query, Value\Field $field, string $likeOperator = 'like')
-    {
+    protected function queryOnColumn(
+        $query,
+        Value\Field $field,
+        string $likeOperator = 'like',
+        string $whereOperator = 'orWhere'
+    ) {
         if ($field->isExpression()) {
-            return $this->queryOnColumnUsing($query, new Value\Field($field->getValue()), $likeOperator, 'orWhere');
+            return $this->queryOnColumnUsing($query, new Value\Field($field->getValue()), $likeOperator, $whereOperator);
         } elseif ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
             return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
 
-        return $this->queryOnColumnUsing($query, $field, $likeOperator, 'orWhere');
+        return $this->queryOnColumnUsing($query, $field, $likeOperator, $whereOperator);
     }
 
     /**
