@@ -65,7 +65,7 @@ class KeywordTest extends TestCase
             'hello%',
             '%hello',
             '%hello%',
-        ], (new Keyword('Hello'))->allLowerCased());
+        ], (new Keyword('Hello'))->allLowerCase());
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class KeywordTest extends TestCase
     {
         $this->assertSame([
             'hello',
-        ], (new Keyword('Hello'))->wildcardCharacter('*')->noWildcardSearching()->allLowerCased());
+        ], (new Keyword('Hello'))->wildcardCharacter('*')->noWildcardSearching()->allLowerCase());
     }
 
     /** @test */
@@ -84,7 +84,7 @@ class KeywordTest extends TestCase
             'مرحبا%',
             '%مرحبا',
             '%مرحبا%',
-        ], (new Keyword('مرحبا'))->allLowerCased());
+        ], (new Keyword('مرحبا'))->allLowerCase());
     }
 
     /** @test */

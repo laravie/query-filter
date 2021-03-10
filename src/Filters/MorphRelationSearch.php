@@ -3,7 +3,6 @@
 namespace Laravie\QueryFilter\Filters;
 
 use Laravie\QueryFilter\SearchFilter;
-use Laravie\QueryFilter\Contracts\Keyword;
 
 class MorphRelationSearch extends SearchFilter
 {
@@ -47,7 +46,7 @@ class MorphRelationSearch extends SearchFilter
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator)
+    public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
         $this->validateEloquentQueryBuilder($query);
 

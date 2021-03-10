@@ -22,5 +22,10 @@ interface Keyword
     /**
      * Get searchable strings as lowercase.
      */
-    public function allLowerCased(): array;
+    public function allLowerCase(): array;
+
+    /**
+     * Handle resolving keyword for filter.
+     */
+    public function handle(SearchFilter $filter): array;
 }

@@ -66,7 +66,7 @@ class Keyword implements KeywordContract
     /**
      * Get searchable strings as lowercase.
      */
-    public function allLowerCased(): array
+    public function allLowerCase(): array
     {
         return static::searchable(
             Str::lower($this->value),
@@ -74,6 +74,20 @@ class Keyword implements KeywordContract
             $this->wildcardReplacement,
             $this->wildcardSearching ?? true
         );
+    }
+
+    /**
+     * Handle resolving keyword for filter.
+     */
+    public function handle(Contracts\SearchFilter $filter): array
+    {
+        if ($filter instanceof Contracts\Keyword\AsExactValue) {
+            return [$this->getValue()];
+        } elseif ($filter instanceof Contracts\Keyword\AsLowerCase) {
+            return $this->allLowerCase();
+        }
+
+        return $this->all();
     }
 
     /**

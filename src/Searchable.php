@@ -73,7 +73,7 @@ class Searchable
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
             foreach ($filters as $filter) {
-                $filter->apply($query, $keywords, $likeOperator, 'orWhere');
+                $filter->apply($query, $keywords->handle($filter), $likeOperator, 'orWhere');
             }
 
             foreach ($fields as $field) {
@@ -125,15 +125,20 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        return (new Filters\FieldSearch($field->getOriginalValue()))->apply(
-            $query,
-            $this->searchKeyword()
-                ->wildcardCharacter($this->wildcardCharacter)
-                ->wildcardReplacement($this->wildcardReplacement)
-                ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
-            $likeOperator,
-            $whereOperator
-        );
+        tap(new Filters\FieldSearch($field->getOriginalValue()), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+            $filter->apply(
+                $query,
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
+                    ->handle($filter),
+                $likeOperator,
+                $whereOperator
+            );
+        });
+
+        return $query;
     }
 
     /**
@@ -151,15 +156,20 @@ class Searchable
     ) {
         [$column, $path] = $field->wrapJsonFieldAndPath();
 
-        return (new Filters\JsonFieldSearch($column, $path))->apply(
-            $query,
-            $this->searchKeyword()
-                ->wildcardCharacter($this->wildcardCharacter)
-                ->wildcardReplacement($this->wildcardReplacement)
-                ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
-            $likeOperator,
-            $whereOperator
-        );
+        tap(new Filters\JsonFieldSearch($column, $path), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+            $filter->apply(
+                $query,
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
+                    ->handle($filter),
+                $likeOperator,
+                $whereOperator
+            );
+        });
+
+        return $query;
     }
 
     /**
@@ -172,14 +182,19 @@ class Searchable
     ): EloquentQueryBuilder {
         [$relation, $column] = $field->wrapRelationNameAndField();
 
-        return (new Filters\RelationSearch($relation, $column))->apply(
-            $query,
-            $this->searchKeyword()
-                ->wildcardCharacter($this->wildcardCharacter)
-                ->wildcardReplacement($this->wildcardReplacement)
-                ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true),
-            $likeOperator,
-            'orWhere'
-        );
+        tap(new Filters\RelationSearch($relation, $column), function ($filter) use ($field, $query, $likeOperator) {
+            $filter->apply(
+                $query,
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
+                    ->handle($filter),
+                $likeOperator,
+                'orWhere'
+            );
+        });
+
+        return $query;
     }
 }

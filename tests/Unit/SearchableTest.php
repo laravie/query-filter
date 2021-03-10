@@ -19,7 +19,7 @@ class SearchableTest extends TestCase
 
         $this->assertInstanceOf(Keyword::class, $stub->searchKeyword());
         $this->assertSame(['Hello', 'Hello%', '%Hello', '%Hello%'], $stub->searchKeyword()->all());
-        $this->assertSame(['hello', 'hello%', '%hello', '%hello%'], $stub->searchKeyword()->allLowerCased());
+        $this->assertSame(['hello', 'hello%', '%hello', '%hello%'], $stub->searchKeyword()->allLowerCase());
     }
 
     /** @test */

@@ -2,10 +2,10 @@
 
 namespace Laravie\QueryFilter\Filters;
 
+use Laravie\QueryFilter\Contracts\Keyword\AsLowerCase;
 use Laravie\QueryFilter\SearchFilter;
-use Laravie\QueryFilter\Contracts\Keyword;
 
-class JsonFieldSearch extends SearchFilter
+class JsonFieldSearch extends SearchFilter implements AsLowerCase
 {
     /**
      * Column name.
@@ -37,10 +37,10 @@ class JsonFieldSearch extends SearchFilter
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    public function apply($query, Keyword $keywords, string $likeOperator, string $whereOperator)
+    public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
         return $query->{$whereOperator}(function ($query) use ($keywords, $likeOperator) {
-            foreach ($keywords->allLowerCased() as $keyword) {
+            foreach ($keywords as $keyword) {
                 $query->orWhereRaw(
                     "lower({$this->column}->'\$.{$this->path}') {$likeOperator} ?", [$keyword]
                 );
