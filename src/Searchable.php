@@ -125,7 +125,7 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        tap(new Filters\FieldSearch($field->getOriginalValue()), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        \tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -154,9 +154,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        [$column, $path] = $field->wrapJsonFieldAndPath();
-
-        tap(new Filters\JsonFieldSearch($column, $path), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        \tap($this->getJsonFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -180,9 +178,7 @@ class Searchable
         Field $field,
         string $likeOperator
     ): EloquentQueryBuilder {
-        [$relation, $column] = $field->wrapRelationNameAndField();
-
-        tap(new Filters\RelationSearch($relation, $column), function ($filter) use ($field, $query, $likeOperator) {
+        \tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -196,5 +192,34 @@ class Searchable
         });
 
         return $query;
+    }
+
+
+    /**
+     * Get Field Search Filter.
+     */
+    protected function getFieldSearchFilter(Field $field): Contracts\SearchFilter
+    {
+        return new Filters\FieldSearch($field->getOriginalValue());
+    }
+
+    /**
+     * Get JSON Field Search Filter.
+     */
+    protected function getJsonFieldSearchFilter(Field $field): Contracts\SearchFilter
+    {
+        [$column, $path] = $field->wrapJsonFieldAndPath();
+
+        return new Filters\JsonFieldSearch($column, $path);
+    }
+
+    /**
+     * Get Relation Search Filter.
+     */
+    protected function getRelationSearchFilter(Field $field): Contracts\SearchFilter
+    {
+        [$relation, $column] = $field->wrapRelationNameAndField();
+
+        return new Filters\RelationSearch($relation, $column);
     }
 }
