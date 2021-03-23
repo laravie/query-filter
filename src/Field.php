@@ -96,7 +96,7 @@ class Field extends Column implements FieldContract
      *
      * @return string
      */
-    public function wrapJsonPath($value, $delimiter = '->')
+    protected function wrapJsonPath(string $value, string $delimiter = '->'): string
     {
         $value = \preg_replace("/([\\\\]+)?\\'/", "\\'", $value);
 
