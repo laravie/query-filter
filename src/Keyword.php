@@ -71,7 +71,7 @@ class Keyword implements KeywordContract
         if ($filter instanceof Contracts\Keyword\AsExactValue) {
             return [$this->getValue()];
         } elseif ($filter instanceof Contracts\Keyword\AsLowerCase) {
-            return \collect($this->all())->transform(function ($keyword) {
+            return \collect($this->all())->transform(static function ($keyword) {
                 return Str::lower($keyword);
             })->all();
         }
@@ -102,7 +102,7 @@ class Keyword implements KeywordContract
             return [$text];
         } elseif (! Str::contains($text, \array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
             return \collect(static::$defaultSearchVariations)
-                ->map(function ($string) use ($text) {
+                ->map(static function ($string) use ($text) {
                     return Str::replaceFirst('{keyword}', $text, $string);
                 })->all();
         }
