@@ -38,7 +38,6 @@ class Column
         $this->name = $name;
     }
 
-
     /**
      * Make a new Field value object.
      *

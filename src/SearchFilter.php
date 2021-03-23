@@ -2,9 +2,9 @@
 
 namespace Laravie\QueryFilter;
 
-use RuntimeException;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use RuntimeException;
 
 abstract class SearchFilter implements Contracts\SearchFilter
 {

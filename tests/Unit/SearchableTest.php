@@ -2,11 +2,11 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
-use Mockery as m;
-use PHPUnit\Framework\TestCase;
+use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Keyword;
 use Laravie\QueryFilter\Searchable;
-use Illuminate\Database\Query\Expression;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
 class SearchableTest extends TestCase
 {

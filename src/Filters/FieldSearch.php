@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Laravie\QueryFilter\SearchFilter;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Laravie\QueryFilter\SearchFilter;
 
 class FieldSearch extends SearchFilter
 {
@@ -28,7 +28,6 @@ class FieldSearch extends SearchFilter
      * Apply generic field search queries.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     * @param  array  $keywords
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */

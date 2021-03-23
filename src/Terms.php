@@ -3,8 +3,8 @@
 namespace Laravie\QueryFilter;
 
 use Countable;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Terms implements Countable
 {

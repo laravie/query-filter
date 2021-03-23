@@ -3,9 +3,9 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Support\Str;
+use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 use Laravie\QueryFilter\Concerns\SearchingWildcard;
 use Laravie\QueryFilter\Contracts\Keyword as KeywordContract;
-use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 
 class Keyword implements KeywordContract
 {

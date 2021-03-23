@@ -3,11 +3,11 @@
 namespace Laravie\QueryFilter\Tests\Feature\Filters;
 
 use Illuminate\Support\Facades\DB;
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\TestCase;
-use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Filters\PrimaryKeySearch;
+use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\Factories\UserFactory;
+use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Tests\TestCase;
 
 class PrimaryKeySearchTest extends TestCase
 {

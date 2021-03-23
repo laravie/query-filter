@@ -2,9 +2,9 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
+use Laravie\QueryFilter\Taxonomy;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Taxonomy;
 
 class TaxonomyTest extends TestCase
 {

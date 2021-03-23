@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Laravie\QueryFilter\Keyword;
+use PHPUnit\Framework\TestCase;
 
 class KeywordTest extends TestCase
 {

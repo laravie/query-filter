@@ -2,11 +2,11 @@
 
 namespace Laravie\QueryFilter\Tests\Feature\Filters;
 
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\TestCase;
-use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Filters\FieldSearch;
+use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\Factories\UserFactory;
+use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Tests\TestCase;
 
 class FieldSearchTest extends TestCase
 {

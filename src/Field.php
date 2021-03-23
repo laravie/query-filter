@@ -2,7 +2,6 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 use Laravie\QueryFilter\Contracts\Field as FieldContract;
 
@@ -90,11 +89,6 @@ class Field extends Column implements FieldContract
 
     /**
      * Wrap the given JSON path.
-     *
-     * @param  string  $value
-     * @param  string  $delimiter
-     *
-     * @return string
      */
     protected function wrapJsonPath(string $value, string $delimiter = '->'): string
     {
