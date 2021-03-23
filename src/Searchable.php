@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Traits\Tappable;
 
 class Searchable
@@ -121,7 +122,7 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        \tap($this->getFieldSearchFilter($field->getOriginalValue()), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        \tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -150,7 +151,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        \tap($this->getJsonFieldSearchFilter($field->wrapJsonFieldAndPath($query)), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        \tap($this->getJsonFieldSearchFilter($field, $query), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -174,9 +175,7 @@ class Searchable
         Field $field,
         string $likeOperator
     ): EloquentQueryBuilder {
-        [$relation, $column] = $field->wrapRelationNameAndField();
-
-        \tap($this->getRelationSearchFilter($relation, $column), function ($filter) use ($field, $query, $likeOperator) {
+        \tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -195,30 +194,37 @@ class Searchable
     /**
      * Get Field Search Filter.
      *
-     * @param  \Illuminate\Database\Query\Expression|string  $column
+     * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getFieldSearchFilter($column): Contracts\SearchFilter
+    protected function getFieldSearchFilter(Field $field): Contracts\SearchFilter
     {
-        return new Filters\FieldSearch($column);
+        return new Filters\FieldSearch($field->getOriginalValue());
     }
 
     /**
      * Get JSON Field Search Filter.
      *
+     * @param  \Laravie\QueryFilter\Field  $field
      * @param  \Illuminate\Database\Query\Expression|string  $path
      */
-    protected function getJsonFieldSearchFilter($path): Contracts\SearchFilter
+    protected function getJsonFieldSearchFilter(Field $field, $query): Contracts\SearchFilter
     {
-        return new Filters\JsonFieldSearch($path);
+        return new Filters\JsonFieldSearch(
+            new Expression(
+                $query->getGrammar()->wrap($field->getOriginalValue())
+            )
+        );
     }
 
     /**
      * Get Relation Search Filter.
      *
-     * @param  \Illuminate\Database\Query\Expression|string  $column
+     * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getRelationSearchFilter(string $relation, $column): Contracts\SearchFilter
+    protected function getRelationSearchFilter(Field $field): Contracts\SearchFilter
     {
+        [$relation, $column] = \explode('.', $field->getOriginalValue(), 2);
+
         return new Filters\RelationSearch($relation, $column);
     }
 }

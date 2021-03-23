@@ -38,6 +38,19 @@ class Column
         $this->name = $name;
     }
 
+
+    /**
+     * Make a new Field value object.
+     *
+     * @param  static|\Illuminate\Database\Query\Expression|string  $name
+     *
+     * @return static
+     */
+    public static function make($name)
+    {
+        return new static($name);
+    }
+
     /**
      * Get original value.
      *

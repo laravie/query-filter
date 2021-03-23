@@ -41,9 +41,7 @@ class Field extends Column implements FieldContract
     public function validate(): bool
     {
         if ($this->isRelationSelector()) {
-            [, $field] = $this->wrapRelationNameAndField();
-
-            return static::make($field)->validate();
+            return $this->validateRelationColumn();
         } elseif ($this->isJsonPathSelector()) {
             return $this->validateJsonPath();
         }
@@ -52,7 +50,17 @@ class Field extends Column implements FieldContract
     }
 
     /**
-     * Validate JSON field + path.
+     * Validate Relation  field + path.
+     */
+    protected function validateRelationColumn(): bool
+    {
+        [, $field] = \explode('.', $this->name, 2);
+
+        return Column::make($field)->validate();
+    }
+
+    /**
+     * Validate JSON column + path.
      */
     protected function validateJsonPath(): bool
     {
@@ -61,7 +69,7 @@ class Field extends Column implements FieldContract
         $field = $parts[0];
         $path = \count($parts) > 1 ? $this->wrapJsonPath($parts[1], '->') : '';
 
-        return (new Column($field))->validate() && (new Column(\str_replace('.', '', $path)))->validate();
+        return Column::make($field)->validate() && Column::make(\str_replace('.', '', $path))->validate();
     }
 
     /**
@@ -78,32 +86,6 @@ class Field extends Column implements FieldContract
     public function isJsonPathSelector(): bool
     {
         return \strpos($this->name, '->') !== false;
-    }
-
-    /**
-     * Wrap relation and field.
-     */
-    public function wrapRelationNameAndField(): array
-    {
-        [$relation, $column] = \explode('.', $this->name, 2);
-
-        return [
-            $relation,
-            $column,
-            'normal',
-        ];
-    }
-
-    /**
-     * Split the given JSON selector into the field and the optional path and wrap them separately.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     */
-    public function wrapJsonFieldAndPath($query): Expression
-    {
-        return new Expression(
-            $query->getGrammar()->wrap($this->name)
-        );
     }
 
     /**

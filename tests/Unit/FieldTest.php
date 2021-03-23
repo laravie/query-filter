@@ -27,26 +27,6 @@ class FieldTest extends TestCase
         $this->assertFalse((new Field($given))->validate());
     }
 
-    /** @test */
-    public function it_can_wrap_relation_field()
-    {
-        $this->assertEquals(['users', new Field('fullname'), 'normal'], (new Field('users.fullname'))->wrapRelationNameAndField());
-    }
-
-    /** @test */
-    public function it_can_wrap_json_selector()
-    {
-        $query = m::mock('Illuminate\Database\Database\Builder');
-        $grammar = m::mock('Illuminate\Database\Database\Grammars\Grammar');
-
-        $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('getGrammar')->andReturn($grammar);
-
-        $grammar->shouldReceive('wrap')->with('address->country->code')->andReturn(new Expression('address->\'$.country.code\''));
-
-        $this->assertEquals("address->'$.country.code'", (string) (new Field('address->country->code'))->wrapJsonFieldAndPath($query));
-    }
-
     /**
      * Valid column name data provider.
      *
