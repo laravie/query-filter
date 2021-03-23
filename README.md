@@ -153,7 +153,7 @@ where (
 
 #### Search with JSON path
 
-This would allow you to query JSON path using `LIKE` with case insensitive (JSON path in MySQL is case-sensitive by default).
+This would allow you to query JSON path using `LIKE` with case insensitive.
 
 ```php
 use App\User;
@@ -172,10 +172,10 @@ return $searchable->apply($query)->get();
 select * from `users` 
 where (
     (
-        lower(`address`->'$.country') like 'malaysia'
-        or lower(`address`->'$.country') like 'malaysia%'
-        or lower(`address`->'$.country') like '%malaysia'
-        or lower(`address`->'$.country') like '%malaysia%'
+        lower(json_unquote(json_extract(`meta`, '$."country"'))) like 'malaysia'
+        or lower(json_unquote(json_extract(`meta`, '$."country"'))) like 'malaysia%'
+        or lower(json_unquote(json_extract(`meta`, '$."country"'))) like '%malaysia'
+        or lower(json_unquote(json_extract(`meta`, '$."country"'))) like '%malaysia%'
     )
 );
 ```
@@ -329,10 +329,11 @@ namespace App\Nova;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource as NovaResource;
-use Laravie\QueryFilter\Taxonomy;
+use Laravie\QueryFilter\Searchable;
 
 abstract class Resource extends NovaResource
 {
+
     // ...
     
     /**
@@ -345,36 +346,21 @@ abstract class Resource extends NovaResource
      */
     protected static function applySearch($query, $search)
     {
-        return $query->where(function ($query) use ($search) {
-            static::applyResourceSearch($query, $search);
-        });
+        $searchColumns = static::searchableColumns() ?? [];
+
+        return static::initializeSearch($search, $searchColumns)->apply($query);
     }
 
     /**
-     * Apply the search query to the query.
+     * Initialize Search.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string                                $search
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  string  $search
+     * @param  array  $searchColumns
+     * @return \Laravie\QueryFilter\Searchable
      */
-    protected static function applyResourceSearch($query, $search)
+    protected static function initializeSearch($search, $searchColumns)
     {
-        (new Taxonomy(
-            $search, static::taxonomiesRules(), static::searchableColumns()
-        ))->apply($query);
-
-        return $query;
-    }
-
-    /**
-     * Taxonomies Rules.
-     *
-     * @return array 
-     */
-    public static function taxonomiesRules()
-    {
-        return [];
+        return new Searchable($search, $searchColumns);
     }
 }
 ```
