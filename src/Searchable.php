@@ -61,11 +61,7 @@ class Searchable
             ->wildcardReplacement($this->wildcardReplacement)
             ->wildcardSearching($this->wildcardSearching ?? true);
 
-        $connectionType = $query instanceof EloquentQueryBuilder
-            ? $query->getModel()->getConnection()->getDriverName()
-            : $query->getConnection()->getDriverName();
-
-        $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
+        $likeOperator = connection_type($query) == 'pgsql' ? 'ilike' : 'like';
 
         [$filters, $fields] = \collect($this->fields)->partition(static function ($field) {
             return $field instanceof Contracts\SearchFilter;
