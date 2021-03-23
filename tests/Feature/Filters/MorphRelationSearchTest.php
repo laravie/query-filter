@@ -23,7 +23,7 @@ class MorphRelationSearchTest extends TestCase
         ]);
 
         NoteFactory::new()->create([
-            'notable_type'=> Post::class,
+            'notable_type' => Post::class,
             'notable_id' => $posts[0]->getKey(),
         ]);
 
@@ -59,7 +59,7 @@ class MorphRelationSearchTest extends TestCase
         ]);
 
         NoteFactory::new()->create([
-            'notable_type'=> Post::class,
+            'notable_type' => Post::class,
             'notable_id' => $posts[0]->getKey(),
         ]);
 
@@ -95,7 +95,7 @@ class MorphRelationSearchTest extends TestCase
         ]);
 
         NoteFactory::new()->create([
-            'notable_type'=> Post::class,
+            'notable_type' => Post::class,
             'notable_id' => $posts[0]->getKey(),
             'title' => 'laravel',
         ]);
