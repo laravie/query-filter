@@ -3,7 +3,6 @@
 namespace Laravie\QueryFilter;
 
 use Countable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Terms implements Countable
@@ -41,7 +40,7 @@ class Terms implements Countable
         $basic = [];
         $tagged = [];
 
-        $tags = Collection::make($rules)
+        $tags = \collect($rules)
             ->map(static function ($value) {
                 [$tag, ] = \explode(':', $value, 2);
 
@@ -105,7 +104,7 @@ class Terms implements Countable
     {
         [$tag, $type] = \explode(':', $term, 2);
 
-        $results = Collection::make($this->tagged())
+        $results = \collect($this->tagged())
             ->filter(static function ($value) use ($tag) {
                 return Str::startsWith($value, "{$tag}:");
             })->values();

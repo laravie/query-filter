@@ -2,7 +2,6 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 use Laravie\QueryFilter\Concerns\SearchingWildcard;
@@ -72,7 +71,7 @@ class Keyword implements KeywordContract
         if ($filter instanceof Contracts\Keyword\AsExactValue) {
             return [$this->getValue()];
         } elseif ($filter instanceof Contracts\Keyword\AsLowerCase) {
-            return Collection::make($this->all())->transform(function ($keyword) {
+            return \collect($this->all())->transform(function ($keyword) {
                 return Str::lower($keyword);
             })->all();
         }
