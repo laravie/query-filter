@@ -2,8 +2,9 @@
 
 namespace Laravie\QueryFilter;
 
-use Laravie\QueryFilter\Contracts\Field as FieldContract;
+use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
+use Laravie\QueryFilter\Contracts\Field as FieldContract;
 
 class Field extends Column implements FieldContract
 {
@@ -44,12 +45,23 @@ class Field extends Column implements FieldContract
 
             return static::make($field)->validate();
         } elseif ($this->isJsonPathSelector()) {
-            [, $path] = $this->wrapJsonFieldAndPath();
-
-            return (new Column(\str_replace('.', '', $path)))->validate();
+            return $this->validateJsonPath();
         }
 
         return parent::validate();
+    }
+
+    /**
+     * Validate JSON field + path.
+     */
+    protected function validateJsonPath(): bool
+    {
+        $parts = \explode('->', $this->name, 2);
+
+        $field = $parts[0];
+        $path = \count($parts) > 1 ? $this->wrapJsonPath($parts[1], '->') : '';
+
+        return (new Column($field))->validate() && (new Column(\str_replace('.', '', $path)))->validate();
     }
 
     /**
@@ -84,14 +96,14 @@ class Field extends Column implements FieldContract
 
     /**
      * Split the given JSON selector into the field and the optional path and wrap them separately.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      */
-    public function wrapJsonFieldAndPath(): array
+    public function wrapJsonFieldAndPath($query): Expression
     {
-        $parts = \explode('->', $this->name, 2);
-        $field = $parts[0];
-        $path = \count($parts) > 1 ? $this->wrapJsonPath($parts[1], '->') : '';
-
-        return [$field, $path];
+        return new Expression(
+            $query->getGrammar()->wrap($this->name)
+        );
     }
 
     /**

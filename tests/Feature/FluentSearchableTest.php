@@ -169,7 +169,7 @@ class FluentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where ((lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ?))',
+            'select * from "users" where ((lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ?))',
             $query->toSql()
         );
 

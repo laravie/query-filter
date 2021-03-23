@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
+use Mockery as m;
 use Laravie\QueryFilter\Field;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\Query\Expression;
@@ -35,7 +36,15 @@ class FieldTest extends TestCase
     /** @test */
     public function it_can_wrap_json_selector()
     {
-        $this->assertEquals(['address', 'country.code'], (new Field('address->country->code'))->wrapJsonFieldAndPath());
+        $query = m::mock('Illuminate\Database\Database\Builder');
+        $grammar = m::mock('Illuminate\Database\Database\Grammars\Grammar');
+
+        $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('getGrammar')->andReturn($grammar);
+
+        $grammar->shouldReceive('wrap')->with('address->country->code')->andReturn(new Expression('address->\'$.country.code\''));
+
+        $this->assertEquals("address->'$.country.code'", (string) (new Field('address->country->code'))->wrapJsonFieldAndPath($query));
     }
 
     /**

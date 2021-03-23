@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Support\Traits\Tappable;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Illuminate\Support\Traits\Tappable;
 
 class Searchable
 {
@@ -150,9 +150,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        [$column, $path] = $field->wrapJsonFieldAndPath();
-
-        \tap($this->getJsonFieldSearchFilter($column, $path), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        \tap($this->getJsonFieldSearchFilter($field->wrapJsonFieldAndPath($query)), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -206,16 +204,20 @@ class Searchable
 
     /**
      * Get JSON Field Search Filter.
+     *
+     * @param  \Illuminate\Database\Query\Expression|string  $path
      */
-    protected function getJsonFieldSearchFilter(string $column, string $path): Contracts\SearchFilter
+    protected function getJsonFieldSearchFilter($path): Contracts\SearchFilter
     {
-        return new Filters\JsonFieldSearch($column, $path);
+        return new Filters\JsonFieldSearch($path);
     }
 
     /**
      * Get Relation Search Filter.
+     *
+     * @param  \Illuminate\Database\Query\Expression|string  $column
      */
-    protected function getRelationSearchFilter(string $relation, string $column): Contracts\SearchFilter
+    protected function getRelationSearchFilter(string $relation, $column): Contracts\SearchFilter
     {
         return new Filters\RelationSearch($relation, $column);
     }

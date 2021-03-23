@@ -2,10 +2,11 @@
 
 namespace Laravie\QueryFilter\Tests\Feature\Filters;
 
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\TestCase;
-use Laravie\QueryFilter\Tests\Models\User;
+use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Filters\JsonFieldSearch;
+use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Tests\TestCase;
 
 class JsonFieldSearchTest extends TestCase
 {
@@ -13,7 +14,7 @@ class JsonFieldSearchTest extends TestCase
     public function it_can_build_search_query()
     {
         $stub = new Searchable(
-            '60000', [new JsonFieldSearch('address', 'postcode')]
+            '60000', [new JsonFieldSearch("address->'$.postcode'")]
         );
 
         $query = User::query();
@@ -34,7 +35,7 @@ class JsonFieldSearchTest extends TestCase
     public function it_can_build_search_query_with_nested_json_selector()
     {
         $stub = new Searchable(
-            '60000', [new JsonFieldSearch('personal', 'address.postcode')]
+            '60000', [new JsonFieldSearch(new Expression("personal->'$.address.postcode'"))]
         );
 
         $query = User::query();

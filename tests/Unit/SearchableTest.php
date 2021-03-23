@@ -149,8 +149,10 @@ class SearchableTest extends TestCase
     public function it_can_build_search_query_with_json_selector()
     {
         $query = m::mock('Illuminate\Database\Database\Builder');
+        $grammar = m::mock('Illuminate\Database\Database\Grammars\Grammar');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('getGrammar')->andReturn($grammar);
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
@@ -164,6 +166,8 @@ class SearchableTest extends TestCase
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['hello%'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello%']);
+
+        $grammar->shouldReceive('wrap')->with('address->postcode')->andReturn(new Expression('address->\'$.postcode\''));
 
         $stub = new Searchable(
             'hello', ['address->postcode']

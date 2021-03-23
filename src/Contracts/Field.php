@@ -2,6 +2,8 @@
 
 namespace Laravie\QueryFilter\Contracts;
 
+use Illuminate\Database\Query\Expression;
+
 interface Field
 {
     /**
@@ -21,6 +23,8 @@ interface Field
 
     /**
      * Split the given JSON selector into the field and the optional path and wrap them separately.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      */
-    public function wrapJsonFieldAndPath(): array;
+    public function wrapJsonFieldAndPath($query): Expression;
 }

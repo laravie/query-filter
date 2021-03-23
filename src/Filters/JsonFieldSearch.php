@@ -8,25 +8,19 @@ use Laravie\QueryFilter\SearchFilter;
 class JsonFieldSearch extends SearchFilter implements AsLowerCase
 {
     /**
-     * Column name.
-     *
-     * @var string
-     */
-    protected $column;
-
-    /**
      * JSON path.
      *
-     * @var string
+     * @var \Illuminate\Database\Query\Expression|string
      */
     protected $path;
 
     /**
      * Construct a new JSON Field Search.
+     *
+     * @param  \Illuminate\Database\Query\Expression|string  $path
      */
-    public function __construct(string $column, string $path)
+    public function __construct($path)
     {
-        $this->column = $column;
         $this->path = $path;
     }
 
@@ -42,7 +36,7 @@ class JsonFieldSearch extends SearchFilter implements AsLowerCase
         return $query->{$whereOperator}(function ($query) use ($keywords, $likeOperator) {
             foreach ($keywords as $keyword) {
                 $query->orWhereRaw(
-                    "lower({$this->column}->'\$.{$this->path}') {$likeOperator} ?", [$keyword]
+                    "lower({$this->path}) {$likeOperator} ?", [$keyword]
                 );
             }
         });
