@@ -20,11 +20,6 @@ interface Keyword
     public function all(): array;
 
     /**
-     * Get searchable strings as lowercase.
-     */
-    public function allLowerCase(): array;
-
-    /**
      * Handle resolving keyword for filter.
      */
     public function handle(SearchFilter $filter): array;

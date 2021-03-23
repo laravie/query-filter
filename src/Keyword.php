@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 use Laravie\QueryFilter\Concerns\SearchingWildcard;
@@ -64,19 +65,6 @@ class Keyword implements KeywordContract
     }
 
     /**
-     * Get searchable strings as lowercase.
-     */
-    public function allLowerCase(): array
-    {
-        return static::searchable(
-            Str::lower($this->value),
-            $this->wildcardCharacter,
-            $this->wildcardReplacement,
-            $this->wildcardSearching ?? true
-        );
-    }
-
-    /**
      * Handle resolving keyword for filter.
      */
     public function handle(Contracts\SearchFilter $filter): array
@@ -84,7 +72,9 @@ class Keyword implements KeywordContract
         if ($filter instanceof Contracts\Keyword\AsExactValue) {
             return [$this->getValue()];
         } elseif ($filter instanceof Contracts\Keyword\AsLowerCase) {
-            return $this->allLowerCase();
+            return Collection::make($this->all())->transform(function ($keyword) {
+                return Str::lower($keyword);
+            })->all();
         }
 
         return $this->all();

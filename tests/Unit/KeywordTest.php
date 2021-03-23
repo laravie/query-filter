@@ -40,7 +40,6 @@ class KeywordTest extends TestCase
             '%Hello%',
         ], (new Keyword('Hello'))->all(null, '%'));
 
-
         $this->assertSame([
             'Hello',
         ], (new Keyword('Hello'))->wildcardCharacter('*')->wildcardReplacement(null)->all());
@@ -55,36 +54,6 @@ class KeywordTest extends TestCase
             '%مرحبا',
             '%مرحبا%',
         ], (new Keyword('مرحبا'))->all());
-    }
-
-    /** @test */
-    public function it_can_generate_lowercased_keywords()
-    {
-        $this->assertSame([
-            'hello',
-            'hello%',
-            '%hello',
-            '%hello%',
-        ], (new Keyword('Hello'))->allLowerCase());
-    }
-
-    /** @test */
-    public function it_can_generate_exact_lowercased_keyword()
-    {
-        $this->assertSame([
-            'hello',
-        ], (new Keyword('Hello'))->wildcardCharacter('*')->noWildcardSearching()->allLowerCase());
-    }
-
-    /** @test */
-    public function it_can_generate_lowercased_keywords_for_other_langs()
-    {
-        $this->assertSame([
-            'مرحبا',
-            'مرحبا%',
-            '%مرحبا',
-            '%مرحبا%',
-        ], (new Keyword('مرحبا'))->allLowerCase());
     }
 
     /** @test */
