@@ -205,7 +205,7 @@ class Searchable
      * Get JSON Field Search Filter.
      *
      * @param  \Laravie\QueryFilter\Field  $field
-     * @param  \Illuminate\Database\Query\Expression|string  $path
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      */
     protected function getJsonFieldSearchFilter(Field $field, $query): Contracts\SearchFilter
     {
