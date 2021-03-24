@@ -15,3 +15,11 @@ function connection_type($query): string
             ? $query->getModel()->getConnection()->getDriverName()
             : $query->getConnection()->getDriverName();
 }
+
+/**
+ * Get like operator based on connection type.
+ */
+function like_operator(string $connectionType): string
+{
+    return $connectionType == 'pgsql' ? 'ilike' : 'like';
+}

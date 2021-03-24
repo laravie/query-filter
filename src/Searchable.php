@@ -62,7 +62,7 @@ class Searchable
             ->wildcardReplacement($this->wildcardReplacement)
             ->wildcardSearching($this->wildcardSearching ?? true);
 
-        $likeOperator = connection_type($query) == 'pgsql' ? 'ilike' : 'like';
+        $likeOperator = like_operator(connection_type($query));
 
         [$filters, $fields] = \collect($this->fields)->partition(static function ($field) {
             return $field instanceof Contracts\SearchFilter;
