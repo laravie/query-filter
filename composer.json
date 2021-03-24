@@ -24,8 +24,8 @@
     },
     "require": {
         "php": "^7.3 || ^8.0",
-        "illuminate/database": "^8.0",
-        "illuminate/support": "^8.0"
+        "illuminate/database": "^8.25",
+        "illuminate/support": "^8.25"
     },
     "require-dev": {
         "nunomaduro/collision": "^5.3",
