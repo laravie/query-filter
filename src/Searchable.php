@@ -3,7 +3,6 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Traits\Tappable;
 
 class Searchable

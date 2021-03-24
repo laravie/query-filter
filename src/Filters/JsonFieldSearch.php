@@ -2,7 +2,6 @@
 
 namespace Laravie\QueryFilter\Filters;
 
-use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Contracts\Keyword\AsLowerCase;
 use Laravie\QueryFilter\SearchFilter;
 

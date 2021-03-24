@@ -52,7 +52,6 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-
     /** @test */
     public function it_can_build_search_query_with_exact_keyword_on_column()
     {
