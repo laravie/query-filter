@@ -15,7 +15,7 @@ class Taxonomy
      *
      * @var array
      */
-    protected $columns = [];
+    protected $fields = [];
 
     /**
      * Taxonomy rules.
@@ -27,19 +27,19 @@ class Taxonomy
     /**
      * Taxonomy keywords.
      *
-     * @var \Laravie\QueryFilter\Value\Terms
+     * @var \Laravie\QueryFilter\Terms
      */
     protected $terms;
 
     /**
      * Construct a new Matches Query.
      */
-    public function __construct(?string $terms, array $rules = [], array $columns = [])
+    public function __construct(?string $terms, array $rules = [], array $fields = [])
     {
         $this->rules = \array_filter($rules);
-        $this->columns = $columns;
+        $this->fields = $fields;
 
-        $this->terms = Value\Terms::parse($terms ?? '', \array_keys($this->rules));
+        $this->terms = Terms::parse($terms ?? '', \array_keys($this->rules));
     }
 
     /**
@@ -65,7 +65,7 @@ class Taxonomy
     protected function matchBasicConditions($query): void
     {
         (new Searchable(
-            $this->terms->basic(), $this->columns
+            $this->terms->basic(), $this->fields
         ))
         ->wildcardCharacter($this->wildcardCharacter)
         ->tap(function (Searchable $searchable) {

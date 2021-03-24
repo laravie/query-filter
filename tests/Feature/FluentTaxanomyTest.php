@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
-use Laravie\QueryFilter\Taxonomy;
 use Illuminate\Support\Facades\DB;
+use Laravie\QueryFilter\Taxonomy;
 use Laravie\QueryFilter\Tests\TestCase;
 
 class FluentTaxonomyTest extends TestCase
@@ -102,7 +102,7 @@ class FluentTaxonomyTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("name" like ?))',
+            'select * from "users" where ("name" like ?)',
             $query->toSql()
         );
 

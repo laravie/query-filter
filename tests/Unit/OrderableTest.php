@@ -2,9 +2,9 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
+use Laravie\QueryFilter\Orderable;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Orderable;
 
 class OrderableTest extends TestCase
 {

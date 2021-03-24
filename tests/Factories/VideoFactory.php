@@ -3,16 +3,16 @@
 namespace Laravie\QueryFilter\Tests\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Laravie\QueryFilter\Tests\Models\Note;
+use Laravie\QueryFilter\Tests\Models\Video;
 
-class NoteFactory extends Factory
+class VideoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Note::class;
+    protected $model = Video::class;
 
     /**
      * Define the model's default state.
@@ -22,6 +22,7 @@ class NoteFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => UserFactory::new()->create(),
             'title' => $this->faker->text(),
             'content' => $this->faker->paragraph(),
         ];

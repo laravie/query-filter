@@ -35,7 +35,7 @@ class Orderable
      */
     public function __construct(?string $column, string $direction = 'asc', array $config = [])
     {
-        $this->column = new Value\Column($this->sanitizeColumnName($column ?? ''));
+        $this->column = new Column($this->sanitizeColumnName($column ?? ''));
         $this->direction = $this->sanitizeDirection($direction);
         $this->config = $config;
     }

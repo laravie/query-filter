@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotesTable extends Migration
+class CreateVideosTable extends Migration
 {
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('videos', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->morphs('notable');
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('content');
 
@@ -21,6 +21,6 @@ class CreateNotesTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('videos');
     }
 }

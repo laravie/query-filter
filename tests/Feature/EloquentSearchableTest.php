@@ -2,12 +2,13 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Database\Query\Expression;
-use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Filters\PrimaryKeySearch;
+use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\Factories\PostFactory;
 use Laravie\QueryFilter\Tests\Factories\UserFactory;
+use Laravie\QueryFilter\Tests\Models\User;
+use Laravie\QueryFilter\Tests\TestCase;
 
 class EloquentSearchableTest extends TestCase
 {
@@ -40,6 +41,37 @@ class EloquentSearchableTest extends TestCase
         );
 
         $this->assertSame(5, $query->count());
+    }
+
+    /** @test */
+    public function it_can_build_search_query_with_combined_with_search_filters()
+    {
+        UserFactory::new()->times(5)->create([
+            'name' => 'hello world',
+        ]);
+
+        UserFactory::new()->times(3)->create([
+            'name' => 'goodbye world',
+        ]);
+
+        $stub = new Searchable(
+            '5', [new PrimaryKeySearch(PHP_INT_MAX), 'name']
+        );
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where ("users"."id" = ? or ("users"."name" like ? or "users"."name" like ? or "users"."name" like ? or "users"."name" like ?))',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['5', '5', '5%', '%5', '%5%'],
+            $query->getBindings()
+        );
+
+        $this->assertSame(1, $query->count());
     }
 
     /** @test */
@@ -147,7 +179,7 @@ class EloquentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where ((lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ?))',
+            'select * from "users" where ((lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ?))',
             $query->toSql()
         );
 
@@ -168,7 +200,7 @@ class EloquentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where ((lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ?))',
+            'select * from "users" where ((lower(json_extract("personal", \'$."address"."postcode"\')) like ? or lower(json_extract("personal", \'$."address"."postcode"\')) like ? or lower(json_extract("personal", \'$."address"."postcode"\')) like ? or lower(json_extract("personal", \'$."address"."postcode"\')) like ?))',
             $query->toSql()
         );
 

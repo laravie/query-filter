@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Unit\Value;
+namespace Laravie\QueryFilter\Tests\Unit;
 
+use Laravie\QueryFilter\Terms;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Value\Terms;
 
 class TermsTest extends TestCase
 {

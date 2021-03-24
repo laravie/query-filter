@@ -2,11 +2,11 @@
 
 namespace Laravie\QueryFilter\Tests\Unit;
 
+use Illuminate\Database\Query\Expression;
+use Laravie\QueryFilter\Keyword;
+use Laravie\QueryFilter\Searchable;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Value\Keyword;
-use Illuminate\Database\Query\Expression;
 
 class SearchableTest extends TestCase
 {
@@ -19,7 +19,6 @@ class SearchableTest extends TestCase
 
         $this->assertInstanceOf(Keyword::class, $stub->searchKeyword());
         $this->assertSame(['Hello', 'Hello%', '%Hello', '%Hello%'], $stub->searchKeyword()->all());
-        $this->assertSame(['hello', 'hello%', '%hello', '%hello%'], $stub->searchKeyword()->allLowerCased());
     }
 
     /** @test */
@@ -28,7 +27,8 @@ class SearchableTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
+            ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
@@ -54,7 +54,8 @@ class SearchableTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('orWhere')->never()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(m::type('Closure'))
+            ->shouldReceive('orWhere')->never()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
@@ -76,7 +77,8 @@ class SearchableTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('orWhere')->never()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(m::type('Closure'))
+            ->shouldReceive('orWhere')->never()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
@@ -98,7 +100,8 @@ class SearchableTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('orWhere')->never()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(m::type('Closure'))
+            ->shouldReceive('orWhere')->never()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
@@ -120,7 +123,8 @@ class SearchableTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
+            ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
@@ -144,13 +148,16 @@ class SearchableTest extends TestCase
     public function it_can_build_search_query_with_json_selector()
     {
         $query = m::mock('Illuminate\Database\Database\Builder');
+        $grammar = m::mock('Illuminate\Database\Database\Grammars\Grammar');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+        $query->shouldReceive('getGrammar')->andReturn($grammar);
+        $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
+            ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
-                ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
+            ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
@@ -158,6 +165,8 @@ class SearchableTest extends TestCase
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['hello%'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello%']);
+
+        $grammar->shouldReceive('wrap')->with('address->postcode')->andReturn(new Expression('address->\'$.postcode\''));
 
         $stub = new Searchable(
             'hello', ['address->postcode']
@@ -172,11 +181,12 @@ class SearchableTest extends TestCase
         $query = m::mock('Illuminate\Database\Database\Builder');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
+            ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })
-                ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
+            ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 });
@@ -195,7 +205,8 @@ class SearchableTest extends TestCase
         $relationQuery = m::mock('Illuminate\Database\Database\Builder');
 
         $query->shouldReceive('getModel->getConnection->getDriverName')->andReturn('mysql');
-        $query->shouldReceive('where')->once()->with(m::type('Closure'))
+        $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
+            ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
                     $c($query);
                 })

@@ -2,12 +2,12 @@
 Database/Eloquent Query Builder filters for Laravel
 ==============
 
-[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=2.x)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3A2.x)
+[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=3.x)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3A3.x)
 [![Latest Stable Version](https://poser.pugx.org/laravie/query-filter/v/stable)](https://packagist.org/packages/laravie/query-filter)
 [![Total Downloads](https://poser.pugx.org/laravie/query-filter/downloads)](https://packagist.org/packages/laravie/query-filter)
 [![Latest Unstable Version](https://poser.pugx.org/laravie/query-filter/v/unstable)](https://packagist.org/packages/laravie/query-filter)
 [![License](https://poser.pugx.org/laravie/query-filter/license)](https://packagist.org/packages/laravie/query-filter)
-[![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=2.x)](https://coveralls.io/github/laravie/query-filter?branch=2.x)
+[![Coverage Status](https://coveralls.io/repos/github/laravie/query-filter/badge.svg?branch=3.x)](https://coveralls.io/github/laravie/query-filter?branch=3.x)
 
 * [Installation](#installation)
     - [Quick Installation](#quick-installation)
@@ -42,7 +42,7 @@ The class provides a simple interface to handle `ORDER BY` queries to Laravel El
 use App\User;
 use Laravie\QueryFilter\Orderable;
 
-$query = App\User::query();
+$query = User::query();
 
 $orderable = new Orderable(
     'name', 'desc'
@@ -69,7 +69,7 @@ The class provides a simple interface to `LIKE` queries to Laravel Eloquent/Quer
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'crynobone', ['name', 'email']
@@ -103,7 +103,7 @@ Set specific `%` or `*` wildcard to reduce the possible `LIKE`s variations.
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'crynobone*gmail', ['name', 'email']
@@ -131,7 +131,7 @@ Use `withoutWildcardSearching()` to disable adding additional search condition.
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = (new Searchable(
     'crynobone@gmail', ['name', 'email']
@@ -153,13 +153,13 @@ where (
 
 #### Search with JSON path
 
-This would allow you to query JSON path using `LIKE` with case insensitive (JSON path in MySQL is case-sensitive by default).
+This would allow you to query JSON path using `LIKE` with case insensitive.
 
 ```php
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'Malaysia', ['address->country']
@@ -172,10 +172,10 @@ return $searchable->apply($query)->get();
 select * from `users` 
 where (
     (
-        lower(`address`->'$.country') like 'malaysia'
-        or lower(`address`->'$.country') like 'malaysia%'
-        or lower(`address`->'$.country') like '%malaysia'
-        or lower(`address`->'$.country') like '%malaysia%'
+        lower(json_unquote(json_extract(`meta`, '$."country"'))) like 'malaysia'
+        or lower(json_unquote(json_extract(`meta`, '$."country"'))) like 'malaysia%'
+        or lower(json_unquote(json_extract(`meta`, '$."country"'))) like '%malaysia'
+        or lower(json_unquote(json_extract(`meta`, '$."country"'))) like '%malaysia%'
     )
 );
 ```
@@ -188,7 +188,7 @@ This would make it easy to search results not only in the current model but also
 use App\User;
 use Laravie\QueryFilter\Searchable;
 
-$query = App\User::query();
+$query = User::query();
 
 $searchable = new Searchable(
     'Administrator', ['name', 'roles.name']
@@ -222,6 +222,25 @@ where (
 
 > Relations search can only be applied to `Illuminate\Database\Eloquent\Builder` as it need to ensure that the relationship exists via `whereHas()` queries.
 
+#### Search with Morph Relations
+
+You can use polymorphic relationship search using the following options:
+
+```php
+use App\Comment;
+use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Filters\MorphRelationSearch;
+
+$query = Comment::query();
+
+$searchable = new Searchable(
+    'Administrator', ['name', new MorphRelationSearch('commentable', 'name')]
+);
+
+return $searchable->apply($query)->get(); 
+```
+
+
 ### Taxonomy Queries
 
 ```php
@@ -234,7 +253,7 @@ Taxonomy always developers to create a set of rules to group the search keywords
 use App\User;
 use Laravie\QueryFilter\Taxonomy;
 
-$query = App\User::query();
+$query = User::query();
 
 $taxonomy = new Taxonomy(
     'is:admin email:crynobone@gmail.com', [
@@ -310,7 +329,7 @@ namespace App\Nova;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource as NovaResource;
-use Laravie\QueryFilter\Taxonomy;
+use Laravie\QueryFilter\Searchable;
 
 abstract class Resource extends NovaResource
 {
@@ -326,36 +345,21 @@ abstract class Resource extends NovaResource
      */
     protected static function applySearch($query, $search)
     {
-        return $query->where(function ($query) use ($search) {
-            static::applyResourceSearch($query, $search);
-        });
+        $searchColumns = static::searchableColumns() ?? [];
+
+        return static::initializeSearch($search, $searchColumns)->apply($query);
     }
 
     /**
-     * Apply the search query to the query.
+     * Initialize Search.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string                                $search
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  string  $search
+     * @param  array  $searchColumns
+     * @return \Laravie\QueryFilter\Searchable
      */
-    protected static function applyResourceSearch($query, $search)
+    protected static function initializeSearch($search, $searchColumns)
     {
-        (new Taxonomy(
-            $search, static::taxonomiesRules(), static::searchableColumns()
-        ))->apply($query);
-
-        return $query;
-    }
-
-    /**
-     * Taxonomies Rules.
-     *
-     * @return array 
-     */
-    public static function taxonomiesRules()
-    {
-        return [];
+        return new Searchable($search, $searchColumns);
     }
 }
 ```

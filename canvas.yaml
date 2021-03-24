@@ -1,0 +1,21 @@
+preset: package
+
+namespace: Laravie\QueryFilter
+
+factory:
+  path: tests/Factories
+
+console:
+  namespace: Laravie\QueryFilter\Console
+
+model:
+  namespace: Laravie\QueryFilter
+
+provider:
+  namespace: Laravie\QueryFilter
+
+testing:
+  namespace: Laravie\QueryFilter\Tests
+  extends:
+    unit: PHPUnit\Framework\TestCase
+    feature: Laravie\QueryFilter\Tests\TestCase

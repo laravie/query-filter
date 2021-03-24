@@ -2,11 +2,11 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
-use Illuminate\Support\Facades\DB;
-use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Value\Field;
-use Laravie\QueryFilter\Tests\TestCase;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Facades\DB;
+use Laravie\QueryFilter\Field;
+use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Tests\TestCase;
 
 class FluentSearchableTest extends TestCase
 {
@@ -42,7 +42,7 @@ class FluentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("users"."name" like ?))',
+            'select * from "users" where ("users"."name" like ?)',
             $query->toSql()
         );
 
@@ -64,7 +64,7 @@ class FluentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where (("name" like ?) or ("email" like ? or "email" like ? or "email" like ? or "email" like ?))',
+            'select * from "users" where ("name" like ? or ("email" like ? or "email" like ? or "email" like ? or "email" like ?))',
             $query->toSql()
         );
 
@@ -169,7 +169,7 @@ class FluentSearchableTest extends TestCase
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where ((lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ?))',
+            'select * from "users" where ((lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ? or lower(json_extract("address", \'$."postcode"\')) like ?))',
             $query->toSql()
         );
 

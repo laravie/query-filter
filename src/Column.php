@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\QueryFilter\Value;
+namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Query\Expression;
 
@@ -29,7 +29,7 @@ class Column
     protected $name;
 
     /**
-     * Construct a new Field value object.
+     * Construct a new Column value object.
      *
      * @param  \Illuminate\Database\Query\Expression|string  $name
      */
@@ -42,15 +42,30 @@ class Column
      * Make a new Field value object.
      *
      * @param  static|\Illuminate\Database\Query\Expression|string  $name
+     *
      * @return static
      */
     public static function make($name)
     {
-        if ($name instanceof static) {
-            return $name;
-        }
-
         return new static($name);
+    }
+
+    /**
+     * Get original value.
+     *
+     * @return \Illuminate\Database\Query\Expression|string
+     */
+    public function getOriginalValue()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get expression value.
+     */
+    public function getValue(): string
+    {
+        return $this->isExpression() ? $this->name->getValue() : $this->name;
     }
 
     /**
@@ -87,14 +102,6 @@ class Column
         }
 
         return true;
-    }
-
-    /**
-     * Get expression value.
-     */
-    public function getValue(): string
-    {
-        return $this->isExpression() ? $this->name->getValue() : $this->name;
     }
 
     /**

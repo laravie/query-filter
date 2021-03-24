@@ -2,8 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Factories;
 
-use Laravie\QueryFilter\Tests\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Laravie\QueryFilter\Tests\Models\Post;
 
 class PostFactory extends Factory
 {

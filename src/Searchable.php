@@ -2,8 +2,9 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Traits\Tappable;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Searchable
 {
@@ -14,7 +15,7 @@ class Searchable
     /**
      * Search keyword.
      *
-     * @var \Laravie\QueryFilter\Value\Keyword
+     * @var \Laravie\QueryFilter\Keyword
      */
     protected $keyword;
 
@@ -23,23 +24,23 @@ class Searchable
      *
      * @var array
      */
-    protected $columns = [];
+    protected $fields = [];
 
     /**
      * Construct a new Search Query.
      */
-    public function __construct(?string $keyword, array $columns = [])
+    public function __construct(?string $keyword, array $fields = [])
     {
-        $this->keyword = new Value\Keyword($keyword ?? '');
-        $this->columns = \array_filter($columns);
+        $this->keyword = $keyword ?? '';
+        $this->fields = \array_filter($fields);
     }
 
     /**
      * Get search keyword.
      */
-    public function searchKeyword(): Value\Keyword
+    public function searchKeyword(): Keyword
     {
-        return $this->keyword;
+        return new Keyword($this->keyword);
     }
 
     /**
@@ -51,19 +52,29 @@ class Searchable
      */
     public function apply($query)
     {
-        if (! $this->keyword->validate() || empty($this->columns)) {
+        $keywords = $this->searchKeyword();
+
+        if (! $keywords->validate() || empty($this->fields)) {
             return $query;
         }
 
-        $connectionType = $query instanceof EloquentBuilder
-            ? $query->getModel()->getConnection()->getDriverName()
-            : $query->getConnection()->getDriverName();
+        $keywords->wildcardCharacter($this->wildcardCharacter)
+            ->wildcardReplacement($this->wildcardReplacement)
+            ->wildcardSearching($this->wildcardSearching ?? true);
 
-        $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
+        $likeOperator = like_operator(connection_type($query));
 
-        $query->where(function ($query) use ($likeOperator) {
-            foreach ($this->columns as $column) {
-                $this->queryOnColumn($query, Value\Field::make($column), $likeOperator);
+        [$filters, $fields] = \collect($this->fields)->partition(static function ($field) {
+            return $field instanceof Contracts\SearchFilter;
+        });
+
+        $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
+            foreach ($filters as $filter) {
+                $filter->apply($query, $keywords->handle($filter), $likeOperator, 'orWhere');
+            }
+
+            foreach ($fields as $field) {
+                $this->queryOnColumn($query, Field::make($field), $likeOperator, 'orWhere');
             }
         });
 
@@ -77,19 +88,19 @@ class Searchable
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    protected function queryOnColumn($query, Value\Field $column, string $likeOperator = 'like')
-    {
-        if ($column->isExpression()) {
-            return $this->queryOnColumnUsing($query, new Value\Field($column->getValue()), $likeOperator, 'orWhere');
-        } elseif ($column->isRelationSelector() && $query instanceof EloquentBuilder) {
-            [$relation, $column] = $column->wrapRelationNameAndField();
-
-            return $query->orWhereHas($relation, function ($query) use ($column, $likeOperator) {
-                $this->queryOnColumnUsing($query, $column, $likeOperator, 'where');
-            });
+    protected function queryOnColumn(
+        $query,
+        Field $field,
+        string $likeOperator = 'like',
+        string $whereOperator = 'orWhere'
+    ) {
+        if ($field->isExpression()) {
+            return $this->queryOnColumnUsing($query, new Field($field->getValue()), $likeOperator, $whereOperator);
+        } elseif ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
+            return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
 
-        return $this->queryOnColumnUsing($query, $column, $likeOperator, 'orWhere');
+        return $this->queryOnColumnUsing($query, $field, $likeOperator, $whereOperator);
     }
 
     /**
@@ -101,31 +112,30 @@ class Searchable
      */
     protected function queryOnColumnUsing(
         $query,
-        Value\Field $column,
+        Field $field,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        if (! $column->validate()) {
+        if (! $field->validate()) {
             return $query;
-        } elseif ($column->isJsonPathSelector()) {
-            return $this->queryOnJsonColumnUsing($query, $column, $likeOperator, $whereOperator);
+        } elseif ($field->isJsonPathSelector()) {
+            return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        $wildcardSearching = $column->wildcardSearching ?? $this->wildcardSearching ?? true;
-
-        $keywords = $this->keyword->all(
-            $this->wildcardCharacter, $this->wildcardReplacement, $wildcardSearching
-        );
-
-        if ($query instanceof EloquentBuilder) {
-            $column = $query->qualifyColumn((string) $column);
-        }
-
-        return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
-            foreach ($keywords as $keyword) {
-                $query->orWhere((string) $column, $likeOperator, $keyword);
-            }
+        \tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+            $filter->apply(
+                $query,
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
+                    ->handle($filter),
+                $likeOperator,
+                $whereOperator
+            );
         });
+
+        return $query;
     }
 
     /**
@@ -137,24 +147,84 @@ class Searchable
      */
     protected function queryOnJsonColumnUsing(
         $query,
-        Value\Field $column,
+        Field $field,
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        $wildcardSearching = $column->wildcardSearching ?? $this->wildcardSearching ?? true;
-
-        $keywords = $this->keyword->allLowerCased(
-            $this->wildcardCharacter, $this->wildcardReplacement, $wildcardSearching
-        );
-
-        [$field, $path] = $column->wrapJsonFieldAndPath();
-
-        return $query->{$whereOperator}(static function ($query) use ($field, $path, $keywords, $likeOperator) {
-            foreach ($keywords as $keyword) {
-                $query->orWhereRaw(
-                    "lower({$field}->'\$.{$path}') {$likeOperator} ?", [$keyword]
-                );
-            }
+        \tap($this->getJsonFieldSearchFilter($field, $query), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+            $filter->apply(
+                $query,
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
+                    ->handle($filter),
+                $likeOperator,
+                $whereOperator
+            );
         });
+
+        return $query;
+    }
+
+    /**
+     * Build wildcard query filter for column using where on relation.
+     */
+    protected function queryOnColumnUsingRelation(
+        EloquentQueryBuilder $query,
+        Field $field,
+        string $likeOperator
+    ): EloquentQueryBuilder {
+        \tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
+            $filter->apply(
+                $query,
+                $this->searchKeyword()
+                    ->wildcardCharacter($this->wildcardCharacter)
+                    ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
+                    ->handle($filter),
+                $likeOperator,
+                'orWhere'
+            );
+        });
+
+        return $query;
+    }
+
+    /**
+     * Get Field Search Filter.
+     *
+     * @param  \Laravie\QueryFilter\Field  $field
+     */
+    protected function getFieldSearchFilter(Field $field): Contracts\SearchFilter
+    {
+        return new Filters\FieldSearch($field->getOriginalValue());
+    }
+
+    /**
+     * Get JSON Field Search Filter.
+     *
+     * @param  \Laravie\QueryFilter\Field  $field
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     */
+    protected function getJsonFieldSearchFilter(Field $field, $query): Contracts\SearchFilter
+    {
+        return new Filters\JsonFieldSearch(
+            new Expression(
+                $query->getGrammar()->wrap($field->getOriginalValue())
+            )
+        );
+    }
+
+    /**
+     * Get Relation Search Filter.
+     *
+     * @param  \Laravie\QueryFilter\Field  $field
+     */
+    protected function getRelationSearchFilter(Field $field): Contracts\SearchFilter
+    {
+        [$relation, $column] = \explode('.', $field->getOriginalValue(), 2);
+
+        return new Filters\RelationSearch($relation, $column);
     }
 }

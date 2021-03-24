@@ -2,9 +2,9 @@
 
 namespace Laravie\QueryFilter\Tests\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Laravie\QueryFilter\Tests\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
 {
