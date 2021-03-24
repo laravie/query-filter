@@ -333,7 +333,6 @@ use Laravie\QueryFilter\Searchable;
 
 abstract class Resource extends NovaResource
 {
-
     // ...
     
     /**
