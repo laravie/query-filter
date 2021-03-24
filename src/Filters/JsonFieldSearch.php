@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter\Filters;
 
+use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Contracts\Keyword\AsLowerCase;
 use Laravie\QueryFilter\SearchFilter;
 
@@ -33,10 +34,12 @@ class JsonFieldSearch extends SearchFilter implements AsLowerCase
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
-        return $query->{$whereOperator}(function ($query) use ($keywords, $likeOperator) {
+        $path = $query->getGrammar()->wrap($this->path);
+
+        return $query->{$whereOperator}(function ($query) use ($path, $keywords, $likeOperator) {
             foreach ($keywords as $keyword) {
                 $query->orWhereRaw(
-                    "lower({$this->path}) {$likeOperator} ?", [$keyword]
+                    "lower({$path}) {$likeOperator} ?", [$keyword]
                 );
             }
         });

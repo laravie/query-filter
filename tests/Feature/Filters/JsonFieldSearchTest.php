@@ -14,14 +14,14 @@ class JsonFieldSearchTest extends TestCase
     public function it_can_build_search_query()
     {
         $stub = new Searchable(
-            '60000', [new JsonFieldSearch("address->'$.postcode'")]
+            '60000', [new JsonFieldSearch('personal->address->address')]
         );
 
         $query = User::query();
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where ((lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ? or lower(address->\'$.postcode\') like ?))',
+            'select * from "users" where ((lower(json_extract("personal", \'$."address"."address"\')) like ? or lower(json_extract("personal", \'$."address"."address"\')) like ? or lower(json_extract("personal", \'$."address"."address"\')) like ? or lower(json_extract("personal", \'$."address"."address"\')) like ?))',
             $query->toSql()
         );
 
@@ -35,14 +35,14 @@ class JsonFieldSearchTest extends TestCase
     public function it_can_build_search_query_with_nested_json_selector()
     {
         $stub = new Searchable(
-            '60000', [new JsonFieldSearch(new Expression("personal->'$.address.postcode'"))]
+            '60000', [new JsonFieldSearch(new Expression('json_extract("personal", \'$."address"."address"\')'))]
         );
 
         $query = User::query();
         $stub->apply($query);
 
         $this->assertSame(
-            'select * from "users" where ((lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ? or lower(personal->\'$.address.postcode\') like ?))',
+            'select * from "users" where ((lower(json_extract("personal", \'$."address"."address"\')) like ? or lower(json_extract("personal", \'$."address"."address"\')) like ? or lower(json_extract("personal", \'$."address"."address"\')) like ? or lower(json_extract("personal", \'$."address"."address"\')) like ?))',
             $query->toSql()
         );
 

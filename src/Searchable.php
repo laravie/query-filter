@@ -151,7 +151,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        \tap($this->getJsonFieldSearchFilter($field, $query), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        \tap($this->getJsonFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->apply(
                 $query,
                 $this->searchKeyword()
@@ -205,15 +205,10 @@ class Searchable
      * Get JSON Field Search Filter.
      *
      * @param  \Laravie\QueryFilter\Field  $field
-     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      */
-    protected function getJsonFieldSearchFilter(Field $field, $query): Contracts\SearchFilter
+    protected function getJsonFieldSearchFilter(Field $field): Contracts\SearchFilter
     {
-        return new Filters\JsonFieldSearch(
-            new Expression(
-                $query->getGrammar()->wrap($field->getOriginalValue())
-            )
-        );
+        return new Filters\JsonFieldSearch($field->getOriginalValue());
     }
 
     /**
