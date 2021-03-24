@@ -6,7 +6,7 @@ use Laravie\QueryFilter\Taxonomy;
 use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 
-class EloquentTaxanomyTest extends TestCase
+class EloquentTaxonomyTest extends TestCase
 {
     /** @test */
     public function it_can_build_match_query()
