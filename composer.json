@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "orchestra/canvas": "^6.1",
-        "orchestra/testbench": "^6.15"
+        "orchestra/testbench": "^6.16"
     },
     "config": {
         "sort-packages": true
