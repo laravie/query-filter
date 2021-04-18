@@ -9,7 +9,7 @@ trait SearchingWildcard
      *
      * @var string|null
      */
-    public $wildcardCharacter = null;
+    public $wildcardCharacter = '*';
 
     /**
      * Wildcard search character replacement.
