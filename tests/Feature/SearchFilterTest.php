@@ -2,6 +2,8 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
+use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
+use Laravie\QueryFilter\Contracts\Filter\RequiresFluent;
 use function Laravie\QueryFilter\connection_type;
 use function Laravie\QueryFilter\like_operator;
 use Laravie\QueryFilter\SearchFilter;
@@ -13,10 +15,10 @@ class SearchFilterTest extends TestCase
     /** @test */
     public function it_can_trigger_exception_when_function_expecting_eloquent_query_builder()
     {
-        $search = new class() extends SearchFilter {
+        $search = new class() extends SearchFilter implements RequiresEloquent {
             public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
             {
-                $this->validateEloquentQueryBuilder($query);
+                $this->validate($query);
             }
         };
 
@@ -31,10 +33,10 @@ class SearchFilterTest extends TestCase
     /** @test */
     public function it_can_trigger_exception_when_function_expecting_fluent_query_builder()
     {
-        $search = new class() extends SearchFilter {
+        $search = new class() extends SearchFilter implements RequiresFluent {
             public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
             {
-                $this->validateFluentQueryBuilder($query);
+                $this->validate($query);
             }
         };
 
