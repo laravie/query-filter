@@ -9,6 +9,22 @@ use RuntimeException;
 abstract class SearchFilter implements Contracts\SearchFilter
 {
     /**
+     * Validate $query.
+     *
+     * @param  mixed  $query
+     *
+     * @throws \RuntimeException
+     */
+    protected function validate($query): void
+    {
+        if ($this instanceof Contracts\Filter\RequiresEloquent) {
+            $this->validateEloquentQueryBuilder($query);
+        } elseif ($this instanceof Contracts\Filter\RequiresFluent) {
+            $this->validateFluentQueryBuilder($query);
+        }
+    }
+
+    /**
      * Validate $query is an instance of Eloquent Query Builder.
      *
      * @param  mixed  $query

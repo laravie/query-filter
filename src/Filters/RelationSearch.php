@@ -2,9 +2,10 @@
 
 namespace Laravie\QueryFilter\Filters;
 
+use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
 use Laravie\QueryFilter\SearchFilter;
 
-class RelationSearch extends SearchFilter
+class RelationSearch extends SearchFilter implements RequiresEloquent
 {
     /**
      * Relation name.
@@ -40,7 +41,7 @@ class RelationSearch extends SearchFilter
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
-        $this->validateEloquentQueryBuilder($query);
+        $this->validate($query);
 
         $query->{$whereOperator.'Has'}($this->relation, function ($query) use ($keywords, $likeOperator) {
             return (new FieldSearch($this->column))->apply($query, $keywords, $likeOperator, 'where');

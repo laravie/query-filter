@@ -2,9 +2,10 @@
 
 namespace Laravie\QueryFilter\Filters;
 
+use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
 use Laravie\QueryFilter\SearchFilter;
 
-class MorphRelationSearch extends SearchFilter
+class MorphRelationSearch extends SearchFilter implements RequiresEloquent
 {
     /**
      * Relation name.
@@ -48,7 +49,7 @@ class MorphRelationSearch extends SearchFilter
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
-        $this->validateEloquentQueryBuilder($query);
+        $this->validate($query);
 
         $types = ! empty($this->types) ? $this->types : '*';
 
