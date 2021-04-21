@@ -52,7 +52,7 @@ class MorphRelationSearch extends SearchFilter implements RequiresEloquent
         $types = ! empty($this->types) ? $this->types : '*';
 
         $query->{$whereOperator.'HasMorph'}($this->relation, $types, function ($query) use ($keywords, $likeOperator) {
-            return (new FieldSearch($this->column))->apply(
+            return (new FieldSearch($this->column))->validate($query)->apply(
                 $query, $keywords, $likeOperator, 'where'
             );
         });
