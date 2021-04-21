@@ -41,8 +41,6 @@ class RelationSearch extends SearchFilter implements RequiresEloquent
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
-        $this->validate($query);
-
         $query->{$whereOperator.'Has'}($this->relation, function ($query) use ($keywords, $likeOperator) {
             return (new FieldSearch($this->column))->apply($query, $keywords, $likeOperator, 'where');
         });

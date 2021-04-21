@@ -69,7 +69,9 @@ class Searchable
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
             foreach ($filters as $filter) {
-                $filter->apply($query, $keywords->handle($filter), $likeOperator, 'orWhere');
+                $filter->validate($query)->apply(
+                    $query, $keywords->handle($filter), $likeOperator, 'orWhere'
+                );
             }
 
             foreach ($fields as $field) {
@@ -122,7 +124,7 @@ class Searchable
         }
 
         \tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
-            $filter->apply(
+            $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
@@ -151,7 +153,7 @@ class Searchable
         string $whereOperator = 'where'
     ) {
         \tap($this->getJsonFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
-            $filter->apply(
+            $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
@@ -175,7 +177,7 @@ class Searchable
         string $likeOperator
     ): EloquentQueryBuilder {
         \tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
-            $filter->apply(
+            $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)

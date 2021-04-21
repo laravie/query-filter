@@ -33,8 +33,6 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
      */
     public function apply($query, array $keywords, string $likeOperator, ?string $whereOperator = null)
     {
-        $this->validate($query);
-
         if ($this->canSearchPrimaryKey($model = $query->getModel(), $search = \head($keywords))) {
             $query->orWhere($model->getQualifiedKeyName(), $search);
         }

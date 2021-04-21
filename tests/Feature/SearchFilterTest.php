@@ -18,7 +18,7 @@ class SearchFilterTest extends TestCase
         $search = new class() extends SearchFilter implements RequiresEloquent {
             public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
             {
-                $this->validate($query);
+                //
             }
         };
 
@@ -27,7 +27,7 @@ class SearchFilterTest extends TestCase
 
         $query = User::query()->toBase();
 
-        $search->apply($query, ['Laravel'], like_operator(connection_type($query)), 'orWhere');
+        $search->validate($query);
     }
 
     /** @test */
@@ -36,7 +36,7 @@ class SearchFilterTest extends TestCase
         $search = new class() extends SearchFilter implements RequiresFluent {
             public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
             {
-                $this->validate($query);
+                //
             }
         };
 
@@ -45,6 +45,6 @@ class SearchFilterTest extends TestCase
 
         $query = User::query();
 
-        $search->apply($query, ['Laravel'], like_operator(connection_type($query)), 'orWhere');
+        $search->validate($query);
     }
 }

@@ -12,16 +12,19 @@ abstract class SearchFilter implements Contracts\SearchFilter
      * Validate $query.
      *
      * @param  mixed  $query
+     * @return $this
      *
      * @throws \RuntimeException
      */
-    protected function validate($query): void
+    public function validate($query)
     {
         if ($this instanceof Contracts\Filter\RequiresEloquent) {
             $this->validateEloquentQueryBuilder($query);
         } elseif ($this instanceof Contracts\Filter\RequiresFluent) {
             $this->validateFluentQueryBuilder($query);
         }
+
+        return $this;
     }
 
     /**
