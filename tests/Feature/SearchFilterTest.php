@@ -4,8 +4,6 @@ namespace Laravie\QueryFilter\Tests\Feature;
 
 use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
 use Laravie\QueryFilter\Contracts\Filter\RequiresFluent;
-use function Laravie\QueryFilter\connection_type;
-use function Laravie\QueryFilter\like_operator;
 use Laravie\QueryFilter\SearchFilter;
 use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
