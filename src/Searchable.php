@@ -3,6 +3,7 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Tappable;
 
 class Searchable
@@ -63,7 +64,7 @@ class Searchable
 
         $likeOperator = like_operator(connection_type($query));
 
-        [$filters, $fields] = \collect($this->fields)->partition(static function ($field) {
+        [$filters, $fields] = Collection::make($this->fields)->partition(static function ($field) {
             return $field instanceof Contracts\SearchFilter;
         });
 
