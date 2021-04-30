@@ -60,7 +60,6 @@ class FieldSearchTest extends TestCase
 
         $query->shouldNotHaveReceived('orWhere');
 
-        $stub->apply($query, [''], 'like', 'orWhere');
-
+        $stub->apply($query, [], 'like', 'orWhere');
     }
 }
