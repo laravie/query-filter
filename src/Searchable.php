@@ -65,7 +65,7 @@ class Searchable
         $likeOperator = like_operator(connection_type($query));
 
         [$filters, $fields] = Collection::make($this->fields)->partition(static function ($field) {
-            return $field instanceof Contracts\SearchFilter;
+            return $field instanceof Contracts\Filter\Filter;
         });
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
@@ -198,7 +198,7 @@ class Searchable
      *
      * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getFieldSearchFilter(Field $field): Contracts\SearchFilter
+    protected function getFieldSearchFilter(Field $field): Contracts\Filter\Filter
     {
         return new Filters\FieldSearch($field->getOriginalValue());
     }
@@ -208,7 +208,7 @@ class Searchable
      *
      * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getJsonFieldSearchFilter(Field $field): Contracts\SearchFilter
+    protected function getJsonFieldSearchFilter(Field $field): Contracts\Filter\Filter
     {
         return new Filters\JsonFieldSearch($field->getOriginalValue());
     }
@@ -218,7 +218,7 @@ class Searchable
      *
      * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getRelationSearchFilter(Field $field): Contracts\SearchFilter
+    protected function getRelationSearchFilter(Field $field): Contracts\Filter\Filter
     {
         [$relation, $column] = \explode('.', $field->getOriginalValue(), 2);
 

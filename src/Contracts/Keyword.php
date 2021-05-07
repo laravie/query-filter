@@ -2,6 +2,8 @@
 
 namespace Laravie\QueryFilter\Contracts;
 
+use Laravie\QueryFilter\Contracts\Filter\Filter;
+
 interface Keyword
 {
     /**
@@ -22,5 +24,5 @@ interface Keyword
     /**
      * Handle resolving keyword for filter.
      */
-    public function handle(SearchFilter $filter): array;
+    public function handle(Filter $filter): array;
 }

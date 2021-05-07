@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use RuntimeException;
 
-abstract class SearchFilter implements Contracts\SearchFilter
+abstract class SearchFilter implements Contracts\Filter\Filter
 {
     /**
      * Validate $query.

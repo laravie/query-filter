@@ -67,7 +67,7 @@ class Keyword implements KeywordContract
     /**
      * Handle resolving keyword for filter.
      */
-    public function handle(Contracts\SearchFilter $filter): array
+    public function handle(Contracts\Filter\Filter $filter): array
     {
         if ($filter instanceof Contracts\Keyword\AsExactValue) {
             return [$this->getValue()];
