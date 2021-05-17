@@ -3,7 +3,7 @@
 namespace Laravie\QueryFilter;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
-use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Tappable;
 
 class Searchable
@@ -64,13 +64,15 @@ class Searchable
 
         $likeOperator = like_operator(connection_type($query));
 
-        [$filters, $fields] = \collect($this->fields)->partition(static function ($field) {
-            return $field instanceof Contracts\SearchFilter;
+        [$filters, $fields] = Collection::make($this->fields)->partition(static function ($field) {
+            return $field instanceof Contracts\Filter\Filter;
         });
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
             foreach ($filters as $filter) {
-                $filter->apply($query, $keywords->handle($filter), $likeOperator, 'orWhere');
+                $filter->validate($query)->apply(
+                    $query, $keywords->handle($filter), $likeOperator, 'orWhere'
+                );
             }
 
             foreach ($fields as $field) {
@@ -123,7 +125,7 @@ class Searchable
         }
 
         \tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
-            $filter->apply(
+            $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
@@ -151,8 +153,8 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        \tap($this->getJsonFieldSearchFilter($field, $query), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
-            $filter->apply(
+        \tap($this->getJsonFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+            $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
@@ -176,7 +178,7 @@ class Searchable
         string $likeOperator
     ): EloquentQueryBuilder {
         \tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
-            $filter->apply(
+            $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
@@ -196,7 +198,7 @@ class Searchable
      *
      * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getFieldSearchFilter(Field $field): Contracts\SearchFilter
+    protected function getFieldSearchFilter(Field $field): Contracts\Filter\Filter
     {
         return new Filters\FieldSearch($field->getOriginalValue());
     }
@@ -205,15 +207,10 @@ class Searchable
      * Get JSON Field Search Filter.
      *
      * @param  \Laravie\QueryFilter\Field  $field
-     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
      */
-    protected function getJsonFieldSearchFilter(Field $field, $query): Contracts\SearchFilter
+    protected function getJsonFieldSearchFilter(Field $field): Contracts\Filter\Filter
     {
-        return new Filters\JsonFieldSearch(
-            new Expression(
-                $query->getGrammar()->wrap($field->getOriginalValue())
-            )
-        );
+        return new Filters\JsonFieldSearch($field->getOriginalValue());
     }
 
     /**
@@ -221,7 +218,7 @@ class Searchable
      *
      * @param  \Laravie\QueryFilter\Field  $field
      */
-    protected function getRelationSearchFilter(Field $field): Contracts\SearchFilter
+    protected function getRelationSearchFilter(Field $field): Contracts\Filter\Filter
     {
         [$relation, $column] = \explode('.', $field->getOriginalValue(), 2);
 

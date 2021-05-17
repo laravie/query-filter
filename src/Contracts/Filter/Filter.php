@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravie\QueryFilter\Contracts;
+namespace Laravie\QueryFilter\Contracts\Filter;
 
-interface SearchFilter
+interface Filter
 {
     /**
      * Apply search queries.

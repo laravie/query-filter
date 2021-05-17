@@ -2,47 +2,73 @@
 
 namespace Laravie\QueryFilter\Tests\Feature;
 
+use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
+use Laravie\QueryFilter\Contracts\Filter\RequiresFluent;
 use Laravie\QueryFilter\SearchFilter;
 use Laravie\QueryFilter\Tests\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
-use function Laravie\QueryFilter\connection_type;
-use function Laravie\QueryFilter\like_operator;
 
 class SearchFilterTest extends TestCase
 {
     /** @test */
-    public function it_can_trigger_exception_when_function_expecting_eloquent_query_builder()
+    public function it_can_validate_function_expecting_eloquent_query_builder()
     {
-        $search = new class() extends SearchFilter {
+        $search = new class() extends SearchFilter implements RequiresEloquent {
             public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
             {
-                $this->validateEloquentQueryBuilder($query);
+                //
+            }
+        };
+
+        $search->validate(User::query());
+
+        $this->addToAssertionCount(1);
+    }
+
+    /** @test */
+    public function it_can_trigger_exception_when_function_expecting_eloquent_query_builder()
+    {
+        $search = new class() extends SearchFilter implements RequiresEloquent {
+            public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
+            {
+                //
             }
         };
 
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Unable to use '.class_basename($search).' when $query is not an instance of Illuminate\Database\Eloquent\Builder');
 
-        $query = User::query()->toBase();
+        $search->validate(User::query()->toBase());
+    }
 
-        $search->apply($query, ['Laravel'], like_operator(connection_type($query)), 'orWhere');
+    /** @test */
+    public function it_can_validate_function_expecting_fluent_query_builder()
+    {
+        $search = new class() extends SearchFilter implements RequiresFluent {
+            public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
+            {
+                //
+            }
+        };
+
+        $search->validate(User::query()->toBase());
+
+        $this->addToAssertionCount(1);
     }
 
     /** @test */
     public function it_can_trigger_exception_when_function_expecting_fluent_query_builder()
     {
-        $search = new class() extends SearchFilter {
+        $search = new class() extends SearchFilter implements RequiresFluent {
             public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
             {
-                $this->validateFluentQueryBuilder($query);
+                //
             }
         };
 
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Unable to use '.class_basename($search).' when $query is not an instance of Illuminate\Database\Query\Builder');
 
-        $query = User::query();
-
-        $search->apply($query, ['Laravel'], like_operator(connection_type($query)), 'orWhere');
+        $search->validate(User::query());
     }
 }

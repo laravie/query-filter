@@ -6,8 +6,28 @@ use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use RuntimeException;
 
-abstract class SearchFilter implements Contracts\SearchFilter
+abstract class SearchFilter implements Contracts\Filter\Filter
 {
+    /**
+     * Validate $query.
+     *
+     * @param  mixed  $query
+     *
+     * @throws \RuntimeException
+     *
+     * @return $this
+     */
+    public function validate($query)
+    {
+        if ($this instanceof Contracts\Filter\RequiresEloquent) {
+            $this->validateEloquentQueryBuilder($query);
+        } elseif ($this instanceof Contracts\Filter\RequiresFluent) {
+            $this->validateFluentQueryBuilder($query);
+        }
+
+        return $this;
+    }
+
     /**
      * Validate $query is an instance of Eloquent Query Builder.
      *

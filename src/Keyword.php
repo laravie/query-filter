@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravie\QueryFilter\Concerns\ConditionallySearchingWildcard;
 use Laravie\QueryFilter\Concerns\SearchingWildcard;
@@ -66,14 +67,15 @@ class Keyword implements KeywordContract
     /**
      * Handle resolving keyword for filter.
      */
-    public function handle(Contracts\SearchFilter $filter): array
+    public function handle(Contracts\Filter\Filter $filter): array
     {
         if ($filter instanceof Contracts\Keyword\AsExactValue) {
             return [$this->getValue()];
         } elseif ($filter instanceof Contracts\Keyword\AsLowerCase) {
-            return \collect($this->all())->transform(static function ($keyword) {
-                return Str::lower($keyword);
-            })->all();
+            return Collection::make($this->all())
+                ->transform(static function ($keyword) {
+                    return Str::lower($keyword);
+                })->all();
         }
 
         return $this->all();
@@ -101,7 +103,7 @@ class Keyword implements KeywordContract
         } elseif (\is_null($replacement)) {
             return [$text];
         } elseif (! Str::contains($text, \array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
-            return \collect(static::$defaultSearchVariations)
+            return Collection::make(static::$defaultSearchVariations)
                 ->map(static function ($string) use ($text) {
                     return Str::replaceFirst('{keyword}', $text, $string);
                 })->all();

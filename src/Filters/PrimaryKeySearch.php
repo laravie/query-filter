@@ -3,10 +3,11 @@
 namespace Laravie\QueryFilter\Filters;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
 use Laravie\QueryFilter\Contracts\Keyword\AsExactValue;
 use Laravie\QueryFilter\SearchFilter;
 
-class PrimaryKeySearch extends SearchFilter implements AsExactValue
+class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresEloquent
 {
     /**
      * Max primary key size.
@@ -32,8 +33,6 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue
      */
     public function apply($query, array $keywords, string $likeOperator, ?string $whereOperator = null)
     {
-        $this->validateEloquentQueryBuilder($query);
-
         if ($this->canSearchPrimaryKey($model = $query->getModel(), $search = \head($keywords))) {
             $query->orWhere($model->getQualifiedKeyName(), $search);
         }
