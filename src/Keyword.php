@@ -102,7 +102,7 @@ class Keyword implements KeywordContract
             return [];
         } elseif (\is_null($replacement)) {
             return [$text];
-        } elseif (! Str::contains($text, \array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
+        } elseif (! Str::contains($text, array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
             return Collection::make(static::$defaultSearchVariations)
                 ->map(static function ($string) use ($text) {
                     return Str::replaceFirst('{keyword}', $text, $string);
@@ -110,7 +110,7 @@ class Keyword implements KeywordContract
         }
 
         return [
-            \str_replace($wildcard, $replacement, $text),
+            str_replace($wildcard, $replacement, $text),
         ];
     }
 
@@ -119,9 +119,9 @@ class Keyword implements KeywordContract
      */
     public static function sanitize(string $keyword): string
     {
-        $words = \preg_replace('/[^\w\*\s]/iu', '', $keyword);
+        $words = preg_replace('/[^\w\*\s]/iu', '', $keyword);
 
-        if (empty(\trim($words))) {
+        if (empty(trim($words))) {
             return '';
         } elseif (\strlen($words) > 3 && \strlen($words) < (\strlen($keyword) * 0.5)) {
             return $words;

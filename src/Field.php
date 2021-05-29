@@ -26,7 +26,7 @@ class Field extends Column implements FieldContract
     public static function make($name)
     {
         if ($name instanceof static) {
-            return \tap(new static($name), static function ($field) use ($name) {
+            return tap(new static($name), static function ($field) use ($name) {
                 $field->wildcardSearching = $name->wildcardSearching;
             });
         }
@@ -53,7 +53,7 @@ class Field extends Column implements FieldContract
      */
     protected function validateRelationColumn(): bool
     {
-        [, $field] = \explode('.', $this->name, 2);
+        [, $field] = explode('.', $this->name, 2);
 
         return Column::make($field)->validate();
     }
@@ -63,12 +63,12 @@ class Field extends Column implements FieldContract
      */
     protected function validateJsonPath(): bool
     {
-        $parts = \explode('->', $this->name, 2);
+        $parts = explode('->', $this->name, 2);
 
         $field = $parts[0];
         $path = \count($parts) > 1 ? $this->wrapJsonPath($parts[1], '->') : '';
 
-        return Column::make($field)->validate() && Column::make(\str_replace('.', '', $path))->validate();
+        return Column::make($field)->validate() && Column::make(str_replace('.', '', $path))->validate();
     }
 
     /**
@@ -76,7 +76,7 @@ class Field extends Column implements FieldContract
      */
     public function isRelationSelector(): bool
     {
-        return \strpos($this->name, '.') !== false;
+        return strpos($this->name, '.') !== false;
     }
 
     /**
@@ -84,7 +84,7 @@ class Field extends Column implements FieldContract
      */
     public function isJsonPathSelector(): bool
     {
-        return \strpos($this->name, '->') !== false;
+        return strpos($this->name, '->') !== false;
     }
 
     /**
@@ -92,9 +92,9 @@ class Field extends Column implements FieldContract
      */
     protected function wrapJsonPath(string $value, string $delimiter = '->'): string
     {
-        $value = \preg_replace("/([\\\\]+)?\\'/", "\\'", $value);
+        $value = preg_replace("/([\\\\]+)?\\'/", "\\'", $value);
 
-        return \str_replace($delimiter, '.', $value);
+        return str_replace($delimiter, '.', $value);
     }
 
     /**

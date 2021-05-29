@@ -32,7 +32,7 @@ class Searchable
     public function __construct(?string $keyword, array $fields = [])
     {
         $this->keyword = $keyword ?? '';
-        $this->fields = \array_filter($fields);
+        $this->fields = array_filter($fields);
     }
 
     /**
@@ -124,7 +124,7 @@ class Searchable
             return $this->queryOnJsonColumnUsing($query, $field, $likeOperator, 'orWhere');
         }
 
-        \tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        tap($this->getFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
@@ -153,7 +153,7 @@ class Searchable
         string $likeOperator,
         string $whereOperator = 'where'
     ) {
-        \tap($this->getJsonFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
+        tap($this->getJsonFieldSearchFilter($field), function ($filter) use ($field, $query, $likeOperator, $whereOperator) {
             $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
@@ -177,7 +177,7 @@ class Searchable
         Field $field,
         string $likeOperator
     ): EloquentQueryBuilder {
-        \tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
+        tap($this->getRelationSearchFilter($field), function ($filter) use ($field, $query, $likeOperator) {
             $filter->validate($query)->apply(
                 $query,
                 $this->searchKeyword()
@@ -220,7 +220,7 @@ class Searchable
      */
     protected function getRelationSearchFilter(Field $field): Contracts\Filter\Filter
     {
-        [$relation, $column] = \explode('.', $field->getOriginalValue(), 2);
+        [$relation, $column] = explode('.', $field->getOriginalValue(), 2);
 
         return new Filters\RelationSearch($relation, $column);
     }

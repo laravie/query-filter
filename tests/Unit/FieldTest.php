@@ -36,7 +36,7 @@ class FieldTest extends TestCase
         return [
             [new Expression('users.fullname')],
             ['fullname'],
-            [\str_pad('email', 64, 'x')],
+            [str_pad('email', 64, 'x')],
         ];
     }
 
@@ -48,7 +48,7 @@ class FieldTest extends TestCase
     public function invalidFieldNameDataProvider()
     {
         return [
-            [\str_pad('email', 65, 'x')],
+            [str_pad('email', 65, 'x')],
             [''],
             [null],
         ];

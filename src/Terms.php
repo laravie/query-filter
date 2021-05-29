@@ -43,23 +43,23 @@ class Terms implements Countable
 
         $tags = Collection::make($rules)
             ->map(static function ($value) {
-                [$tag, ] = \explode(':', $value, 2);
+                [$tag, ] = explode(':', $value, 2);
 
                 return "{$tag}:";
             })->all();
 
-        if (\preg_match_all('/([\w]+:\"[\w\s]*\"|[\w]+:[\w\S]+|[\w\S]+)\s?/', $term, $terms)) {
+        if (preg_match_all('/([\w]+:\"[\w\s]*\"|[\w]+:[\w\S]+|[\w\S]+)\s?/', $term, $terms)) {
             foreach ($terms[1] as $index => $term) {
                 if (! Str::startsWith($term, $tags)) {
-                    \array_push($basic, $term);
+                    array_push($basic, $term);
                 } else {
-                    \array_push($tagged, $term);
+                    array_push($tagged, $term);
                 }
             }
         }
 
         return new static(
-            \implode(' ', $basic),
+            implode(' ', $basic),
             $tagged
         );
     }
@@ -103,7 +103,7 @@ class Terms implements Countable
      */
     public function where(string $term)
     {
-        [$tag, $type] = \explode(':', $term, 2);
+        [$tag, $type] = explode(':', $term, 2);
 
         $results = Collection::make($this->tagged())
             ->filter(static function ($value) use ($tag) {
@@ -115,15 +115,15 @@ class Terms implements Countable
         }
 
         if ($type === '*') {
-            [, $value] = \explode(':', $results[0] ?? null, 2);
+            [, $value] = explode(':', $results[0] ?? null, 2);
 
-            return \trim($value, '"');
+            return trim($value, '"');
         }
 
         return $results->map(static function ($text) {
-            [, $value] = \explode(':', $text, 2);
+            [, $value] = explode(':', $text, 2);
 
-            return \trim($value, '"');
+            return trim($value, '"');
         })->filter(static function ($text) {
             return ! empty($text);
         })->values()->all();
