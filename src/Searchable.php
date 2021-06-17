@@ -60,6 +60,7 @@ class Searchable
 
         $keywords->wildcardCharacter($this->wildcardCharacter)
             ->wildcardReplacement($this->wildcardReplacement)
+            ->wildcardSearchVariants($this->wildcardSearchVariants)
             ->wildcardSearching($this->wildcardSearching ?? true);
 
         $likeOperator = like_operator(connection_type($query));
@@ -130,6 +131,7 @@ class Searchable
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
                     ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearchVariants($this->wildcardSearchVariants)
                     ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
                     ->handle($filter),
                 $likeOperator,
@@ -159,6 +161,7 @@ class Searchable
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
                     ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearchVariants($this->wildcardSearchVariants)
                     ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
                     ->handle($filter),
                 $likeOperator,
@@ -183,6 +186,7 @@ class Searchable
                 $this->searchKeyword()
                     ->wildcardCharacter($this->wildcardCharacter)
                     ->wildcardReplacement($this->wildcardReplacement)
+                    ->wildcardSearchVariants($this->wildcardSearchVariants)
                     ->wildcardSearching($field->wildcardSearching ?? $this->wildcardSearching ?? true)
                     ->handle($filter),
                 $likeOperator,

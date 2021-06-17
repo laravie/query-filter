@@ -12,6 +12,26 @@ trait ConditionallySearchingWildcard
     public $wildcardSearching = null;
 
     /**
+     * Widlcard search variants.
+     *
+     * @var array|null
+     */
+    public $wildcardSearchVariants = null;
+
+    /**
+     * Set wildcard search variants.
+     *
+     * @param  array  $searchVariants
+     * @return $this
+     */
+    public function wildcardSearchVariants(?array $searchVariants)
+    {
+        $this->wildcardSearchVariants = $searchVariants;
+
+        return $this;
+    }
+
+    /**
      * Set wildcard searching status.
      *
      * @return $this
