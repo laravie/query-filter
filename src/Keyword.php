@@ -60,7 +60,8 @@ class Keyword implements KeywordContract
             $this->value,
             $this->wildcardCharacter,
             $this->wildcardReplacement,
-            $this->wildcardSearching ?? true
+            $this->wildcardSearching ?? true,
+            $this->wildcardSearchVariants ?? null
         );
     }
 
@@ -94,8 +95,13 @@ class Keyword implements KeywordContract
     /**
      * Convert basic string to searchable result.
      */
-    public static function searchable(string $text, ?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
-    {
+    public static function searchable(
+        string $text,
+        ?string $wildcard = '*',
+        ?string $replacement = '%',
+        bool $wildcardSearching = true,
+        ?array $wildcardSearchVariants = null
+    ): array {
         $text = static::sanitize($text);
 
         if (empty($text)) {
@@ -103,7 +109,7 @@ class Keyword implements KeywordContract
         } elseif (\is_null($replacement)) {
             return [$text];
         } elseif (! Str::contains($text, array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
-            return Collection::make(static::$defaultSearchVariations)
+            return Collection::make($wildcardSearchVariants ?? static::$defaultSearchVariations)
                 ->map(static function ($string) use ($text) {
                     return Str::replaceFirst('{keyword}', $text, $string);
                 })->all();

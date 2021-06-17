@@ -44,6 +44,37 @@ class EloquentSearchableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_build_search_query_with_custom_search_variants()
+    {
+        UserFactory::new()->times(5)->create([
+            'name' => 'hello world',
+        ]);
+
+        UserFactory::new()->times(3)->create([
+            'name' => 'goodbye world',
+        ]);
+
+        $stub = (new Searchable(
+            'hello', ['name']
+        ))->wildcardSearchVariants(['%{keyword}%']);
+
+        $query = User::query();
+        $stub->apply($query);
+
+        $this->assertSame(
+            'select * from "users" where ("users"."name" like ?)',
+            $query->toSql()
+        );
+
+        $this->assertSame(
+            ['%hello%'],
+            $query->getBindings()
+        );
+
+        $this->assertSame(5, $query->count());
+    }
+
+    /** @test */
     public function it_can_build_search_query_with_combined_with_search_filters()
     {
         UserFactory::new()->times(5)->create([
