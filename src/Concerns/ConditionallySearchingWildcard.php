@@ -22,6 +22,7 @@ trait ConditionallySearchingWildcard
      * Set wildcard search variants.
      *
      * @param  array  $searchVariants
+     *
      * @return $this
      */
     public function wildcardSearchVariants(?array $searchVariants)
