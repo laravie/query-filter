@@ -11,9 +11,9 @@ Released: 2021-06-18
 * Added configurable `wildcardSearchVariants()`.
 
 ```php
-$searchable = new Searchable(
+$searchable = (new Searchable(
     'Administrator', ['name', 'roles.name']
-)->wildcardSearchVariants(['%{keyword}%']); 
+))->wildcardSearchVariants(['%{keyword}%']); 
 
 return $searchable->apply($query)->get(); 
 ```
