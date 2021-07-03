@@ -113,7 +113,7 @@ class Column
             return false;
         }
 
-        if (! \preg_match(self::VALID_COLUMN_NAME_REGEX, $column)) {
+        if (! preg_match(self::VALID_COLUMN_NAME_REGEX, $column)) {
             return false;
         }
 

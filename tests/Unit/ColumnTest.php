@@ -36,7 +36,7 @@ class ColumnTest extends TestCase
         return [
             [new Expression('users.fullname')],
             ['fullname'],
-            [\str_pad('email', 64, 'x')],
+            [str_pad('email', 64, 'x')],
         ];
     }
 
@@ -49,7 +49,7 @@ class ColumnTest extends TestCase
     {
         return [
             ['email->"%27))%23injectedSQL'],
-            [\str_pad('email', 65, 'x')],
+            [str_pad('email', 65, 'x')],
             [''],
             [null],
         ];

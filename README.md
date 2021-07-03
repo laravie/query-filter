@@ -112,7 +112,7 @@ where (
 
 #### Search with exact wildcard 
 
-Use `withoutWildcardSearching()` to disable adding additional search condition.
+Use `noWildcardSearching()` to disable adding additional search condition.
 
 ```php
 use App\User;

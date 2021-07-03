@@ -37,7 +37,7 @@ class FieldSearch extends SearchFilter
             ? $query->qualifyColumn((string) $this->column)
             : $this->column;
 
-        if (count($keywords) > 1) {
+        if (\count($keywords) > 1) {
             return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
                 foreach ($keywords as $keyword) {
                     $query->orWhere((string) $column, $likeOperator, $keyword);

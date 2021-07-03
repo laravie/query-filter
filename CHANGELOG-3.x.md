@@ -2,6 +2,22 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 3.1.0
+
+Released: 2021-06-18
+
+### Added
+
+* Added configurable `wildcardSearchVariants()`.
+
+```php
+$searchable = (new Searchable(
+    'Administrator', ['name', 'roles.name']
+))->wildcardSearchVariants(['%{keyword}%']); 
+
+return $searchable->apply($query)->get(); 
+```
+
 ## 3.0.0
 
 Released: 2021-05-12

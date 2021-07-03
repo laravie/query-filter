@@ -36,10 +36,10 @@ class Taxonomy
      */
     public function __construct(?string $terms, array $rules = [], array $fields = [])
     {
-        $this->rules = \array_filter($rules);
+        $this->rules = array_filter($rules);
         $this->fields = $fields;
 
-        $this->terms = Terms::parse($terms ?? '', \array_keys($this->rules));
+        $this->terms = Terms::parse($terms ?? '', array_keys($this->rules));
     }
 
     /**
@@ -89,7 +89,7 @@ class Taxonomy
         }
 
         foreach ($this->rules as $term => $callback) {
-            if (\strpos($term, ':*') !== false || \strpos($term, ':[]') !== false) {
+            if (strpos($term, ':*') !== false || strpos($term, ':[]') !== false) {
                 $value = $this->terms->where($term);
 
                 $query->unless(empty($value), static function ($query) use ($callback, $value) {

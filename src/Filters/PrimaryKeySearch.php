@@ -33,7 +33,7 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
      */
     public function apply($query, array $keywords, string $likeOperator, ?string $whereOperator = null)
     {
-        if ($this->canSearchPrimaryKey($model = $query->getModel(), $search = \head($keywords))) {
+        if ($this->canSearchPrimaryKey($model = $query->getModel(), $search = head($keywords))) {
             $query->orWhere($model->getQualifiedKeyName(), $search);
         }
 
@@ -47,7 +47,7 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
      */
     protected function canSearchPrimaryKey(Model $model, $search): bool
     {
-        return \ctype_digit($search)
+        return ctype_digit($search)
             && \in_array($model->getKeyType(), ['int', 'integer'])
             && ($model->getConnection()->getDriverName() != 'pgsql' || $search <= $this->maxPrimaryKeySize);
     }

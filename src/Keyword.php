@@ -60,7 +60,8 @@ class Keyword implements KeywordContract
             $this->value,
             $this->wildcardCharacter,
             $this->wildcardReplacement,
-            $this->wildcardSearching ?? true
+            $this->wildcardSearching ?? true,
+            $this->wildcardSearchVariants ?? null
         );
     }
 
@@ -94,23 +95,28 @@ class Keyword implements KeywordContract
     /**
      * Convert basic string to searchable result.
      */
-    public static function searchable(string $text, ?string $wildcard = '*', ?string $replacement = '%', bool $wildcardSearching = true): array
-    {
+    public static function searchable(
+        string $text,
+        ?string $wildcard = '*',
+        ?string $replacement = '%',
+        bool $wildcardSearching = true,
+        ?array $wildcardSearchVariants = null
+    ): array {
         $text = static::sanitize($text);
 
         if (empty($text)) {
             return [];
         } elseif (\is_null($replacement)) {
             return [$text];
-        } elseif (! Str::contains($text, \array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
-            return Collection::make(static::$defaultSearchVariations)
+        } elseif (! Str::contains($text, array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
+            return Collection::make($wildcardSearchVariants ?? static::$defaultSearchVariations)
                 ->map(static function ($string) use ($text) {
                     return Str::replaceFirst('{keyword}', $text, $string);
                 })->all();
         }
 
         return [
-            \str_replace($wildcard, $replacement, $text),
+            str_replace($wildcard, $replacement, $text),
         ];
     }
 
@@ -119,9 +125,9 @@ class Keyword implements KeywordContract
      */
     public static function sanitize(string $keyword): string
     {
-        $words = \preg_replace('/[^\w\*\s]/iu', '', $keyword);
+        $words = preg_replace('/[^\w\*\s]/iu', '', $keyword);
 
-        if (empty(\trim($words))) {
+        if (empty(trim($words))) {
             return '';
         } elseif (\strlen($words) > 3 && \strlen($words) < (\strlen($keyword) * 0.5)) {
             return $words;
