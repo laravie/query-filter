@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 /**
  * Get connection type from Query Builder.
  *
- * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+ * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
  */
 function connection_type($query): string
 {
