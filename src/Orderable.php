@@ -12,7 +12,7 @@ class Orderable
     /**
      * Ordered column name.
      *
-     * @var string
+     * @var \Laravie\QueryFilter\Column
      */
     protected $column;
 
