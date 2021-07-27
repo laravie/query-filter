@@ -16,7 +16,6 @@ jobs:
           - "ubuntu-latest"
           - "windows-latest"
         php:
-          - "7.4"
           - "8.0"
         dependencies:
           - "locked"
@@ -50,6 +49,51 @@ jobs:
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--prefer-dist"
+
+      - name: Execute tests
+        run: vendor/bin/phpunit
+
+  tests-on-php-74:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        os:
+          - "ubuntu-latest"
+          - "windows-latest"
+        php:
+          - "7.4"
+        dependencies:
+          - "locked"
+          - "highest"
+          - "lowest"
+        laravel:
+          - "8.x"
+        experimental:
+          - false
+
+    name: Laravel ${{ matrix.laravel }} on PHP${{ matrix.php }}-${{ matrix.os }} (${{ matrix.dependencies }})
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, sqlite3, pdo_sqlite, bcmath, fileinfo
+          coverage: none
+
+      - name: Install Laravel Framework ${{ matrix.laravel }}
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+
+      - name: Install dependencies
+        uses: "ramsey/composer-install@v1"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--prefer-dist --no-cache"
 
       - name: Execute tests
         run: vendor/bin/phpunit
