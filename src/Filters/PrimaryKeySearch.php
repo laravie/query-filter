@@ -12,7 +12,7 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
     /**
      * Max primary key size.
      *
-     * @var
+     * @var int
      */
     protected $maxPrimaryKeySize = PHP_INT_MAX;
 

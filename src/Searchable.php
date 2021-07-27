@@ -15,7 +15,7 @@ class Searchable
     /**
      * Search keyword.
      *
-     * @var \Laravie\QueryFilter\Keyword
+     * @var string
      */
     protected $keyword;
 
