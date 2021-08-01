@@ -116,7 +116,7 @@ class Keyword implements KeywordContract
         }
 
         return [
-            str_replace($wildcard, $replacement, $text),
+            str_replace($wildcard ?? '*', $replacement ?? '%', $text),
         ];
     }
 
@@ -125,6 +125,7 @@ class Keyword implements KeywordContract
      */
     public static function sanitize(string $keyword): string
     {
+        /** @var string $words */
         $words = preg_replace('/[^\w\*\s]/iu', '', $keyword);
 
         if (empty(trim($words))) {
