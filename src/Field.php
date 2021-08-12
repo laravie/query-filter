@@ -76,7 +76,7 @@ class Field extends Column implements FieldContract
      */
     public function isRelationSelector(): bool
     {
-        return strpos($this->name, '.') !== false;
+        return strpos($this->name ?? '', '.') !== false;
     }
 
     /**
