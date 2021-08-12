@@ -84,7 +84,7 @@ class Field extends Column implements FieldContract
      */
     public function isJsonPathSelector(): bool
     {
-        return strpos($this->name, '->') !== false;
+        return strpos($this->name ?? '', '->') !== false;
     }
 
     /**
