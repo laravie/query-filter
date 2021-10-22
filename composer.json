@@ -24,12 +24,12 @@
     },
     "require": {
         "php": "^7.3 || ^8.0",
-        "illuminate/database": "^8.63",
-        "illuminate/support": "^8.63"
+        "illuminate/database": "^8.66",
+        "illuminate/support": "^8.66"
     },
     "require-dev": {
         "nunomaduro/larastan": "^0.7.10",
-        "orchestra/canvas": "^6.1",
+        "orchestra/canvas": "^6.7",
         "orchestra/testbench": "^6.22"
     },
     "config": {
