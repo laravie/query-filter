@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 3.2.0
+
+Released: 2021-10-27
+
+### Added
+
+* Added support for PHP 8.1.
+
 ## 3.1.0
 
 Released: 2021-06-18
