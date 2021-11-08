@@ -1,5 +1,6 @@
 includes:
   - ./vendor/nunomaduro/larastan/extension.neon
+  - ./phpstan-baseline.neon
 
 parameters:
 
@@ -7,7 +8,7 @@ parameters:
     - src
 
   # The level 8 is the highest level
-  level: 5
+  level: 8
 
   ignoreErrors:
     - '#Unsafe usage of new static#'

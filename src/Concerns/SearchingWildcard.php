@@ -14,7 +14,7 @@ trait SearchingWildcard
     /**
      * Wildcard search character replacement.
      *
-     * @var string
+     * @var string|null
      */
     public $wildcardReplacement = '%';
 

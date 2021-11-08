@@ -65,7 +65,11 @@ class Column
      */
     public function getValue(): string
     {
-        return $this->isExpression() ? $this->name->getValue() : $this->name;
+        if (\is_string($this->name)) {
+            return $this->name;
+        }
+
+        return $this->name->getValue();
     }
 
     /**

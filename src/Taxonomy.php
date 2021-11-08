@@ -20,7 +20,7 @@ class Taxonomy
     /**
      * Taxonomy rules.
      *
-     * @var array
+     * @var array<string,callable>
      */
     protected $rules = [];
 
