@@ -65,7 +65,7 @@ class Column
      */
     public function getValue(): string
     {
-        if (is_string($this->name)) {
+        if (\is_string($this->name)) {
             return $this->name;
         }
 
