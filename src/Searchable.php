@@ -65,6 +65,10 @@ class Searchable
 
         $likeOperator = like_operator(connection_type($query));
 
+        /**
+         * @var \Illuminate\Support\Collection $filters
+         * @var \Illuminate\Support\Collection $fields
+         */
         [$filters, $fields] = Collection::make($this->fields)->partition(static function ($field) {
             return $field instanceof Contracts\Filter\Filter;
         });

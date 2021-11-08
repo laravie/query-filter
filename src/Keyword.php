@@ -116,7 +116,7 @@ class Keyword implements KeywordContract
         }
 
         return [
-            str_replace($wildcard ?? '*', $replacement ?? '%', $text),
+            str_replace($wildcard ?? '*', $replacement, $text),
         ];
     }
 
