@@ -44,7 +44,7 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
     /**
      * Determine if can search primary key.
      *
-     * @param  string|int  $search
+     * @param  mixed  $search
      */
     protected function canSearchPrimaryKey(Model $model, $search): bool
     {
