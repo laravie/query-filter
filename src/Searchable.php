@@ -22,14 +22,14 @@ class Searchable
     /**
      * Search columns.
      *
-     * @var array
+     * @var array<int, string|\Laravie\QueryFilter\Contracts\Filter\Filter>
      */
     protected $fields = [];
 
     /**
      * Construct a new Search Query.
-     * 
-     * @param  array<int, string|\Laravie\QueryFilter\Contracts\Filter>  $fields
+     *
+     * @param  array<int, string|\Laravie\QueryFilter\Contracts\Filter\Filter>  $fields
      */
     public function __construct(?string $keyword, array $fields = [])
     {
@@ -68,7 +68,7 @@ class Searchable
         $likeOperator = like_operator(connection_type($query));
 
         /**
-         * @var \Illuminate\Support\Collection<int, \Laravie\QueryFilter\Contracts\Filter> $filters
+         * @var \Illuminate\Support\Collection<int, \Laravie\QueryFilter\Contracts\Filter\Filter> $filters
          * @var \Illuminate\Support\Collection<int, string> $fields
          */
         [$filters, $fields] = Collection::make($this->fields)->partition(static function ($field) {

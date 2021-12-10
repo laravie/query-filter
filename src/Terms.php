@@ -24,7 +24,7 @@ class Terms implements Countable
 
     /**
      * Construct a new Condition value object.
-     * 
+     *
      * @param  array<int, string>  $tagged
      */
     public function __construct(string $basic, array $tagged)
@@ -37,7 +37,7 @@ class Terms implements Countable
      * Parse rules from keyword.
      *
      * @param  array<int, string>  $rules
-     * 
+     *
      * @return static
      */
     public static function parse(string $term, array $rules)
@@ -78,8 +78,8 @@ class Terms implements Countable
 
     /**
      * Get tagged conditions.
-     * 
-     * @return array<int, string> 
+     *
+     * @return array<int, string>
      */
     public function tagged(): array
     {
@@ -121,7 +121,7 @@ class Terms implements Countable
         }
 
         if ($type === '*') {
-            [, $value] = explode(':', $results[0] ?? null, 2);
+            [, $value] = explode(':', $results[0] ?? '', 2);
 
             return trim($value, '"');
         }
