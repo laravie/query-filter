@@ -96,6 +96,9 @@ class Column
 
     /**
      * Get if column is acceptable for filter.
+     * 
+     * @param  array<int, string>  $only
+     * @param  array<int, string>  $except
      */
     public function accepted(array $only = [], array $except = []): bool
     {

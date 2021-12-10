@@ -13,14 +13,14 @@ class Taxonomy
     /**
      * Taxonomy columns.
      *
-     * @var array
+     * @var array<int, string|\Laravie\QueryFilter\Contracts\Filter>
      */
     protected $fields = [];
 
     /**
      * Taxonomy rules.
      *
-     * @var array<string,callable>
+     * @var array<string, \Closure|callable>
      */
     protected $rules = [];
 
@@ -33,6 +33,9 @@ class Taxonomy
 
     /**
      * Construct a new Matches Query.
+     * 
+     * @param  array<string, \Closure|callable>  $rules
+     * @param  array<int, string|\Laravie\QueryFilter\Contracts\Filter>  $fields
      */
     public function __construct(?string $terms, array $rules = [], array $fields = [])
     {
