@@ -18,11 +18,15 @@ interface Keyword
 
     /**
      * Get searchable strings.
+     * 
+     * @return array<int, string>
      */
     public function all(): array;
 
     /**
      * Handle resolving keyword for filter.
+     * 
+     * @return array<int, string>
      */
     public function handle(Filter $filter): array;
 }

@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 3.2.1
+
+Released: 2021-12-12
+
+### Changes
+
+* Improves generic types docblock.
+
 ## 3.2.0
 
 Released: 2021-10-27

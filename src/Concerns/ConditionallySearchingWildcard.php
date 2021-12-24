@@ -21,7 +21,7 @@ trait ConditionallySearchingWildcard
     /**
      * Set wildcard search variants.
      *
-     * @param  array  $searchVariants
+     * @param  array<int, string>  $searchVariants
      *
      * @return $this
      */

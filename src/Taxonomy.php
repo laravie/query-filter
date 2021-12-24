@@ -13,14 +13,14 @@ class Taxonomy
     /**
      * Taxonomy columns.
      *
-     * @var array
+     * @var array<int, string|\Laravie\QueryFilter\Contracts\Filter\Filter>
      */
     protected $fields = [];
 
     /**
      * Taxonomy rules.
      *
-     * @var array<string,callable>
+     * @var array<string, \Closure|callable>
      */
     protected $rules = [];
 
@@ -33,6 +33,9 @@ class Taxonomy
 
     /**
      * Construct a new Matches Query.
+     *
+     * @param  array<string, \Closure|callable>  $rules
+     * @param  array<int, string|\Laravie\QueryFilter\Contracts\Filter\Filter>  $fields
      */
     public function __construct(?string $terms, array $rules = [], array $fields = [])
     {
@@ -64,17 +67,16 @@ class Taxonomy
      */
     protected function matchBasicConditions($query): void
     {
-        (new Searchable(
-            $this->terms->basic(), $this->fields
-        ))
-        ->wildcardCharacter($this->wildcardCharacter)
-        ->tap(function (Searchable $searchable) {
-            if (($this->wildcardSearching ?? true) === true) {
-                $searchable->allowWildcardSearching();
-            } else {
-                $searchable->noWildcardSearching();
-            }
-        })->apply($query);
+        $searchable = (new Searchable($this->terms->basic(), $this->fields))
+                            ->wildcardCharacter($this->wildcardCharacter);
+
+        if (($this->wildcardSearching ?? true) === true) {
+            $searchable->allowWildcardSearching();
+        } else {
+            $searchable->noWildcardSearching();
+        }
+
+        $searchable->apply($query);
     }
 
     /**

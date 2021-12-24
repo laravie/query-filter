@@ -28,6 +28,7 @@ class FieldSearch extends SearchFilter
      * Apply generic field search queries.
      *
      * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     * @param  array<int, string>  $keywords
      *
      * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */

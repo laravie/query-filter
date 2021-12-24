@@ -65,11 +65,7 @@ class Column
      */
     public function getValue(): string
     {
-        if (\is_string($this->name)) {
-            return $this->name;
-        }
-
-        return $this->name->getValue();
+        return (string) $this->name;
     }
 
     /**
@@ -96,6 +92,9 @@ class Column
 
     /**
      * Get if column is acceptable for filter.
+     *
+     * @param  array<int, string>  $only
+     * @param  array<int, string>  $except
      */
     public function accepted(array $only = [], array $except = []): bool
     {

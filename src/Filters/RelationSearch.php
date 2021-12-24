@@ -36,6 +36,7 @@ class RelationSearch extends SearchFilter implements RequiresEloquent
      * Apply relation search queries.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array<int, string>  $keywords
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */

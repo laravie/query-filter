@@ -1,7 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Cannot use array destructuring on Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), mixed\\>&iterable\\<Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), mixed\\>\\>\\.$#"
-			count: 1
-			path: src/Searchable.php
-

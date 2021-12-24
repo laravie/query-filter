@@ -32,6 +32,7 @@ class MorphRelationSearch extends SearchFilter implements RequiresEloquent
      * Construct new Morph Related Search.
      *
      * @param  \Illuminate\Database\Query\Expression|string  $column
+     * @param  array<int, string>  $types
      */
     public function __construct(string $relation, $column, array $types = [])
     {
@@ -44,6 +45,7 @@ class MorphRelationSearch extends SearchFilter implements RequiresEloquent
      * Apply relation search queries.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array<int, string>  $keywords
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */

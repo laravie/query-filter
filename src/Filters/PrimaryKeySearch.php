@@ -28,6 +28,7 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
      * Apply primary key field search queries.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array<int, string>  $keywords
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -43,7 +44,7 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
     /**
      * Determine if can search primary key.
      *
-     * @param  string|int  $search
+     * @param  mixed  $search
      */
     protected function canSearchPrimaryKey(Model $model, $search): bool
     {
