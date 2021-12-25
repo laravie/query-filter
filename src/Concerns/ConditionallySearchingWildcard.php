@@ -14,7 +14,7 @@ trait ConditionallySearchingWildcard
     /**
      * Widlcard search variants.
      *
-     * @var array|null
+     * @var array<int, string>|null
      */
     public $wildcardSearchVariants = null;
 

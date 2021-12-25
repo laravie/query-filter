@@ -26,12 +26,14 @@ class Orderable
     /**
      * Configurations.
      *
-     * @var array
+     * @var array{only?: string|array, except?: string|array}
      */
     protected $config = [];
 
     /**
      * Construct a new Ordered Query.
+     *
+     * @param  array{only?: string|array, except?: string|array}  $config
      */
     public function __construct(?string $column, string $direction = 'asc', array $config = [])
     {
