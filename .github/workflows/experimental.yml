@@ -1,5 +1,7 @@
 name: experimental
 
+on: []
+
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
