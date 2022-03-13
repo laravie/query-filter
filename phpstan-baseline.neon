@@ -1,12 +1,3 @@
 parameters:
-	ignoreErrors:
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Database\\\\Query\\\\Builder\\:\\:unless\\(\\)\\.$#"
-			count: 1
-			path: src/Taxonomy.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Database\\\\Query\\\\Builder\\:\\:when\\(\\)\\.$#"
-			count: 1
-			path: src/Taxonomy.php
+	ignoreErrors: []
 
