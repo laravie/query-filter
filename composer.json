@@ -24,8 +24,8 @@
     },
     "require": {
         "php": "^7.3 || ^8.0",
-        "illuminate/database": "^8.67 || ^9.0",
-        "illuminate/support": "^8.67 || ^9.0"
+        "illuminate/database": "^8.67 || ^9.0 || ^10.0",
+        "illuminate/support": "^8.67 || ^9.0 || ^10.0"
     },
     "require-dev": {
         "nunomaduro/larastan": "^1.0.1",
