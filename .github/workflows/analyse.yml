@@ -13,11 +13,11 @@ jobs:
         os:
           - "ubuntu-latest"
         php:
-          - "8.0"
+          - 8.1
         dependencies:
           - "highest"
         laravel:
-          - "9.x"
+          - "10.x"
         experimental:
           - false
 
