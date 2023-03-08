@@ -44,17 +44,9 @@ class Column
     /**
      * Get original value.
      */
-    public function getOriginalValue(): Expression|string
+    public function getValue(): Expression|string
     {
         return $this->name;
-    }
-
-    /**
-     * Get expression value.
-     */
-    public function getValue(): string
-    {
-        return (string) $this->name;
     }
 
     /**
@@ -70,9 +62,14 @@ class Column
      */
     public function validate(): bool
     {
-        if ($this->isExpression()
-            || (! empty($this->name) && static::validateColumnName($this->name))
-        ) {
+        if ($this->isExpression()) {
+            return true;
+        }
+
+        /** @var string $name */
+        $name = $this->name;
+
+        if (! empty($name) && static::validateColumnName($name)) {
             return true;
         }
 

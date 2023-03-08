@@ -25,7 +25,7 @@ class Field extends Column implements FieldContract
     public static function make($name)
     {
         if ($name instanceof static) {
-            return tap(new static($name->getOriginalValue()), static function ($field) use ($name) {
+            return tap(new static($name->getValue()), static function ($field) use ($name) {
                 $field->wildcardSearching = $name->wildcardSearching;
             });
         }
@@ -52,7 +52,14 @@ class Field extends Column implements FieldContract
      */
     protected function validateRelationColumn(): bool
     {
-        [, $field] = explode('.', $this->name, 2);
+        if ($this->isExpression()) {
+            return false;
+        }
+
+        /** @var string $name */
+        $name = $this->name;
+
+        [, $field] = explode('.', $name, 2);
 
         return Column::make($field)->validate();
     }
@@ -62,7 +69,14 @@ class Field extends Column implements FieldContract
      */
     protected function validateJsonPath(): bool
     {
-        $parts = explode('->', $this->name, 2);
+        if ($this->isExpression()) {
+            return false;
+        }
+
+        /** @var string $name */
+        $name = $this->name;
+
+        $parts = explode('->', $name, 2);
 
         $field = $parts[0];
         $path = \count($parts) > 1 ? $this->wrapJsonPath($parts[1], '->') : '';
@@ -75,7 +89,14 @@ class Field extends Column implements FieldContract
      */
     public function isRelationSelector(): bool
     {
-        return $this->isExpression() === false && strpos($this->name, '.') !== false;
+        if ($this->isExpression()) {
+            return false;
+        }
+
+        /** @var string $name */
+        $name = $this->name;
+
+        return strpos($name, '.') !== false;
     }
 
     /**
@@ -83,7 +104,14 @@ class Field extends Column implements FieldContract
      */
     public function isJsonPathSelector(): bool
     {
-        return $this->isExpression() === false && strpos($this->name, '->') !== false;
+        if ($this->isExpression()) {
+            return false;
+        }
+
+        /** @var string $name */
+        $name = $this->name;
+
+        return strpos($name, '->') !== false;
     }
 
     /**

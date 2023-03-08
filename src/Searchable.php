@@ -2,7 +2,6 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Tappable;
@@ -177,6 +176,9 @@ class Searchable
 
     /**
      * Build wildcard query filter for column using where on relation.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */
     protected function queryOnColumnUsingRelation(
         EloquentQueryBuilder $query,
@@ -207,7 +209,7 @@ class Searchable
      */
     protected function getFieldSearchFilter(Field $field): Contracts\Filter\Filter
     {
-        return new Filters\FieldSearch($field->getOriginalValue());
+        return new Filters\FieldSearch($field->getValue());
     }
 
     /**
@@ -217,7 +219,7 @@ class Searchable
      */
     protected function getJsonFieldSearchFilter(Field $field): Contracts\Filter\Filter
     {
-        return new Filters\JsonFieldSearch($field->getOriginalValue());
+        return new Filters\JsonFieldSearch($field->getValue());
     }
 
     /**
@@ -227,7 +229,10 @@ class Searchable
      */
     protected function getRelationSearchFilter(Field $field): Contracts\Filter\Filter
     {
-        [$relation, $column] = explode('.', $field->getOriginalValue(), 2);
+        /** @var string $attribute */
+        $attribute = $field->getValue();
+
+        [$relation, $column] = explode('.', $attribute, 2);
 
         return new Filters\RelationSearch($relation, $column);
     }

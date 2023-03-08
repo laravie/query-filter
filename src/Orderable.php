@@ -50,8 +50,11 @@ class Orderable
      */
     public function apply($query)
     {
+        /** @var \Illuminate\Database\Query\Expression|string $column */
+        $column = $this->column->getValue();
+
         return $this->validate()
-            ? $query->orderBy($this->column->getValue(), $this->direction)
+            ? $query->orderBy($column, $this->direction)
             : $query;
     }
 
