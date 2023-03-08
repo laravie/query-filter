@@ -4,7 +4,7 @@ This changelog references the relevant changes (bug and security fixes) done to 
 
 ## 3.3.0
 
-Released: 2022-03-13
+Released: 2023-03-08
 
 ### Changes
 
