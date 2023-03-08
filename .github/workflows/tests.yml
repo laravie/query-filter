@@ -7,7 +7,7 @@ on:
     - cron: '0 0 * * 3'
 
 jobs:
-  tests:
+  tests-on-laravel-10:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -16,15 +16,13 @@ jobs:
           - "ubuntu-latest"
           - "windows-latest"
         php:
-          - "8.0"
-          - "8.1"
+          - 8.1
+          - 8.2
         dependencies:
-          - "locked"
           - "highest"
           - "lowest"
         laravel:
-          - "8.x"
-          - "9.x"
+          - "10.x"
         experimental:
           - false
 
@@ -54,7 +52,7 @@ jobs:
       - name: Execute tests
         run: vendor/bin/phpunit
 
-  tests-on-php-74:
+  tests-on-laravel-9:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -63,13 +61,14 @@ jobs:
           - "ubuntu-latest"
           - "windows-latest"
         php:
-          - "7.4"
+          - '8.0'
+          - 8.1
+          - 8.2
         dependencies:
-          - "locked"
           - "highest"
           - "lowest"
         laravel:
-          - "8.x"
+          - "9.x"
         experimental:
           - false
 
@@ -77,7 +76,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -91,7 +90,7 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
 
       - name: Install dependencies
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--prefer-dist --no-cache"
@@ -99,7 +98,7 @@ jobs:
       - name: Execute tests
         run: vendor/bin/phpunit
 
-  tests-on-php-73:
+  tests-on-laravel-8:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -108,9 +107,11 @@ jobs:
           - "ubuntu-latest"
           - "windows-latest"
         php:
-          - "7.3"
+          - 7.3
+          - 7.4
+          - '8.0'
+          - 8.1
         dependencies:
-          - "locked"
           - "highest"
           - "lowest"
         laravel:
@@ -122,7 +123,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -136,7 +137,7 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
 
       - name: Install dependencies
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--prefer-dist --no-cache"
