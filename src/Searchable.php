@@ -83,11 +83,7 @@ class Searchable
             }
 
             foreach ($fields as $field) {
-                $column = $field instanceof Expression
-                    ? $query->getGrammar()->wrap($field)
-                    : $field;
-
-                $this->queryOnColumn($query, Field::make($column), $likeOperator, 'orWhere');
+                $this->queryOnColumn($query, Field::make($field), $likeOperator, 'orWhere');
             }
         });
 
@@ -106,7 +102,9 @@ class Searchable
         string $likeOperator = 'like',
         string $whereOperator = 'orWhere'
     ) {
-        if ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
+        if ($field->isExpression()) {
+            return $this->queryOnColumnUsing($query, $field, $likeOperator, $whereOperator);
+        } elseif ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
             return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
 

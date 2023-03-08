@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter\Filters;
 
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Laravie\QueryFilter\SearchFilter;
 
@@ -11,7 +12,7 @@ class FieldSearch extends SearchFilter
      * Construct a new Field Search.
      */
     public function __construct(
-        protected string $column
+        protected Expression|string $column
     ) {
         //
     }
@@ -25,18 +26,20 @@ class FieldSearch extends SearchFilter
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
-        $column = $query instanceof EloquentQueryBuilder
-            ? $query->qualifyColumn((string) $this->column)
-            : $this->column;
+        $column = $this->column instanceof Expression ? $query->getGrammar()->wrap($this->column) : $this->column;
+
+        $attribute = $query instanceof EloquentQueryBuilder
+            ? $query->qualifyColumn($column)
+            : $column;
 
         if (\count($keywords) > 1) {
-            return $query->{$whereOperator}(static function ($query) use ($column, $keywords, $likeOperator) {
+            return $query->{$whereOperator}(static function ($query) use ($attribute, $keywords, $likeOperator) {
                 foreach ($keywords as $keyword) {
-                    $query->orWhere((string) $column, $likeOperator, $keyword);
+                    $query->orWhere($attribute, $likeOperator, $keyword);
                 }
             });
         } elseif (! empty($keywords)) {
-            return $query->{$whereOperator}((string) $column, $likeOperator, $keywords[0]);
+            return $query->{$whereOperator}($attribute, $likeOperator, $keywords[0]);
         }
 
         return $query;

@@ -25,7 +25,7 @@ class Field extends Column implements FieldContract
     public static function make($name)
     {
         if ($name instanceof static) {
-            return tap(new static($name), static function ($field) use ($name) {
+            return tap(new static($name->getOriginalValue()), static function ($field) use ($name) {
                 $field->wildcardSearching = $name->wildcardSearching;
             });
         }
@@ -75,7 +75,7 @@ class Field extends Column implements FieldContract
      */
     public function isRelationSelector(): bool
     {
-        return strpos($this->name, '.') !== false;
+        return $this->isExpression() === false && strpos($this->name, '.') !== false;
     }
 
     /**
@@ -83,7 +83,7 @@ class Field extends Column implements FieldContract
      */
     public function isJsonPathSelector(): bool
     {
-        return strpos($this->name, '->') !== false;
+        return $this->isExpression() === false && strpos($this->name, '->') !== false;
     }
 
     /**

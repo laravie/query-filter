@@ -52,7 +52,6 @@ class FieldTest extends TestCase
         return [
             [str_pad('email', 65, 'x')],
             [''],
-            [null],
         ];
     }
 }

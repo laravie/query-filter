@@ -121,8 +121,10 @@ class SearchableTest extends TestCase
     public function it_can_build_search_query_with_expression_value()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
+        $grammar = m::mock('Illuminate\Database\Database\Grammars\Grammar');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
+        $query->shouldReceive('getGrammar')->andReturn($grammar);
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
                 ->andReturnUsing(static function ($c) use ($query) {
@@ -136,6 +138,8 @@ class SearchableTest extends TestCase
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', 'hello%')
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', '%hello')
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', '%hello%');
+
+        $grammar->shouldReceive('wrap')->with(m::type(Expression::class))->andReturn('users.name');
 
         $stub = new Searchable(
             'hello', [new Expression('users.name')]
@@ -166,7 +170,7 @@ class SearchableTest extends TestCase
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello%']);
 
-        $grammar->shouldReceive('wrap')->with('address->postcode')->andReturn(new Expression('address->\'$.postcode\''));
+        $grammar->shouldReceive('wrap')->with('address->postcode')->andReturn('address->\'$.postcode\'');
 
         $stub = new Searchable(
             'hello', ['address->postcode']

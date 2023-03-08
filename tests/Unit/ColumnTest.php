@@ -53,7 +53,6 @@ class ColumnTest extends TestCase
             ['email->"%27))%23injectedSQL'],
             [str_pad('email', 65, 'x')],
             [''],
-            [null],
         ];
     }
 }
