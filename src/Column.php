@@ -2,7 +2,7 @@
 
 namespace Laravie\QueryFilter;
 
-use Illuminate\Database\Query\Expression;
+use Illuminate\Contracts\Database\Query\Expression;
 
 class Column
 {
@@ -22,27 +22,18 @@ class Column
     private const VALID_COLUMN_NAME_REGEX = '/^(?![0-9])[A-Za-z0-9_-]*$/';
 
     /**
-     * Field name.
-     *
-     * @var \Illuminate\Database\Query\Expression|string
-     */
-    protected $name;
-
-    /**
      * Construct a new Column value object.
-     *
-     * @param  \Illuminate\Database\Query\Expression|string  $name
      */
-    public function __construct($name)
-    {
-        $this->name = $name;
+    public function __construct(
+        protected Expression|string $name
+    ) {
+        //
     }
 
     /**
      * Make a new Field value object.
      *
-     * @param  static|\Illuminate\Database\Query\Expression|string  $name
-     *
+     * @param  static|\Illuminate\Contracts\Database\Query\Expression|string  $name
      * @return static
      */
     public static function make($name)
@@ -52,10 +43,8 @@ class Column
 
     /**
      * Get original value.
-     *
-     * @return \Illuminate\Database\Query\Expression|string
      */
-    public function getOriginalValue()
+    public function getOriginalValue(): Expression|string
     {
         return $this->name;
     }

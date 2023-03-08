@@ -14,7 +14,7 @@ trait ConditionallySearchingWildcard
     /**
      * Widlcard search variants.
      *
-     * @var array|null
+     * @var array<int, string>|null
      */
     public $wildcardSearchVariants = null;
 
@@ -22,7 +22,6 @@ trait ConditionallySearchingWildcard
      * Set wildcard search variants.
      *
      * @param  array<int, string>  $searchVariants
-     *
      * @return $this
      */
     public function wildcardSearchVariants(?array $searchVariants)

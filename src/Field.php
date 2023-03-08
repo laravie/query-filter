@@ -19,8 +19,7 @@ class Field extends Column implements FieldContract
     /**
      * Make a new Field value object.
      *
-     * @param  static|\Illuminate\Database\Query\Expression|string  $name
-     *
+     * @param  static|\Illuminate\Contracts\Database\Query\Expression|string  $name
      * @return static
      */
     public static function make($name)
@@ -96,15 +95,5 @@ class Field extends Column implements FieldContract
         $value = preg_replace("/([\\\\]+)?\\'/", "\\'", $value);
 
         return str_replace($delimiter, '.', $value);
-    }
-
-    /**
-     * Convert to string.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getValue();
     }
 }

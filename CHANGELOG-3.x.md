@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/query-filter`.
 
+## 3.3.0
+
+Released: 2023-03-08
+
+### Changes
+
+* Added support for Laravel Framework 9.
+
 ## 3.2.1
 
 Released: 2021-12-12

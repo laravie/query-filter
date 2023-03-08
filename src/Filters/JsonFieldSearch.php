@@ -2,35 +2,27 @@
 
 namespace Laravie\QueryFilter\Filters;
 
+use Illuminate\Contracts\Database\Query\Expression;
 use Laravie\QueryFilter\Contracts\Keyword\AsLowerCase;
 use Laravie\QueryFilter\SearchFilter;
 
 class JsonFieldSearch extends SearchFilter implements AsLowerCase
 {
     /**
-     * JSON path.
-     *
-     * @var \Illuminate\Database\Query\Expression|string
-     */
-    protected $path;
-
-    /**
      * Construct a new JSON Field Search.
-     *
-     * @param  \Illuminate\Database\Query\Expression|string  $path
      */
-    public function __construct($path)
-    {
-        $this->path = $path;
+    public function __construct(
+        protected Expression|string $path
+    ) {
+        //
     }
 
     /**
      * Apply JSON field search queries.
      *
-     * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
      * @param  array<int, string>  $keywords
-     *
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {

@@ -8,29 +8,20 @@ use Laravie\QueryFilter\SearchFilter;
 class FieldSearch extends SearchFilter
 {
     /**
-     * Column name.
-     *
-     * @var \Illuminate\Database\Query\Expression|string
-     */
-    protected $column;
-
-    /**
      * Construct a new Field Search.
-     *
-     * @param  \Illuminate\Database\Query\Expression|string  $column
      */
-    public function __construct($column)
-    {
-        $this->column = $column;
+    public function __construct(
+        protected string $column
+    ) {
+        //
     }
 
     /**
      * Apply generic field search queries.
      *
-     * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
      * @param  array<int, string>  $keywords
-     *
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {

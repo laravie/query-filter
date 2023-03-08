@@ -53,7 +53,7 @@ class Keyword implements KeywordContract
 
     /**
      * Get searchable strings.
-     * 
+     *
      * @return array<int, string>
      */
     public function all(): array
@@ -69,7 +69,7 @@ class Keyword implements KeywordContract
 
     /**
      * Handle resolving keyword for filter.
-     * 
+     *
      * @return array<int, string>
      */
     public function handle(Contracts\Filter\Filter $filter): array
@@ -98,7 +98,7 @@ class Keyword implements KeywordContract
 
     /**
      * Convert basic string to searchable result.
-     * 
+     *
      * @return array<int, string>
      */
     public static function searchable(

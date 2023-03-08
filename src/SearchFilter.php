@@ -12,10 +12,9 @@ abstract class SearchFilter implements Contracts\Filter\Filter
      * Validate $query.
      *
      * @param  mixed  $query
+     * @return $this
      *
      * @throws \RuntimeException
-     *
-     * @return $this
      */
     public function validate($query)
     {

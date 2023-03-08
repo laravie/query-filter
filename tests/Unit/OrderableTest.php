@@ -50,6 +50,7 @@ class OrderableTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidColumnNameDataProvider
      */
     public function it_doesnt_build_ordered_query_given_invalid_column_name($given)
@@ -66,7 +67,7 @@ class OrderableTest extends TestCase
      *
      * @return array
      */
-    public function invalidColumnNameDataProvider()
+    public static function invalidColumnNameDataProvider()
     {
         return [
             ['email->"%27))%23injectedSQL'],

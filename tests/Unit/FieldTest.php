@@ -10,6 +10,7 @@ class FieldTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider validFieldNameDataProvider
      */
     public function it_can_validate_field_name($given)
@@ -19,6 +20,7 @@ class FieldTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidFieldNameDataProvider
      */
     public function it_cant_validate_invalid_field_name($given)
@@ -31,7 +33,7 @@ class FieldTest extends TestCase
      *
      * @return array
      */
-    public function validFieldNameDataProvider()
+    public static function validFieldNameDataProvider()
     {
         return [
             [new Expression('users.fullname')],
@@ -45,7 +47,7 @@ class FieldTest extends TestCase
      *
      * @return array
      */
-    public function invalidFieldNameDataProvider()
+    public static function invalidFieldNameDataProvider()
     {
         return [
             [str_pad('email', 65, 'x')],

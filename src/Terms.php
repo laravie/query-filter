@@ -37,7 +37,6 @@ class Terms implements Countable
      * Parse rules from keyword.
      *
      * @param  array<int, string>  $rules
-     *
      * @return static
      */
     public static function parse(string $term, array $rules)
@@ -47,7 +46,7 @@ class Terms implements Countable
 
         $tags = Collection::make($rules)
             ->map(static function ($value) {
-                [$tag, ] = explode(':', $value, 2);
+                [$tag] = explode(':', $value, 2);
 
                 return "{$tag}:";
             })->all();

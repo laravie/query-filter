@@ -2,6 +2,7 @@
 
 namespace Laravie\QueryFilter;
 
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Tappable;
@@ -49,7 +50,6 @@ class Searchable
      * Apply search to query.
      *
      * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     *
      * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function apply($query)
@@ -83,7 +83,11 @@ class Searchable
             }
 
             foreach ($fields as $field) {
-                $this->queryOnColumn($query, Field::make($field), $likeOperator, 'orWhere');
+                $column = $field instanceof Expression
+                    ? $query->getGrammar()->wrap($field)
+                    : $field;
+
+                $this->queryOnColumn($query, Field::make($column), $likeOperator, 'orWhere');
             }
         });
 
@@ -94,7 +98,6 @@ class Searchable
      * Build wildcard query filter for field using where or orWhere.
      *
      * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     *
      * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     protected function queryOnColumn(
@@ -103,9 +106,7 @@ class Searchable
         string $likeOperator = 'like',
         string $whereOperator = 'orWhere'
     ) {
-        if ($field->isExpression()) {
-            return $this->queryOnColumnUsing($query, new Field($field->getValue()), $likeOperator, $whereOperator);
-        } elseif ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
+        if ($field->isRelationSelector() && $query instanceof EloquentQueryBuilder) {
             return $this->queryOnColumnUsingRelation($query, $field, $likeOperator);
         }
 
@@ -116,7 +117,6 @@ class Searchable
      * Build wildcard query filter for column using where or orWhere.
      *
      * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     *
      * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     protected function queryOnColumnUsing(
@@ -152,7 +152,6 @@ class Searchable
      * Build wildcard query filter for JSON column using where or orWhere.
      *
      * @param  \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
-     *
      * @return \Illuminate\Contracts\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     protected function queryOnJsonColumnUsing(

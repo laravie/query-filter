@@ -27,10 +27,9 @@ class PrimaryKeySearch extends SearchFilter implements AsExactValue, RequiresElo
     /**
      * Apply primary key field search queries.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Contracts\Database\Eloquent\Builder  $query
      * @param  array<int, string>  $keywords
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Contracts\Database\Eloquent\Builder
      */
     public function apply($query, array $keywords, string $likeOperator, ?string $whereOperator = null)
     {

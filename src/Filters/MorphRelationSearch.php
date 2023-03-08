@@ -8,46 +8,24 @@ use Laravie\QueryFilter\SearchFilter;
 class MorphRelationSearch extends SearchFilter implements RequiresEloquent
 {
     /**
-     * Relation name.
-     *
-     * @var string
-     */
-    protected $relation;
-
-    /**
-     * Related column used for search.
-     *
-     * @var \Illuminate\Database\Query\Expression|string
-     */
-    protected $column;
-
-    /**
-     * Available morph types.
-     *
-     * @var array
-     */
-    protected $types = [];
-
-    /**
      * Construct new Morph Related Search.
      *
-     * @param  \Illuminate\Database\Query\Expression|string  $column
      * @param  array<int, string>  $types
      */
-    public function __construct(string $relation, $column, array $types = [])
-    {
-        $this->relation = $relation;
-        $this->column = $column;
-        $this->types = $types;
+    public function __construct(
+        protected string $relation,
+        protected string $column,
+        protected array $types = []
+    ) {
+        //
     }
 
     /**
      * Apply relation search queries.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Contracts\Database\Eloquent\Builder  $query
      * @param  array<int, string>  $keywords
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Contracts\Database\Eloquent\Builder
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
