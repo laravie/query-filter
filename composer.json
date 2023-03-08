@@ -32,7 +32,7 @@
         "nunomaduro/larastan": "^2.5.1",
         "orchestra/canvas": "^8.0",
         "orchestra/testbench": "^8.0",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^10.0.7"
     },
     "config": {
         "sort-packages": true
