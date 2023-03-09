@@ -111,9 +111,8 @@ class Terms implements Countable
         [$tag, $type] = explode(':', $term, 2);
 
         $results = Collection::make($this->tagged())
-            ->filter(static function ($value) use ($tag) {
-                return Str::startsWith($value, "{$tag}:");
-            })->values();
+            ->filter(fn ($value) => Str::startsWith($value, "{$tag}:"))
+            ->values();
 
         if ($results->isEmpty()) {
             return [];
@@ -129,8 +128,7 @@ class Terms implements Countable
             [, $value] = explode(':', $text, 2);
 
             return trim($value, '"');
-        })->filter(static function ($text) {
-            return ! empty($text);
-        })->values()->all();
+        })->filter(fn ($text) => ! empty($text))
+        ->values()->all();
     }
 }

@@ -70,9 +70,8 @@ class Searchable
          * @var \Illuminate\Support\Collection<int, \Laravie\QueryFilter\Contracts\Filter\Filter> $filters
          * @var \Illuminate\Support\Collection<int, string> $fields
          */
-        [$filters, $fields] = Collection::make($this->fields)->partition(static function ($field) {
-            return $field instanceof Contracts\Filter\Filter;
-        });
+        [$filters, $fields] = Collection::make($this->fields)
+            ->partition(fn ($field) => $field instanceof Contracts\Filter\Filter);
 
         $query->where(function ($query) use ($fields, $filters, $keywords, $likeOperator) {
             foreach ($filters as $filter) {

@@ -78,9 +78,8 @@ class Keyword implements KeywordContract
             return [$this->getValue()];
         } elseif ($filter instanceof Contracts\Keyword\AsLowerCase) {
             return Collection::make($this->all())
-                ->transform(static function ($keyword) {
-                    return Str::lower($keyword);
-                })->all();
+                ->transform(fn ($keyword) => Str::lower($keyword))
+                ->all();
         }
 
         return $this->all();
@@ -116,9 +115,8 @@ class Keyword implements KeywordContract
             return [$text];
         } elseif (! Str::contains($text, array_filter([$wildcard, $replacement])) && $wildcardSearching === true) {
             return Collection::make($wildcardSearchVariants ?? static::$defaultSearchVariations)
-                ->map(static function ($string) use ($text) {
-                    return Str::replaceFirst('{keyword}', $text, $string);
-                })->all();
+                ->map(fn ($string) => Str::replaceFirst('{keyword}', $text, $string))
+                ->all();
         }
 
         return [
