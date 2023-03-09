@@ -26,7 +26,7 @@ class FieldSearch extends SearchFilter
      */
     public function apply($query, array $keywords, string $likeOperator, string $whereOperator)
     {
-        $column = $this->column instanceof Expression ? $query->getGrammar()->wrap($this->column) : $this->column;
+        $column = $this->column instanceof Expression ? $this->column->getValue($query->getGrammar()) : $this->column;
 
         $attribute = $query instanceof EloquentQueryBuilder
             ? $query->qualifyColumn($column)

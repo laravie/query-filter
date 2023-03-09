@@ -121,7 +121,7 @@ class SearchableTest extends TestCase
     public function it_can_build_search_query_with_expression_value()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
-        $grammar = m::mock('Illuminate\Database\Database\Grammars\Grammar');
+        $grammar = m::mock('Illuminate\Database\Grammar');
 
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('getGrammar')->andReturn($grammar);
@@ -138,8 +138,6 @@ class SearchableTest extends TestCase
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', 'hello%')
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', '%hello')
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', '%hello%');
-
-        $grammar->shouldReceive('wrap')->with(m::type(Expression::class))->andReturn('users.name');
 
         $stub = new Searchable(
             'hello', [new Expression('users.name')]
