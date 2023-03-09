@@ -24,8 +24,8 @@
     },
     "require": {
         "php": "^8.1",
-        "illuminate/database": "^10.0",
-        "illuminate/support": "^10.0"
+        "illuminate/database": "^10.3.2",
+        "illuminate/support": "^10.3.2"
     },
     "require-dev": {
         "laravel/pint": "^1.6",
@@ -33,6 +33,18 @@
         "orchestra/canvas": "^8.0",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^10.0.7"
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "ci": [
+            "@composer run prepare",
+            "@php vendor/bin/phpstan analyse",
+            "@php vendor/bin/pint"
+        ],
+        "test": [
+            "@php vendor/bin/phpunit -c ./ --color"
+        ]
     },
     "config": {
         "sort-packages": true
