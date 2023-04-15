@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd"
          backupGlobals="false"
          colors="true"
          processIsolation="false"
          stopOnFailure="false"
          cacheDirectory=".phpunit.cache"
          backupStaticProperties="false">
-    <coverage includeUncoveredFiles="false">
+    <coverage includeUncoveredFiles="false" />
+    <source>
         <include>
             <directory suffix=".php">src/</directory>
         </include>
-    </coverage>
+    </source>
     <testsuites>
         <testsuite name="QueryFilter Test Suite">
             <directory suffix="Test.php">./tests/</directory>
