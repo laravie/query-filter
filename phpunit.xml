@@ -7,12 +7,7 @@
          stopOnFailure="false"
          cacheDirectory=".phpunit.cache"
          backupStaticProperties="false">
-    <coverage includeUncoveredFiles="false" />
-    <source>
-        <include>
-            <directory suffix=".php">src/</directory>
-        </include>
-    </source>
+    <coverage includeUncoveredFiles="false"/>
     <testsuites>
         <testsuite name="QueryFilter Test Suite">
             <directory suffix="Test.php">./tests/</directory>
@@ -23,4 +18,9 @@
         <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="DB_CONNECTION" value="testing"/>
     </php>
+    <source>
+        <include>
+            <directory suffix=".php">src/</directory>
+        </include>
+    </source>
 </phpunit>
