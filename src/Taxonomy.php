@@ -67,7 +67,7 @@ class Taxonomy
     protected function matchBasicConditions($query): void
     {
         $searchable = (new Searchable($this->terms->basic(), $this->fields))
-                            ->wildcardCharacter($this->wildcardCharacter);
+            ->wildcardCharacter($this->wildcardCharacter);
 
         if (($this->wildcardSearching ?? true) === true) {
             $searchable->allowWildcardSearching();

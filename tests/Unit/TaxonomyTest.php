@@ -14,17 +14,17 @@ class TaxonomyTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('unless')->once()->with(false, m::type('Closure'))
-                ->andReturnUsing(static function ($b, $c) use ($query) {
-                    if (! $b) {
-                        return $c($query);
-                    }
-                })
+            ->andReturnUsing(static function ($b, $c) use ($query) {
+                if (! $b) {
+                    return $c($query);
+                }
+            })
             ->shouldReceive('when')->once()->with(true, m::type('Closure'))
-                ->andReturnUsing(static function ($b, $c) use ($query) {
-                    if ((bool) $b) {
-                        return $c($query);
-                    }
-                })
+            ->andReturnUsing(static function ($b, $c) use ($query) {
+                if ((bool) $b) {
+                    return $c($query);
+                }
+            })
             ->shouldReceive('where')->once()->with('name', '=', 'hello')->andReturnSelf()
             ->shouldReceive('whereIn')->once()->with('email', ['crynobone@gmail.com', 'crynobone@orchestraplatform.com'])->andReturnSelf()
             ->shouldReceive('whereNotNull')->once()->with('deleted_at')->andReturnSelf();
@@ -52,19 +52,19 @@ class TaxonomyTest extends TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $query->shouldReceive('unless')->once()->with(true, m::type('Closure'))
-                ->andReturnUsing(static function ($b, $c) use ($query) {
-                    if (! $b) {
-                        return $c($query);
-                    }
-                })
+            ->andReturnUsing(static function ($b, $c) use ($query) {
+                if (! $b) {
+                    return $c($query);
+                }
+            })
             ->shouldReceive('when')->once()->with(false, m::type('Closure'))
-                ->andReturnUsing(static function ($b, $c) use ($query) {
-                    if ((bool) $b) {
-                        return $c($query);
-                    }
+            ->andReturnUsing(static function ($b, $c) use ($query) {
+                if ((bool) $b) {
+                    return $c($query);
+                }
 
-                    return $query;
-                });
+                return $query;
+            });
 
         $stub = new Taxonomy(
             'name: email: email: is:', [
@@ -91,13 +91,13 @@ class TaxonomyTest extends TestCase
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with('name', 'like', 'hello')
             ->shouldReceive('orWhere')->once()->with('name', 'like', 'hello%')
             ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello')

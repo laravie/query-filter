@@ -129,6 +129,6 @@ class Terms implements Countable
 
             return trim($value, '"');
         })->filter(fn ($text) => ! empty($text))
-        ->values()->all();
+            ->values()->all();
     }
 }

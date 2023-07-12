@@ -29,13 +29,13 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with('name', 'like', 'hello')
             ->shouldReceive('orWhere')->once()->with('name', 'like', 'hello%')
             ->shouldReceive('orWhere')->once()->with('name', 'like', '%hello')
@@ -56,9 +56,9 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(m::type('Closure'))
             ->shouldReceive('orWhere')->never()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello')
             ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello%')
             ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello')
@@ -79,9 +79,9 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(m::type('Closure'))
             ->shouldReceive('orWhere')->never()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello')
             ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello%')
             ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello')
@@ -102,9 +102,9 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(m::type('Closure'))
             ->shouldReceive('orWhere')->never()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello')
             ->shouldReceive('orWhere')->never()->with('name', 'like', 'hello%')
             ->shouldReceive('orWhere')->never()->with('name', 'like', '%hello')
@@ -127,13 +127,13 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getGrammar')->andReturn($grammar);
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', 'hello')
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', 'hello%')
             ->shouldReceive('orWhere')->once()->with('users.name', 'like', '%hello')
@@ -156,13 +156,13 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getGrammar')->andReturn($grammar);
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['hello'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['hello%'])
             ->shouldReceive('orWhereRaw')->once()->with('lower(address->\'$.postcode\') like ?', ['%hello'])
@@ -185,13 +185,13 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhere')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                });
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            });
 
         $stub = new Searchable(
             'hello', ['email->"%27))%23injectedSQL']
@@ -209,18 +209,18 @@ class SearchableTest extends TestCase
         $query->shouldReceive('getModel->getConnection->getDriverName')->andReturn('mysql');
         $query->shouldReceive('when')->once()->with(false, m::type('Closure'))->andReturnSelf()
             ->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($query) {
-                    $c($query);
-                })
+            ->andReturnUsing(static function ($c) use ($query) {
+                $c($query);
+            })
             ->shouldReceive('orWhereHas')->once()->with('posts', m::type('Closure'))
             ->andReturnUsing(static function ($r, $c) use ($relationQuery) {
                 $c($relationQuery);
             });
 
         $relationQuery->shouldReceive('where')->once()->with(m::type('Closure'))
-                ->andReturnUsing(static function ($c) use ($relationQuery) {
-                    $c($relationQuery);
-                })
+            ->andReturnUsing(static function ($c) use ($relationQuery) {
+                $c($relationQuery);
+            })
             ->shouldReceive('orWhere')->once()->with('title', 'like', 'hello')
             ->shouldReceive('orWhere')->once()->with('title', 'like', 'hello%')
             ->shouldReceive('orWhere')->once()->with('title', 'like', '%hello')
