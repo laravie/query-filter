@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Factories;
+namespace Workbench\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Laravie\QueryFilter\Tests\Models\User;
+use Workbench\App\Models\User;
 
 class UserFactory extends Factory
 {

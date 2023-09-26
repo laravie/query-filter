@@ -5,7 +5,7 @@ namespace Laravie\QueryFilter\Tests\Feature\Filters;
 use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Filters\JsonFieldSearch;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\Models\User;
+use Workbench\App\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 
 class JsonFieldSearchTest extends TestCase

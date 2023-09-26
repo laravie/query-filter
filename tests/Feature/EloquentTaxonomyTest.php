@@ -3,7 +3,7 @@
 namespace Laravie\QueryFilter\Tests\Feature;
 
 use Laravie\QueryFilter\Taxonomy;
-use Laravie\QueryFilter\Tests\Models\User;
+use Workbench\App\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 
 class EloquentTaxonomyTest extends TestCase

@@ -1,8 +1,10 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Models;
+namespace Workbench\App\Models;
 
-class Video extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Video extends Model
 {
     public function notes()
     {

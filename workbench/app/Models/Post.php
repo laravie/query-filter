@@ -1,8 +1,10 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Models;
+namespace Workbench\App\Models;
 
-class Post extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
 {
     public function notes()
     {

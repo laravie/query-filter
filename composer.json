@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Laravie\\QueryFilter\\" : "src/"
+            "Laravie\\QueryFilter\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -19,23 +19,29 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Laravie\\QueryFilter\\Tests\\" : "tests/"
+            "Laravie\\QueryFilter\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "require": {
         "php": "^8.1",
-        "illuminate/database": "^10.3.2",
-        "illuminate/support": "^10.3.2"
+        "illuminate/database": "^10.17",
+        "illuminate/support": "^10.17"
     },
     "require-dev": {
         "laravel/pint": "^1.6",
         "nunomaduro/larastan": "^2.6",
-        "orchestra/canvas": "^8.1",
-        "orchestra/testbench": "^8.5",
+        "orchestra/testbench": "^8.10",
         "phpunit/phpunit": "^10.1"
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare",
+            "@composer run prepare"
+        ],
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "ci": [
             "@composer run prepare",
@@ -44,6 +50,16 @@
         ],
         "test": [
             "@php vendor/bin/phpunit -c ./ --color"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "lint": [
+            "@php vendor/bin/pint",
+            "@php vendor/bin/phpstan analyse"
         ]
     },
     "config": {

@@ -1,18 +1,18 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Factories;
+namespace Workbench\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Laravie\QueryFilter\Tests\Models\Post;
+use Workbench\App\Models\Video;
 
-class PostFactory extends Factory
+class VideoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Post::class;
+    protected $model = Video::class;
 
     /**
      * Define the model's default state.

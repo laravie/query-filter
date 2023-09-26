@@ -1,0 +1,9 @@
+providers: []
+
+migrations:
+  - workbench/database/migrations
+
+seeders: []
+
+workbench:
+  install: false

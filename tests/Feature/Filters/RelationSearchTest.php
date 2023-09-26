@@ -5,8 +5,8 @@ namespace Laravie\QueryFilter\Tests\Feature\Filters;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Filters\RelationSearch;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\Factories\PostFactory;
-use Laravie\QueryFilter\Tests\Models\User;
+use Workbench\Database\Factories\PostFactory;
+use Workbench\App\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 
 class RelationSearchTest extends TestCase

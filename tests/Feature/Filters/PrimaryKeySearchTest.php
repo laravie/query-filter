@@ -5,8 +5,8 @@ namespace Laravie\QueryFilter\Tests\Feature\Filters;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Filters\PrimaryKeySearch;
 use Laravie\QueryFilter\Searchable;
-use Laravie\QueryFilter\Tests\Factories\UserFactory;
-use Laravie\QueryFilter\Tests\Models\User;
+use Workbench\Database\Factories\UserFactory;
+use Workbench\App\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 
 class PrimaryKeySearchTest extends TestCase

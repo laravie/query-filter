@@ -1,8 +1,10 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Models;
+namespace Workbench\App\Models;
 
-class User extends \Illuminate\Foundation\Auth\User
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
 {
     protected $casts = [
         'address' => 'array',

@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravie\QueryFilter\Tests\Factories;
+namespace Workbench\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Laravie\QueryFilter\Tests\Models\Note;
+use Workbench\App\Models\Note;
 
 class NoteFactory extends Factory
 {
