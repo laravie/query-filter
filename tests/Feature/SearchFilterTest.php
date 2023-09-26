@@ -5,8 +5,8 @@ namespace Laravie\QueryFilter\Tests\Feature;
 use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
 use Laravie\QueryFilter\Contracts\Filter\RequiresFluent;
 use Laravie\QueryFilter\SearchFilter;
-use Workbench\App\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
+use Workbench\App\Models\User;
 
 class SearchFilterTest extends TestCase
 {

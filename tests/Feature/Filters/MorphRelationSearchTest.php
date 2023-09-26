@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Filters\MorphRelationSearch;
 use Laravie\QueryFilter\Filters\RelationSearch;
 use Laravie\QueryFilter\Searchable;
-use Workbench\Database\Factories\NoteFactory;
-use Workbench\Database\Factories\PostFactory;
+use Laravie\QueryFilter\Tests\TestCase;
 use Workbench\App\Models\Note;
 use Workbench\App\Models\Post;
 use Workbench\App\Models\Video;
-use Laravie\QueryFilter\Tests\TestCase;
+use Workbench\Database\Factories\NoteFactory;
+use Workbench\Database\Factories\PostFactory;
 
 class MorphRelationSearchTest extends TestCase
 {

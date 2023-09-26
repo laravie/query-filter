@@ -5,10 +5,10 @@ namespace Laravie\QueryFilter\Tests\Feature\Filters;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Laravie\QueryFilter\Filters\FieldSearch;
 use Laravie\QueryFilter\Searchable;
-use Workbench\Database\Factories\UserFactory;
-use Workbench\App\Models\User;
 use Laravie\QueryFilter\Tests\TestCase;
 use Mockery as m;
+use Workbench\App\Models\User;
+use Workbench\Database\Factories\UserFactory;
 
 class FieldSearchTest extends TestCase
 {

@@ -5,10 +5,10 @@ namespace Laravie\QueryFilter\Tests\Feature;
 use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Filters\PrimaryKeySearch;
 use Laravie\QueryFilter\Searchable;
+use Laravie\QueryFilter\Tests\TestCase;
+use Workbench\App\Models\User;
 use Workbench\Database\Factories\PostFactory;
 use Workbench\Database\Factories\UserFactory;
-use Workbench\App\Models\User;
-use Laravie\QueryFilter\Tests\TestCase;
 
 class EloquentSearchableTest extends TestCase
 {
