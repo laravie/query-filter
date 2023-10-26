@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Field;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class FluentSearchableTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         $stub = new Searchable(
@@ -31,7 +32,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_exact_keyword()
     {
         $stub = (new Searchable(
@@ -52,7 +53,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_exact_keyword_on_column()
     {
         $stub = new Searchable(
@@ -73,7 +74,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_columns_is_not_provided()
     {
         $stub = new Searchable(
@@ -94,7 +95,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_columns_is_invalid()
     {
         $stub = new Searchable(
@@ -115,7 +116,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_keyword_is_empty()
     {
         $stub = new Searchable(
@@ -136,7 +137,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_expression_value()
     {
         $stub = new Searchable(
@@ -157,7 +158,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_json_selector()
     {
         $stub = new Searchable(
@@ -178,7 +179,7 @@ class FluentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_cant_build_search_query_with_invalid_column_name()
     {
         $stub = new Searchable(

@@ -6,13 +6,14 @@ use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Filters\PrimaryKeySearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 use Workbench\Database\Factories\PostFactory;
 use Workbench\Database\Factories\UserFactory;
 
 class EloquentSearchableTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         UserFactory::new()->times(5)->create([
@@ -43,7 +44,7 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(5, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_custom_search_variants()
     {
         UserFactory::new()->times(5)->create([
@@ -74,7 +75,7 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(5, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_combined_with_search_filters()
     {
         UserFactory::new()->times(5)->create([
@@ -105,7 +106,7 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(1, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_columns_is_not_provided()
     {
         $stub = new Searchable(
@@ -126,7 +127,7 @@ class EloquentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_columns_is_invalid()
     {
         $stub = new Searchable(
@@ -147,7 +148,7 @@ class EloquentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_keyword_is_empty()
     {
         $stub = new Searchable(
@@ -168,7 +169,7 @@ class EloquentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_expression_value()
     {
         UserFactory::new()->times(5)->create([
@@ -199,7 +200,7 @@ class EloquentSearchableTest extends TestCase
         $this->assertSame(5, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_json_selector()
     {
         $stub = new Searchable(
@@ -220,7 +221,7 @@ class EloquentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_nested_json_selector()
     {
         $stub = new Searchable(
@@ -241,7 +242,7 @@ class EloquentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_cant_build_search_query_with_invalid_column_name()
     {
         $stub = new Searchable(
@@ -262,7 +263,7 @@ class EloquentSearchableTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_relation_field()
     {
         PostFactory::new()->times(3)->create([

@@ -3,11 +3,12 @@
 namespace Laravie\QueryFilter\Tests\Unit;
 
 use Laravie\QueryFilter\Keyword;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class KeywordTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_generate_keywords()
     {
         $stub = new Keyword('Hello');
@@ -22,7 +23,7 @@ class KeywordTest extends TestCase
         ], $stub->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_exact_keyword()
     {
         $this->assertSame([
@@ -30,7 +31,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('Hello'))->noWildcardSearching()->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_keywords_with_empty_wildcard_character()
     {
         $this->assertSame([
@@ -45,7 +46,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('Hello'))->wildcardCharacter('*')->wildcardReplacement(null)->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_keywords_for_other_langs()
     {
         $this->assertSame([
@@ -56,7 +57,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('مرحبا'))->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_wildcard_keywords()
     {
         $this->assertSame([
@@ -67,7 +68,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('He*world'))->wildcardCharacter('*')->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_wildcard_keywords_for_other_langs()
     {
         $this->assertSame([
@@ -78,7 +79,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('مر*العالم'))->wildcardCharacter('*')->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sanitize_wildcard_attack_keywords()
     {
         $this->assertSame([], (new Keyword('%%%%'))->all());
@@ -90,7 +91,7 @@ class KeywordTest extends TestCase
         ], (new Keyword('_[^!_%/%a?F%_D)_(F%)_%([)({}%){()}£$&N%_)$*£()$*R"_)][%](%[x])%a][$*"£$-9]_'))->wildcardCharacter('*')->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sanitize_wildcard_attack_keywords_for_other_langs()
     {
         $this->assertSame([], (new Keyword('%%%%'))->all());

@@ -4,11 +4,13 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Laravie\QueryFilter\Orderable;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class OrderableTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_ordered_query()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -20,7 +22,7 @@ class OrderableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_ordered_query_given_excluded_column()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -34,7 +36,7 @@ class OrderableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_build_ordered_query_given_excluded_column()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -48,11 +50,8 @@ class OrderableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider invalidColumnNameDataProvider
-     */
+    #[Test]
+    #[DataProvider('invalidColumnNameDataProvider')]
     public function it_doesnt_build_ordered_query_given_invalid_column_name($given)
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -69,11 +68,9 @@ class OrderableTest extends TestCase
      */
     public static function invalidColumnNameDataProvider()
     {
-        return [
-            ['email->"%27))%23injectedSQL'],
-            [str_pad('email', 65, 'x')],
-            [''],
-            [null],
-        ];
+        yield ['email->"%27))%23injectedSQL'];
+        yield [str_pad('email', 65, 'x')];
+        yield [''];
+        yield [null];
     }
 }

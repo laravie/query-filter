@@ -4,25 +4,21 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Column;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ColumnTest extends TestCase
 {
-    /**
-     * @test
-     *
-     * @dataProvider validColumnNameDataProvider
-     */
+    #[Test]
+    #[DataProvider('validColumnNameDataProvider')]
     public function it_can_validate_column_name($given)
     {
         $this->assertTrue((new Column($given))->validate());
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider invalidColumnNameDataProvider
-     */
+    #[Test]
+    #[DataProvider('invalidColumnNameDataProvider')]
     public function it_cant_validate_invalid_column_name($given)
     {
         $this->assertFalse((new Column($given))->validate());
@@ -30,16 +26,12 @@ class ColumnTest extends TestCase
 
     /**
      * Valid column name data provider.
-     *
-     * @return array
      */
     public static function validColumnNameDataProvider()
     {
-        return [
-            [new Expression('users.fullname')],
-            ['fullname'],
-            [str_pad('email', 64, 'x')],
-        ];
+        yield [new Expression('users.fullname')];
+        yield ['fullname'];
+        yield [str_pad('email', 64, 'x')];
     }
 
     /**
@@ -49,10 +41,8 @@ class ColumnTest extends TestCase
      */
     public static function invalidColumnNameDataProvider()
     {
-        return [
-            ['email->"%27))%23injectedSQL'],
-            [str_pad('email', 65, 'x')],
-            [''],
-        ];
+        yield ['email->"%27))%23injectedSQL'];
+        yield [str_pad('email', 65, 'x')];
+        yield [''];
     }
 }

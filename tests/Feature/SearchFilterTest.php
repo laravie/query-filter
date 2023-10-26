@@ -6,11 +6,12 @@ use Laravie\QueryFilter\Contracts\Filter\RequiresEloquent;
 use Laravie\QueryFilter\Contracts\Filter\RequiresFluent;
 use Laravie\QueryFilter\SearchFilter;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 
 class SearchFilterTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_validate_function_expecting_eloquent_query_builder()
     {
         $search = new class() extends SearchFilter implements RequiresEloquent
@@ -26,7 +27,7 @@ class SearchFilterTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_trigger_exception_when_function_expecting_eloquent_query_builder()
     {
         $search = new class() extends SearchFilter implements RequiresEloquent
@@ -43,7 +44,7 @@ class SearchFilterTest extends TestCase
         $search->validate(User::query()->toBase());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_function_expecting_fluent_query_builder()
     {
         $search = new class() extends SearchFilter implements RequiresFluent
@@ -59,7 +60,7 @@ class SearchFilterTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_trigger_exception_when_function_expecting_fluent_query_builder()
     {
         $search = new class() extends SearchFilter implements RequiresFluent

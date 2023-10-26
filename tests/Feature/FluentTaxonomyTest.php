@@ -5,10 +5,11 @@ namespace Laravie\QueryFilter\Tests\Feature;
 use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Taxonomy;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class FluentTaxonomyTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_match_query()
     {
         $stub = new Taxonomy(
@@ -39,7 +40,7 @@ class FluentTaxonomyTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_cant_build_match_query_given_empty_taxanomy()
     {
         $stub = new Taxonomy(
@@ -70,7 +71,7 @@ class FluentTaxonomyTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_match_query_with_basic_search()
     {
         $stub = new Taxonomy(
@@ -91,7 +92,7 @@ class FluentTaxonomyTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_match_query_with_basic_search_with_exact_keyword()
     {
         $stub = (new Taxonomy(

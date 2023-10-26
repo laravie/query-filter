@@ -7,12 +7,13 @@ use Laravie\QueryFilter\Filters\FieldSearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 use Workbench\Database\Factories\UserFactory;
 
 class FieldSearchTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         UserFactory::new()->times(5)->create([
@@ -43,7 +44,7 @@ class FieldSearchTest extends TestCase
         $this->assertSame(5, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_empty_keyword()
     {
         UserFactory::new()->times(5)->create([

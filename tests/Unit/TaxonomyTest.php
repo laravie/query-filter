@@ -4,11 +4,12 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Laravie\QueryFilter\Taxonomy;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class TaxonomyTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_match_query()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -46,7 +47,7 @@ class TaxonomyTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_cant_build_match_query_given_empty_taxanomy()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -83,7 +84,7 @@ class TaxonomyTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_match_query_with_basic_search()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');

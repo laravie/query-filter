@@ -6,12 +6,13 @@ use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Filters\RelationSearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 use Workbench\Database\Factories\PostFactory;
 
 class RelationSearchTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         PostFactory::new()->times(3)->create([
@@ -42,7 +43,7 @@ class RelationSearchTest extends TestCase
         $this->assertSame(3, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_cannot_build_search_query_using_fluent_query_builder()
     {
         $this->expectException('RuntimeException');

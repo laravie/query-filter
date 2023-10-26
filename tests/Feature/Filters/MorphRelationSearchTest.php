@@ -7,6 +7,7 @@ use Laravie\QueryFilter\Filters\MorphRelationSearch;
 use Laravie\QueryFilter\Filters\RelationSearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\Note;
 use Workbench\App\Models\Post;
 use Workbench\App\Models\Video;
@@ -15,7 +16,7 @@ use Workbench\Database\Factories\PostFactory;
 
 class MorphRelationSearchTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         $posts = PostFactory::new()->times(3)->create([
@@ -51,7 +52,7 @@ class MorphRelationSearchTest extends TestCase
         $this->assertSame(1, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_types()
     {
         $posts = PostFactory::new()->times(3)->create([
@@ -87,7 +88,7 @@ class MorphRelationSearchTest extends TestCase
         $this->assertSame(1, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_inverse_search_query()
     {
         $posts = PostFactory::new()->times(3)->create([
@@ -120,7 +121,7 @@ class MorphRelationSearchTest extends TestCase
         $this->assertSame(1, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_cannot_build_search_query_using_fluent_query_builder()
     {
         $this->expectException('RuntimeException');

@@ -4,25 +4,21 @@ namespace Laravie\QueryFilter\Tests\Unit;
 
 use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Field;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class FieldTest extends TestCase
 {
-    /**
-     * @test
-     *
-     * @dataProvider validFieldNameDataProvider
-     */
+    #[Test]
+    #[DataProvider('validFieldNameDataProvider')]
     public function it_can_validate_field_name($given)
     {
         $this->assertTrue((new Field($given))->validate());
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider invalidFieldNameDataProvider
-     */
+    #[Test]
+    #[DataProvider('invalidFieldNameDataProvider')]
     public function it_cant_validate_invalid_field_name($given)
     {
         $this->assertFalse((new Field($given))->validate());
@@ -35,11 +31,9 @@ class FieldTest extends TestCase
      */
     public static function validFieldNameDataProvider()
     {
-        return [
-            [new Expression('users.fullname')],
-            ['fullname'],
-            [str_pad('email', 64, 'x')],
-        ];
+        yield [new Expression('users.fullname')];
+        yield ['fullname'];
+        yield [str_pad('email', 64, 'x')];
     }
 
     /**
@@ -49,9 +43,7 @@ class FieldTest extends TestCase
      */
     public static function invalidFieldNameDataProvider()
     {
-        return [
-            [str_pad('email', 65, 'x')],
-            [''],
-        ];
+        yield [str_pad('email', 65, 'x')];
+        yield [''];
     }
 }

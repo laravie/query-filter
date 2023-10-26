@@ -6,11 +6,12 @@ use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Keyword;
 use Laravie\QueryFilter\Searchable;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class SearchableTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_has_proper_signature()
     {
         $stub = new Searchable(
@@ -21,7 +22,7 @@ class SearchableTest extends TestCase
         $this->assertSame(['Hello', 'Hello%', '%Hello', '%Hello%'], $stub->searchKeyword()->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -48,7 +49,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_columns_is_not_provided()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -71,7 +72,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_columns_is_invalid()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -94,7 +95,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_build_search_query_when_keyword_is_empty()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -117,7 +118,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_expression_value()
     {
         $query = m::mock('Illuminate\Database\Query\Builder');
@@ -146,7 +147,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_json_selector()
     {
         $query = m::mock('Illuminate\Database\Database\Builder');
@@ -177,7 +178,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_cant_build_search_query_with_invalid_column_name()
     {
         $query = m::mock('Illuminate\Database\Database\Builder');
@@ -200,7 +201,7 @@ class SearchableTest extends TestCase
         $this->assertEquals($query, $stub->apply($query));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_relation_field()
     {
         $query = m::mock('Illuminate\Database\Eloquent\Builder');

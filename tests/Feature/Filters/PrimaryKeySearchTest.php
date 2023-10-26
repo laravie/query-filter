@@ -6,12 +6,13 @@ use Illuminate\Support\Facades\DB;
 use Laravie\QueryFilter\Filters\PrimaryKeySearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 use Workbench\Database\Factories\UserFactory;
 
 class PrimaryKeySearchTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         UserFactory::new()->times(5)->create([
@@ -42,7 +43,7 @@ class PrimaryKeySearchTest extends TestCase
         $this->assertSame(1, $query->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_cannot_build_search_query_from_fluent_query_builder()
     {
         $this->expectException('RuntimeException');

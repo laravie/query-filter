@@ -6,11 +6,12 @@ use Illuminate\Database\Query\Expression;
 use Laravie\QueryFilter\Filters\JsonFieldSearch;
 use Laravie\QueryFilter\Searchable;
 use Laravie\QueryFilter\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 
 class JsonFieldSearchTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_search_query()
     {
         $stub = new Searchable(
@@ -31,7 +32,7 @@ class JsonFieldSearchTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_search_query_with_nested_json_selector()
     {
         $stub = new Searchable(

@@ -3,11 +3,12 @@
 namespace Laravie\QueryFilter\Tests\Unit;
 
 use Laravie\QueryFilter\Terms;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class TermsTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_build_conditions()
     {
         $rules = [
@@ -42,7 +43,7 @@ class TermsTest extends TestCase
         $this->assertEmpty($terms->where('foo:*'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_conditions_only_contains_basic()
     {
         $rules = [
@@ -68,7 +69,7 @@ class TermsTest extends TestCase
         $this->assertEmpty($terms->where('foo:*'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_conditions_only_contains_tagged()
     {
         $rules = [
@@ -100,7 +101,7 @@ class TermsTest extends TestCase
         $this->assertEmpty($terms->where('foo:*'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_build_conditions_only_contains_partial_tagged()
     {
         $rules = [
@@ -129,7 +130,7 @@ class TermsTest extends TestCase
         $this->assertEmpty($terms->where('foo:*'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_still_parse_basic_terms_when_given_wildcard_attack_keywords()
     {
         $this->assertSame('%%%%', Terms::parse('%%%%', [])->basic());
