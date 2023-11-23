@@ -33,7 +33,7 @@
     "require-dev": {
         "laravel/pint": "^1.6",
         "nunomaduro/larastan": "^2.6",
-        "orchestra/testbench": "^8.10",
+        "orchestra/testbench": "^8.15",
         "phpunit/phpunit": "^10.1"
     },
     "scripts": {
