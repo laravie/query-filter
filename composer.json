@@ -27,26 +27,29 @@
     },
     "require": {
         "php": "^8.1",
-        "illuminate/database": "^10.17",
-        "illuminate/support": "^10.17"
+        "illuminate/database": "^10.17 || ^11.0",
+        "illuminate/support": "^10.17 || ^11.0"
     },
     "require-dev": {
         "laravel/pint": "^1.6",
         "nunomaduro/larastan": "^2.6",
-        "orchestra/testbench": "^8.15",
-        "phpunit/phpunit": "^10.1"
+        "orchestra/testbench": "^8.15 ||. ^9.0",
+        "phpunit/phpunit": "^10.1 || ^11.0"
     },
     "scripts": {
         "post-autoload-dump": [
             "@clear",
-            "@prepare",
-            "@composer run prepare"
+            "@prepare"
         ],
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "lint": [
+            "@php vendor/bin/pint",
+            "@php vendor/bin/phpstan analyse"
+        ],
         "ci": [
-            "@composer run prepare",
-            "@php vendor/bin/phpstan analyse",
-            "@php vendor/bin/pint"
+            "@prepare",
+            "@lint",
+            "@test"
         ],
         "test": [
             "@php vendor/bin/phpunit -c ./ --color"
@@ -56,10 +59,6 @@
         "serve": [
             "@build",
             "@php vendor/bin/testbench serve"
-        ],
-        "lint": [
-            "@php vendor/bin/pint",
-            "@php vendor/bin/phpstan analyse"
         ]
     },
     "config": {
