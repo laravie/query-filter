@@ -2,7 +2,7 @@
 Database/Eloquent Query Builder filters for Laravel
 ==============
 
-[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=3.x)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3A3.x)
+[![tests](https://github.com/laravie/query-filter/workflows/tests/badge.svg?branch=master)](https://github.com/laravie/query-filter/actions?query=workflow%3Atests+branch%3Amaster)
 [![Latest Stable Version](https://poser.pugx.org/laravie/query-filter/v/stable)](https://packagist.org/packages/laravie/query-filter)
 [![Total Downloads](https://poser.pugx.org/laravie/query-filter/downloads)](https://packagist.org/packages/laravie/query-filter)
 [![Latest Unstable Version](https://poser.pugx.org/laravie/query-filter/v/unstable)](https://packagist.org/packages/laravie/query-filter)
